@@ -31,8 +31,8 @@ pipeline {
                 }
             }
             steps {
-                sh 'flutter --version'
-                sh 'flutter build apk'
+                sh '/home/cirrus/sdks/flutter/bin/flutter --version'
+                sh '/home/cirrus/sdks/flutter/bin/flutter build apk'
             }
         }
         stage("Acceptance test") {
