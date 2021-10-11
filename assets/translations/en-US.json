@@ -1,0 +1,11 @@
+{
+  "appName": "SVIS",
+  "tagLine": "Secure | Smart",
+  "register": "Register",
+  "login": "Login",
+  "login.email": "Email or User ID",
+  "forgotPassword": "Forgot Password",
+  "welcome": "Welcome",
+  "username": "Username",
+  "rememberMe": "Remember Me"
+}
