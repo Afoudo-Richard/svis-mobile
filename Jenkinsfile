@@ -2,7 +2,7 @@ pipeline {
     environment {
         def scannerHome = tool 'sonarqube'
     }
-//    agent any
+    agent any
 
     options {
         gitLabConnection('gitlab')
