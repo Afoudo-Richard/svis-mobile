@@ -27,7 +27,7 @@ pipeline {
             agent {
                 docker {
                     image 'cirrusci/flutter:stable'
-                    args '-v ${PWD}/build:/build -v ${HOME}.config/flutter:/.config/flutter --workdir /build'
+                    args '-v ${PWD}/build:/build -v ${HOME}/.config/flutter:/.config/flutter --workdir /build'
                 }
             }
             steps {
