@@ -2,7 +2,7 @@ pipeline {
     environment {
         def scannerHome = tool 'sonarqube'
     }
-    agent any
+//    agent any
 
     options {
         gitLabConnection('gitlab')
@@ -27,7 +27,7 @@ pipeline {
             agent {
                 docker {
                     image 'cirrusci/flutter:stable'
-                    args '-v ${PWD}/build:/build --workdir /build'
+                    args '-v ${PWD}/build:/build -v ${HOME}.config/flutter:/.config/flutter --workdir /build'
                 }
             }
             steps {
