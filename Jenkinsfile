@@ -16,14 +16,13 @@ pipeline {
 
     stages {
 
-        stage('Sonarqube Analysis') {
+        /*stage('Sonarqube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh "npm install"
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
-        }
+        }*/
         stage('Build') {
             agent {
                 docker {
