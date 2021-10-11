@@ -2,7 +2,12 @@ pipeline {
     environment {
         def scannerHome = tool 'sonarqube'
     }
-    agent any
+    agent {
+        docker {
+            image 'cirrusci/flutter:stable'
+            args '-u="root" -v ${PWD}/build:/build -v ${HOME}/.config/flutter/:/.config/flutter/ --workdir /build'
+        }
+    }
 
     options {
         gitLabConnection('gitlab')
@@ -24,15 +29,9 @@ pipeline {
             }
         }*/
         stage('Build') {
-            agent {
-                docker {
-                    image 'cirrusci/flutter:stable'
-                    args '-u="root" -v ${PWD}/build:/build -v ${HOME}/.config/flutter/:/.config/flutter/ --workdir /build'
-                }
-            }
             steps {
-                sh '${FLUTTER_HOME}/bin/flutter --version'
-                sh '${FLUTTER_HOME}/bin/flutter build apk'
+                sh 'flutter --version'
+                sh 'flutter -v build apk'
             }
         }
         stage("Acceptance test") {
@@ -45,7 +44,7 @@ pipeline {
     post {
         always {
             sh "echo 'Acceptance test'"
-            sh "docker image prune -a -f --filter label=stage=output"
+            archiveArtifacts artifacts: 'build/app/outputs/flutter-apk/*.apk', onlyIfSuccessful: true
         }
     }
 }
