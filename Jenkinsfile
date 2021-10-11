@@ -26,12 +26,13 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'irrusci/flutter:stable'
+                    image 'cirrusci/flutter:stable'
                     args '-v ${PWD}/build:/build --workdir /build'
                 }
             }
             steps {
-                sh 'mvn --version'
+                sh 'flutter --version'
+                sh 'flutter build apk'
             }
         }
         stage("Acceptance test") {
