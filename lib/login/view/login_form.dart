@@ -162,7 +162,13 @@ class _UsernameInput extends StatelessWidget {
   }
 }
 
-class _PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatefulWidget {
+  @override
+  __PasswordInputState createState() => __PasswordInputState();
+}
+
+class __PasswordInputState extends State<_PasswordInput> {
+  bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -175,15 +181,38 @@ class _PasswordInput extends StatelessWidget {
               'password',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
-              key: const Key('loginForm_passwordInput_textField'),
-              onChanged: (password) =>
-                  context.read<LoginBloc>().add(LoginPasswordChanged(password)),
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: '********',
-                errorText: state.password.invalid ? 'invalid password' : null,
-              ),
+            Stack(
+              children: [
+                TextField(
+                  key: const Key('loginForm_passwordInput_textField'),
+                  onChanged: (password) => context
+                      .read<LoginBloc>()
+                      .add(LoginPasswordChanged(password)),
+                  obscureText: _obscureText,
+                  decoration: InputDecoration(
+                    hintText: '********',
+                    // errorText:  state.password.invalid ? 'invalid password' : null,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    icon: Icon(
+                      _obscureText
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
+                      color: Color(0xff9193AB),
+                    ),
+                  ),
+                )
+              ],
             ),
           ],
         );

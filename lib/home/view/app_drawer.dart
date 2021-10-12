@@ -16,81 +16,87 @@ class AppDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               Container(
-                height: 250.0,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: kAppPrimaryColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: 280.0,
+                child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (context, state) {
+                    return DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: kAppPrimaryColor,
+                      ),
+                      child: Column(
                         children: [
-                          Text(
-                            "SVIS",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "SVIS",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                  ))
+                            ],
                           ),
-                          IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 35.0,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Craig",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 20.0),
-                            ),
-                            Text(
-                              'Wagner',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 20.0),
-                            ),
-                          ],
-                        ),
-                      ]),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Row(
-                              children: [
-                                Text(
-                                  'editProfile',
-                                  style: TextStyle(color: Colors.grey),
-                                ).tr(),
-                                IconButton(
-                                  onPressed: () => {},
-                                  icon: Icon(Icons.edit),
-                                  iconSize: 16,
-                                  color: Colors.blue,
-                                )
-                              ],
-                            ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 35.0,
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.user?.firstName ?? 'N/A',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    state.user?.lastName ?? 'N/A',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20.0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'editProfile',
+                                      style: TextStyle(color: Colors.grey),
+                                    ).tr(),
+                                    IconButton(
+                                      onPressed: () => {},
+                                      icon: Icon(Icons.edit),
+                                      iconSize: 16,
+                                      color: Colors.blue,
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Container(
@@ -197,14 +203,14 @@ class AppDrawer extends StatelessWidget {
             right: 0,
             child: Align(
               alignment: Alignment.bottomCenter,
-            child: GestureDetector(
-              onTap: () => {},
-              child: Text(
-                'privacyPolicyAndTerms',
-                style: TextStyle(fontSize: 12.0),
-              ).tr(),
-            ),
+              child: GestureDetector(
+                onTap: () => {},
+                child: Text(
+                  'privacyPolicyAndTerms',
+                  style: TextStyle(fontSize: 12.0),
+                ).tr(),
               ),
+            ),
           )
         ],
       ),
