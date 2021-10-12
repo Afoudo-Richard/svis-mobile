@@ -25,25 +25,22 @@ class FaultCodes extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
+              SizedBox(height: 10.0,),
               Row(
                 children: [
                   Expanded(
-                    child: Material(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      elevation: 5.0,
-                      shadowColor: Colors.blue.shade100,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.blue,
-                            size: 25.0,
-                          ),
-                          labelText: "Search",
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.0)),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.blue,
+                          size: 25.0,
                         ),
+                        labelText: "Search",
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0)),
                       ),
                     ),
                   ),
@@ -70,6 +67,7 @@ class FaultCodes extends StatelessWidget {
                               top: BorderSide(width: 0.5, color: Colors.grey))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
