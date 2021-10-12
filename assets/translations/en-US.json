@@ -17,6 +17,7 @@
   "settings": "Settings",
   "help": "Help",
   "editProfile": "Edit profile",
-  "privacyPolicyAndTerms": "Privacy policy | Term of Services"
+  "privacyPolicyAndTerms": "Privacy policy | Term of Services",
+  "search" : "Search"
   
 }
