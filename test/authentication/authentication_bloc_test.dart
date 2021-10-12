@@ -11,7 +11,7 @@ class MockAuthenticationRepository extends Mock
 class MockUserRepository extends Mock implements UserRepository {}
 
 void main() {
-  const user = User('id');
+  var user = User(null, null, null);
   late AuthenticationRepository authenticationRepository;
   late UserRepository userRepository;
 
@@ -60,7 +60,7 @@ void main() {
         authenticationRepository: authenticationRepository,
         userRepository: userRepository,
       ),
-      expect: () => const <AuthenticationState>[
+      expect: () => <AuthenticationState>[
         AuthenticationState.authenticated(user),
       ],
     );
@@ -82,7 +82,7 @@ void main() {
       act: (bloc) => bloc.add(
         const AuthenticationStatusChanged(AuthenticationStatus.authenticated),
       ),
-      expect: () => const <AuthenticationState>[
+      expect: () => <AuthenticationState>[
         AuthenticationState.authenticated(user),
       ],
     );

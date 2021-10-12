@@ -1,3 +1,4 @@
+import 'package:app/register/register.dart';
 import 'package:app/welcome/welcome.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,12 @@ import 'package:app/login/login.dart';
 import 'package:app/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'commons/colors.dart';
+import 'package:app/commons/colors.dart';
 
+const kLabelStyle = const TextStyle(
+  fontWeight: FontWeight.w600,
+  fontSize: 9,
+);
 late Size kDeviceSize;
 
 class App extends StatelessWidget {
@@ -55,10 +60,12 @@ class _AppViewState extends State<AppView> {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       theme: ThemeData(
+        fontFamily: 'Poppins',
         scaffoldBackgroundColor: kScaffoldBackground,
         textTheme: Theme.of(context).textTheme.apply(
               bodyColor: kAppPrimaryColor,
               displayColor: kAppPrimaryColor,
+              fontFamily: 'Poppins',
             ),
         appBarTheme: AppBarTheme(
           elevation: 0,
@@ -66,8 +73,24 @@ class _AppViewState extends State<AppView> {
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: kAppPrimaryColor,
                 displayColor: kAppPrimaryColor,
+                fontFamily: 'Poppins',
               ),
           iconTheme: IconThemeData(color: kAppPrimaryColor),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding: const EdgeInsets.all(0),
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w400,
+            color: const Color(0xFF9193AB),
+            fontSize: 14,
+            fontFamily: 'Poppins',
+          ),
+        ),
+        snackBarTheme: SnackBarThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          behavior: SnackBarBehavior.floating,
         ),
       ),
       navigatorKey: _navigatorKey,
@@ -85,6 +108,12 @@ class _AppViewState extends State<AppView> {
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
+                  (route) => false,
+                );
+                break;
+              case AuthenticationStatus.registration:
+                _navigator.pushAndRemoveUntil<void>(
+                  RegisterPage.route(),
                   (route) => false,
                 );
                 break;

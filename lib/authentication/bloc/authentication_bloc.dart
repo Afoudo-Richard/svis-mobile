@@ -45,6 +45,8 @@ class AuthenticationBloc
         return emit(const AuthenticationState.unauthenticated());
       case AuthenticationStatus.welcome:
         return emit(const AuthenticationState.welcome());
+      case AuthenticationStatus.registration:
+        return emit(const AuthenticationState.registration());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
         return emit(user != null

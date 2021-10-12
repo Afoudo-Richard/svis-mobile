@@ -1,17 +1,11 @@
 import 'dart:async';
 
-import 'package:uuid/uuid.dart';
+import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 import 'models/models.dart';
 
 class UserRepository {
-  User? _user;
-
   Future<User?> getUser() async {
-    if (_user != null) return _user;
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _user = User(const Uuid().v4()),
-    );
+    return await ParseUser.currentUser() as User?;
   }
 }

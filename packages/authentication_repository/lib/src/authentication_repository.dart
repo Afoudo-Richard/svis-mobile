@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:parse_server_sdk/parse_server_sdk.dart';
+
 enum AuthenticationStatus {
   unknown,
   welcome,
   authenticated,
+  registration,
   unauthenticated,
+  passwordRecovery,
 }
 
 class AuthenticationRepository {
@@ -20,10 +24,12 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
-    await Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
-    );
+    var response = await ParseUser(username, password, username).login();
+    if (response.success) {
+      _controller.add(AuthenticationStatus.authenticated);
+    } else {
+      throw response.error?.message ?? 'unable to login';
+    }
   }
 
   void logOut() {
@@ -31,4 +37,22 @@ class AuthenticationRepository {
   }
 
   void dispose() => _controller.close();
+
+  Future<void> register({
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String firstName,
+    required String lastName,
+  }) async {
+    var user = ParseUser(email, password, email)
+      ..set('firstName', firstName)
+      ..set('lastName', lastName);
+    var response = await user.signUp();
+    if (response.success && response.result['code'] == null) {
+      return Future.value(response.result);
+    } else {
+      throw response.error?.message ?? 'unable to login';
+    }
+  }
 }

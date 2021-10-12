@@ -1,7 +1,20 @@
 {
   "appName": "SVIS",
   "tagLine": "Secure | Smart",
-  "register": "Register",
+  "register": {
+    "title": "Register",
+    "submissionSusscess": "registration succesful please login to proceed",
+    "tag": "Create an account"
+  },
+  "forms": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordError": "Password does not match"
+  },
+  "alreadyHaveAnAccount": "Already have an account? Login",
   "login": "Login",
   "login.email": "Email or User ID",
   "forgotPassword": "Forgot Password",
@@ -17,7 +30,12 @@
   "settings": "Settings",
   "help": "Help",
   "editProfile": "Edit profile",
+<<<<<<< HEAD
   "privacyPolicyAndTerms": "Privacy policy | Term of Services",
   "search" : "Search"
   
+=======
+  "privacyPolicyAndTerms": "Privacy policy | Term of Services"
+
+>>>>>>> ecaca7610545955ddc3a9cf0d0a04dc05d05c35f
 }
