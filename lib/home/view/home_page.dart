@@ -1,8 +1,10 @@
+import 'package:app/commons/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+part 'app_drawer.dart';
 class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomePage());
@@ -25,7 +27,7 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      drawer: Drawer(),
+      drawer: AppDrawer(),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -52,3 +54,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+
