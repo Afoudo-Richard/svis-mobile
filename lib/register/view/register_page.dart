@@ -1,4 +1,4 @@
-import 'package:app/app.dart';
+import 'package:app/commons/colors.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

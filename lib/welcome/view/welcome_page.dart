@@ -1,4 +1,3 @@
-import 'package:app/app.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:app/commons/widgets/intro_view.dart';
 import 'package:flutter/material.dart';
