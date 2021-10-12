@@ -50,12 +50,18 @@ class WelcomePage extends StatelessWidget {
                 VerticalDivider(color: Colors.white, thickness: 2),
                 Expanded(
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      context.read<AuthenticationBloc>().add(
+                            AuthenticationStatusChanged(
+                              AuthenticationStatus.registration,
+                            ),
+                          );
+                    },
                     child: Container(
                       margin: const EdgeInsets.all(20.0),
                       child: Center(
                         child: Text(
-                          'register',
+                          'register.title',
                           style: TextStyle(color: Colors.white),
                         ).tr(),
                       ),

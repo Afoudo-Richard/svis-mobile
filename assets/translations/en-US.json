@@ -1,7 +1,20 @@
 {
   "appName": "SVIS",
   "tagLine": "Secure | Smart",
-  "register": "Register",
+  "register": {
+    "title": "Register",
+    "submissionSusscess": "registration succesful please login to proceed",
+    "tag": "Create an account"
+  },
+  "forms": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordError": "Password does not match"
+  },
+  "alreadyHaveAnAccount": "Already have an account? Login",
   "login": "Login",
   "login.email": "Email or User ID",
   "forgotPassword": "Forgot Password",

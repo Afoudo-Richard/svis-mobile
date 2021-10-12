@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:app/commons/forms/forms.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:app/login/login.dart';
 import 'package:formz/formz.dart';
 
 part 'login_event.dart';
@@ -66,8 +67,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: state.password.value,
         );
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      } catch (_) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      } catch (error) {
+        emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+          error: (error is SocketException)
+              ? 'errors.socketException'
+              : error.toString(),
+        ));
       }
     }
   }

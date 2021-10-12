@@ -1,3 +1,4 @@
+import 'package:app/commons/forms/forms.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:app/login/login.dart';

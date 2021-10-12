@@ -1,4 +1,6 @@
 import 'package:app/app.dart';
+import 'package:app/authentication/authentication.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/login/login.dart';
@@ -14,7 +16,16 @@ class LoginForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
+              SnackBar(
+                elevation: 0,
+                content: Text(
+                  state.error,
+                  style: TextStyle(
+                    color: kDangerColor,
+                  ),
+                ).tr(),
+                backgroundColor: kDangerColor.withOpacity(0.2),
+              ),
             );
         }
       },
@@ -44,11 +55,16 @@ class LoginForm extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<AuthenticationBloc>().add(
+                                AuthenticationStatusChanged(
+                                    AuthenticationStatus.registration),
+                              );
+                        },
                         child: Row(
                           children: [
                             Text(
-                              'register',
+                              'register.title',
                               style: TextStyle(color: kAppAccent),
                             ).tr(),
                             SizedBox(width: 10),
