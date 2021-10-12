@@ -9,6 +9,7 @@ import 'package:app/login/login.dart';
 import 'package:app/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'commons/colors.dart';
 
 const kAppPrimaryColor = const Color(0xFF3F415B);
 const kAppAccent = const Color(0xFF2185DC);

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/login/login.dart';
 import 'package:formz/formz.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:app/commons/colors.dart';
 
 class LoginForm extends StatelessWidget {
   @override

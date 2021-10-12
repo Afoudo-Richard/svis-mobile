@@ -20,5 +20,16 @@
   "forgotPassword": "Forgot Password",
   "welcome": "Welcome",
   "username": "Username",
-  "rememberMe": "Remember Me"
+  "rememberMe": "Remember Me",
+  "users": "Users",
+  "vehicles": "Vehicles",
+  "reports": "Reports",
+  "trackSetup": "Track Setup",
+  "diagnostics": "Diagnostics",
+  "templates": "Templates",
+  "settings": "Settings",
+  "help": "Help",
+  "editProfile": "Edit profile",
+  "privacyPolicyAndTerms": "Privacy policy | Term of Services"
+
 }

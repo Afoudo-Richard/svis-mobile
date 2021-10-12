@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/login/login.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:formz/formz.dart';
+import 'package:app/commons/colors.dart';
 
 class LoginPage extends StatelessWidget {
   static Route route() {
