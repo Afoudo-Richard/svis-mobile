@@ -38,7 +38,13 @@ class _LoginPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: kScaffoldBackground,
       ),
-      body: LoginForm(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LoginForm(),
+          ],
+        ),
+      ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(6),

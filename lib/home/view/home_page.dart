@@ -5,6 +5,7 @@ import 'package:app/authentication/authentication.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 part 'app_drawer.dart';
+
 class HomePage extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomePage());
@@ -28,31 +29,47 @@ class HomePage extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Builder(
-              builder: (context) {
-                final userId = context.select(
-                  (AuthenticationBloc bloc) => bloc.state.user?.objectId,
-                );
-                return Text('UserID: $userId');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested());
-              },
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Builder(
+                builder: (context) {
+                  final user = context.select(
+                    (AuthenticationBloc bloc) => bloc.state.user,
+                  );
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hi, ${user?.firstName ?? 'N/A'}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: kAppPrimaryColor,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Logout'),
+                onPressed: () {
+                  context
+                      .read<AuthenticationBloc>()
+                      .add(AuthenticationLogoutRequested());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-

@@ -22,6 +22,18 @@ class AuthenticationState extends Equatable {
 
   final AuthenticationStatus status;
   final User? user;
+  AuthenticationState.fromJson(Map<String, dynamic> json)
+      : this._(
+          // user: User.clone().fromJson(json['user']), todo fix
+          status: AuthenticationStatus.values
+              .firstWhere((e) => e.toString() == json['status']),
+        );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status.toString();
+    return data;
+  }
 
   @override
   List<Object?> get props => [status, user];

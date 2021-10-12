@@ -32,6 +32,7 @@ dependencies:
     path: packages/user_repository
   easy_localization: ^3.0.0
   parse_server_sdk_flutter: ^3.1.0
+  hydrated_bloc: ^7.1.0
 
 #dependency_overrides:
 #  bloc:
