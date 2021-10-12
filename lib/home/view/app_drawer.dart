@@ -111,7 +111,12 @@ class AppDrawer extends StatelessWidget {
                       title: Text(
                         'users',
                       ).tr(),
-                      onTap: () => {},
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Users()),
+                        )
+                      },
                     ),
                     ListTile(
                       leading: Icon(
@@ -134,7 +139,10 @@ class AppDrawer extends StatelessWidget {
                         'reports',
                       ).tr(),
                       onTap: () => {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => FaultCodes()),)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FaultCodes()),
+                        )
                       },
                     ),
                     ListTile(
