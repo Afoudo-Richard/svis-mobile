@@ -30,12 +30,7 @@
   "settings": "Settings",
   "help": "Help",
   "editProfile": "Edit profile",
-<<<<<<< HEAD
   "privacyPolicyAndTerms": "Privacy policy | Term of Services",
   "search" : "Search"
   
-=======
-  "privacyPolicyAndTerms": "Privacy policy | Term of Services"
-
->>>>>>> ecaca7610545955ddc3a9cf0d0a04dc05d05c35f
 }
