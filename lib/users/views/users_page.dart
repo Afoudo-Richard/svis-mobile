@@ -58,7 +58,7 @@ class Users extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          fillColor: Colors.white,
+                          fillColor: Colors.white, 
                           prefixIcon: Icon(
                             Icons.search,
                             color: Colors.blue,
