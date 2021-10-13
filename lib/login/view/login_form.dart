@@ -1,5 +1,6 @@
 import 'package:app/app.dart';
 import 'package:app/authentication/authentication.dart';
+import 'package:app/password_reset/password_reset.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,14 @@ class LoginForm extends StatelessWidget {
                             kDangerColor.withOpacity(0.1),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          // Navigator.of(context).push(PasswordResetPage.route());
+
+                          context.read<AuthenticationBloc>().add(
+                                AuthenticationStatusChanged(
+                                    AuthenticationStatus.passwordReset),
+                              );
+                        },
                         child: Text(
                           'forgotPassword',
                           style: TextStyle(color: kDangerColor),

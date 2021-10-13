@@ -1,3 +1,4 @@
+import 'package:app/password_reset/password_reset.dart';
 import 'package:app/register/register.dart';
 import 'package:app/welcome/welcome.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -103,6 +104,11 @@ class _AppViewState extends State<AppView> {
                 _navigator.pushAndRemoveUntil<void>(
                   HomePage.route(),
                   (route) => false,
+                );
+                break;
+              case AuthenticationStatus.passwordReset:
+                _navigator.push<void>(
+                  PasswordResetPage.route(),
                 );
                 break;
               case AuthenticationStatus.unauthenticated:

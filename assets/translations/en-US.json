@@ -6,6 +6,10 @@
     "submissionSusscess": "registration succesful please login to proceed",
     "tag": "Create an account"
   },
+  "passwordReset": {
+    "title": "Forgot Password",
+    "tag": "Please fill in exactly the information required."
+  },
   "forms": {
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -32,5 +36,4 @@
   "help": "Help",
   "editProfile": "Edit profile",
   "privacyPolicyAndTerms": "Privacy policy | Term of Services"
-
 }

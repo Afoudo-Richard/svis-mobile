@@ -14,6 +14,9 @@ class AuthenticationState extends Equatable {
   const AuthenticationState.unauthenticated()
       : this._(status: AuthenticationStatus.unauthenticated);
 
+  const AuthenticationState.passwordReset()
+      : this._(status: AuthenticationStatus.passwordReset);
+
   const AuthenticationState.registration()
       : this._(status: AuthenticationStatus.registration);
 
