@@ -1,5 +1,7 @@
 import 'package:app/commons/colors.dart';
+import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/faultCodes/views/faultCode_page.dart';
+import 'package:app/user_profile/user_profile.dart';
 import 'package:app/users/views/users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,6 +74,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: AppBottomAppBar(),
     );
   }
 }

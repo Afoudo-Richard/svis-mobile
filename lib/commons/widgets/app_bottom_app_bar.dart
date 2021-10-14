@@ -1,0 +1,108 @@
+import 'package:app/commons/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+class AppBottomAppBar extends StatelessWidget {
+  const AppBottomAppBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(6),
+        topRight: Radius.circular(6),
+      ),
+      child: BottomAppBar(
+        color: kAppPrimaryColor,
+        child: IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _BottomBarItem(
+                icon: Image.asset(
+                  'assets/icons/control-pannel.png',
+                  height: 28,
+                  width: 28,
+                ),
+                label: 'control pannel',
+              ),
+              _BottomBarItem(
+                icon: Image.asset(
+                  'assets/icons/vehicles.png',
+                  height: 28,
+                  width: 28,
+                ),
+                label: 'Vehicle',
+              ),
+              _BottomBarItem(
+                icon: Image.asset(
+                  'assets/icons/dashboard.png',
+                  height: 28,
+                  width: 28,
+                ),
+                label: 'Dashboard',
+              ),
+              _BottomBarItem(
+                icon: Image.asset(
+                  'assets/icons/drivers.png',
+                  height: 28,
+                  width: 28,
+                ),
+                label: 'Drivers',
+              ),
+              _BottomBarItem(
+                icon: Image.asset(
+                  'assets/icons/activity.png',
+                  height: 28,
+                  width: 28,
+                ),
+                label: 'Activity',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomBarItem extends StatelessWidget {
+  final GestureTapCallback? onTap;
+
+  final String label;
+
+  final Widget icon;
+  const _BottomBarItem({
+    Key? key,
+    this.onTap,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.only(top: 16),
+          child: Column(
+            children: [
+              this.icon,
+              SizedBox(height: 10),
+              Text(
+                this.label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                ),
+              ).tr(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/password_reset/password_reset.dart';
 import 'package:app/register/register.dart';
 import 'package:app/welcome/welcome.dart';
@@ -17,6 +19,39 @@ const kLabelStyle = const TextStyle(
   fontSize: 9,
 );
 late Size kDeviceSize;
+
+MaterialColor generateMaterialColor(Color color) {
+  return MaterialColor(color.value, {
+    50: tintColor(color, 0.9),
+    100: tintColor(color, 0.8),
+    200: tintColor(color, 0.6),
+    300: tintColor(color, 0.4),
+    400: tintColor(color, 0.2),
+    500: color,
+    600: shadeColor(color, 0.1),
+    700: shadeColor(color, 0.2),
+    800: shadeColor(color, 0.3),
+    900: shadeColor(color, 0.4),
+  });
+}
+
+int tintValue(int value, double factor) =>
+    max(0, min((value + ((255 - value) * factor)).round(), 255));
+
+Color tintColor(Color color, double factor) => Color.fromRGBO(
+    tintValue(color.red, factor),
+    tintValue(color.green, factor),
+    tintValue(color.blue, factor),
+    1);
+
+int shadeValue(int value, double factor) =>
+    max(0, min(value - (value * factor).round(), 255));
+
+Color shadeColor(Color color, double factor) => Color.fromRGBO(
+    shadeValue(color.red, factor),
+    shadeValue(color.green, factor),
+    shadeValue(color.blue, factor),
+    1);
 
 class App extends StatelessWidget {
   const App({
@@ -63,6 +98,8 @@ class _AppViewState extends State<AppView> {
       theme: ThemeData(
         fontFamily: 'Poppins',
         scaffoldBackgroundColor: kScaffoldBackground,
+        primaryColor: kAppPrimaryColor,
+        primarySwatch: generateMaterialColor(kAppPrimaryColor),
         textTheme: Theme.of(context).textTheme.apply(
               bodyColor: kAppPrimaryColor,
               displayColor: kAppPrimaryColor,
@@ -77,6 +114,13 @@ class _AppViewState extends State<AppView> {
                 fontFamily: 'Poppins',
               ),
           iconTheme: IconThemeData(color: kAppPrimaryColor),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.all(13),
+            ),
+          ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           contentPadding: const EdgeInsets.all(0),
