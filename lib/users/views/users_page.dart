@@ -1,8 +1,9 @@
 import 'package:app/commons/colors.dart';
+import 'package:app/drivers/view/drivers_page.dart';
 import 'package:flutter/material.dart';
 
 class Users extends StatelessWidget {
-  const Users({ Key? key }) : super(key: key);
+  const Users({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,11 @@ class Users extends StatelessWidget {
       appBar: AppBar(
         title: Text("Users"),
         actions: [
-          IconButton(onPressed: ()=>{}, icon: Icon(Icons.add), iconSize: 35.0,),
+          IconButton(
+            onPressed: () => {},
+            icon: Icon(Icons.add),
+            iconSize: 35.0,
+          ),
           PopupMenuButton(
             iconSize: 35.0,
             itemBuilder: (context) => [
@@ -38,7 +43,6 @@ class Users extends StatelessWidget {
                 child: Text('Delete'),
                 value: 1,
               ),
-
             ],
           )
         ],
@@ -58,7 +62,7 @@ class Users extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          fillColor: Colors.white, 
+                          fillColor: Colors.white,
                           prefixIcon: Icon(
                             Icons.search,
                             color: Colors.blue,
@@ -88,37 +92,56 @@ class Users extends StatelessWidget {
                 SizedBox(
                   height: 20.0,
                 ),
-                UserItem(),
+                Column(
+                  children: [
+                    ListTile(
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Drivers()),
+                        )
+                      },
+                      leading: Icon(
+                        Icons.group,
+                        size: 35.0,
+                      ),
+                      title: Text("Owner"),
+                      trailing: Icon(Icons.chevron_right),
+                    ),
+                    Divider(),
+                  ],
+                ),
               ],
             );
           } else {
-            return UserItem();
+            return Column(
+              children: [
+                ListTile(
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Drivers()),
+                    )
+                  },
+                  leading: Icon(
+                    Icons.group,
+                    size: 35.0,
+                  ),
+                  title: Text("Owner"),
+                  trailing: Icon(Icons.chevron_right),
+                ),
+                Divider(),
+              ],
+            );
           }
         },
       ),
-    );
-  }
-}
 
-class UserItem extends StatelessWidget {
-  const UserItem({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(width: 0.5),
-        )
-      ),
-      child: ListTile(
-        leading: Icon(Icons.group, size: 35.0,),
-        title: Text("Owner"),
-        trailing: Icon(Icons.chevron_right),
-      ),
+      // ListView(
+      //   children: [
+      //     UserItem()
+      //   ]
+      // ),
     );
   }
 }

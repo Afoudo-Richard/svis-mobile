@@ -91,7 +91,10 @@ class _FaultCodeItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(width: 0.5, color: Colors.grey))),
+        border: Border(
+          top: BorderSide(width: 0.5, color: Colors.grey),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,30 +135,31 @@ class _FaultCodeItem extends StatelessWidget {
             ),
           ),
           PopupMenuButton(
-              padding: EdgeInsets.all(0.0),
-              child: Icon(Icons.apps),
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: Text('Details'),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Bets'),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Auction'),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Repairs'),
-                      value: 1,
-                    ),
-                    PopupMenuItem(
-                      child: Text('Reset'),
-                      value: 1,
-                    ),
-                  ])
+            padding: EdgeInsets.all(0.0),
+            child: Icon(Icons.apps),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text('Details'),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text('Bets'),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text('Auction'),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text('Repairs'),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text('Reset'),
+                value: 1,
+              ),
+            ],
+          ),
         ],
       ),
     );

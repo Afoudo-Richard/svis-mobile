@@ -33,6 +33,7 @@ dependencies:
   easy_localization: ^3.0.0
   parse_server_sdk_flutter: ^3.1.0
   hydrated_bloc: ^7.1.0
+  multi_select_item: ^1.0.3
 
 #dependency_overrides:
 #  bloc:
@@ -62,6 +63,7 @@ flutter:
   assets:
     - assets/translations/
     - assets/fonts/
+    - assets/images/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
