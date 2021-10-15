@@ -25,8 +25,8 @@ class UserProfileForm extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundColor: kAppPrimaryColor,
                   child: CircleAvatar(
+                    backgroundColor: kAppAccent,
                     radius: 38,
                   ),
                 ),

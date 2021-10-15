@@ -1,6 +1,8 @@
 import 'package:app/app.dart';
+import 'package:app/user_profile/bloc/user_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GeneralInformtion extends StatelessWidget {
   const GeneralInformtion({
@@ -34,22 +36,26 @@ class GeneralInformtion extends StatelessWidget {
 class _FirstNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'forms.firstName',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ).tr(),
-        TextField(
-          key: const Key('userProfileForm_firstNameInput_textField'),
-          onChanged: (value) {},
-          decoration: InputDecoration(
-            hintText: 'forms.firstName'.tr(),
-            // errorText: state.firstName.invalid ? 'invalid first Name' : null,
-          ),
-        ),
-      ],
+    return BlocBuilder<UserProfileBloc, UserProfileState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'forms.firstName',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ).tr(),
+            TextField(
+              key: const Key('userProfileForm_firstNameInput_textField'),
+              onChanged: (value) {},
+              decoration: InputDecoration(
+                hintText: 'forms.firstName'.tr(),
+                // errorText: state.firstName.invalid ? 'invalid first Name' : null,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
