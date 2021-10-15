@@ -5,8 +5,6 @@ class AppDrawer extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  //List<Map<IconData>> drawer
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -111,12 +109,9 @@ class AppDrawer extends StatelessWidget {
                       title: Text(
                         'users',
                       ).tr(),
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Users()),
-                        );
+                        Navigator.of(context).push(UsersPage.route());
                       },
                     ),
                     ListTile(
@@ -139,12 +134,9 @@ class AppDrawer extends StatelessWidget {
                       title: Text(
                         'reports',
                       ).tr(),
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FaultCodes()),
-                        );
+                        Navigator.of(context).push(FaultCodesPage.route());
                       },
                     ),
                     ListTile(

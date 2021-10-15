@@ -1,5 +1,6 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/drivers/models/driver_model.dart';
+import 'package:app/drivers/view/driver_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:app/drivers/drivers_data.dart';
 import 'package:app/commons/multi_select_item.dart';
@@ -134,22 +135,42 @@ class _DriversState extends State<Drivers> {
                       controller.toggle(index);
                     });
                   },
+                  onTap: () {
+                    if (!controller.isSelecting) {
+                      print(controller.isSelecting);
+                      Navigator.of(context)
+                          .push(DriverDashboardPage.route(drivers[index]));
+                    } else {
+                      setState(() {
+                        controller.toggle(index);
+                      });
+                    }
+                  },
                   isSelected: controller.isSelected(index),
                 )
               ],
             );
           } else {
-            return InkWell(
-              child: DriverItem(
-                isSelecting: controller.isSelecting,
-                driver: drivers[index],
-                onSelected: () {
+            return DriverItem(
+              isSelecting: controller.isSelecting,
+              driver: drivers[index],
+              onSelected: () {
+                setState(() {
+                  controller.toggle(index);
+                });
+              },
+              onTap: () {
+                if (!controller.isSelecting) {
+                  print(controller.isSelecting);
+                  Navigator.of(context)
+                      .push(DriverDashboardPage.route(drivers[index]));
+                } else {
                   setState(() {
                     controller.toggle(index);
                   });
-                },
-                isSelected: controller.isSelected(index),
-              ),
+                }
+              },
+              isSelected: controller.isSelected(index),
             );
           }
         },
@@ -164,6 +185,7 @@ class DriverItem extends StatefulWidget {
       required this.driver,
       required this.isSelecting,
       required this.isSelected,
+      required this.onTap,
       required this.onSelected})
       : super(key: key);
 
@@ -171,6 +193,7 @@ class DriverItem extends StatefulWidget {
   final bool isSelecting;
   final VoidCallback onSelected;
   final bool isSelected;
+  final VoidCallback onTap;
 
   @override
   _DriverItemState createState() => _DriverItemState();
@@ -180,82 +203,90 @@ class _DriverItemState extends State<DriverItem> {
   bool isSelected = false;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: MultiSelectItem(
-        isSelecting: widget.isSelecting,
-        onSelected: widget.onSelected,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 0.5, color: Colors.grey),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return GestureDetector(
+      child: InkWell(
+        child: MultiSelectItem(
+          isSelecting: widget.isSelecting,
+          onSelected: widget.onSelected,
+          child: GestureDetector(
+            onTap: widget.onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(width: 0.5, color: Colors.grey),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Stack(
+                  Row(
                     children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/user.png"),
-                        backgroundColor: kAppPrimaryColor,
-                        radius: 25.0,
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                AssetImage("assets/images/user.png"),
+                            backgroundColor: kAppPrimaryColor,
+                            radius: 25.0,
+                          ),
+                          widget.isSelected
+                              ? CircleAvatar(
+                                  backgroundColor:
+                                      kAppPrimaryColor.withOpacity(0.5),
+                                  radius: 25.0,
+                                  child: Icon(Icons.check_sharp),
+                                )
+                              : Container(),
+                        ],
                       ),
-                      widget.isSelected
-                          ? CircleAvatar(
-                              backgroundColor:
-                                  kAppPrimaryColor.withOpacity(0.5),
-                              radius: 25.0,
-                              child: Icon(Icons.check_sharp),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.driver.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
+                      SizedBox(
+                        width: 10.0,
                       ),
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 4.0, right: 2.0),
-                            height: 7.0,
-                            width: 7.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: widget.driver.isActive
-                                  ? Colors.blue
-                                  : Colors.red,
+                          Text(
+                            widget.driver.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
                             ),
                           ),
-                          Column(
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                widget.driver.isActive ? "Active" : "Inactive",
-                                style: TextStyle(
-                                  fontSize: 10,
+                              Container(
+                                margin: EdgeInsets.only(top: 4.0, right: 2.0),
+                                height: 7.0,
+                                width: 7.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: widget.driver.isActive
+                                      ? Colors.blue
+                                      : Colors.red,
                                 ),
                               ),
-                              Text(
-                                "Role:Admin | Group:Operations",
-                                style: TextStyle(
-                                  fontSize: 10,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.driver.isActive
+                                        ? "Active"
+                                        : "Inactive",
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Role:Admin | Group:Operations",
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -263,59 +294,61 @@ class _DriverItemState extends State<DriverItem> {
                       ),
                     ],
                   ),
-                ],
-              ),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "84%",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "84%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Icon(
+                              widget.driver.hasIncreased
+                                  ? Icons.expand_less
+                                  : Icons.expand_more,
+                              color: widget.driver.hasIncreased
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Last 24hrs",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ]),
+                  PopupMenuButton(
+                    padding: EdgeInsets.all(0.0),
+                    child: Icon(Icons.more_vert),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text('View'),
+                        value: 1,
                       ),
-                    ),
-                    Icon(
-                      widget.driver.hasIncreased
-                          ? Icons.expand_less
-                          : Icons.expand_more,
-                      color: widget.driver.hasIncreased
-                          ? Colors.green
-                          : Colors.red,
-                    ),
-                  ],
-                ),
-                Text(
-                  "Last 24hrs",
-                  style: TextStyle(
-                    fontSize: 10,
-                  ),
-                ),
-              ]),
-              PopupMenuButton(
-                padding: EdgeInsets.all(0.0),
-                child: Icon(Icons.more_vert),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: Text('View'),
-                    value: 1,
-                  ),
-                  PopupMenuItem(
-                    child: Text('Assign'),
-                    value: 1,
-                  ),
-                  PopupMenuItem(
-                    child: Text('Archive'),
-                    value: 1,
-                  ),
-                  PopupMenuItem(
-                    child: Text('Delete'),
-                    value: 1,
+                      PopupMenuItem(
+                        child: Text('Assign'),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Archive'),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Text('Delete'),
+                        value: 1,
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
