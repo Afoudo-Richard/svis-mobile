@@ -1,4 +1,5 @@
 import 'package:app/commons/colors.dart';
+import 'package:app/commons/time_item.dart';
 import 'package:app/drivers/models/driver_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -474,7 +475,7 @@ class RecentActionItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Updated track setup",
+                    header,
                     style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w400,
@@ -484,7 +485,7 @@ class RecentActionItem extends StatelessWidget {
                     height: 5.0,
                   ),
                   Text(
-                    "vehicle LTR 23214",
+                    vehicleInfo,
                     style: TextStyle(
                       fontSize: 13.0,
                     ),
@@ -493,7 +494,9 @@ class RecentActionItem extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text("Jan 03,\n 2021"),
+                  Text(date, style: TextStyle(
+                    fontSize: 13.0
+                  ),),
                 ],
               ),
             ],
@@ -504,38 +507,7 @@ class RecentActionItem extends StatelessWidget {
   }
 }
 
-class TimeItem extends StatelessWidget {
-  const TimeItem({Key? key, required this.label, required this.onTap})
-      : super(key: key);
 
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Text(
-          label,
-          style: TextStyle(color: Colors.blue[800], fontSize: 13.0),
-        ),
-      ),
-    );
-  }
-}
 
 class EventItem extends StatelessWidget {
   const EventItem(
