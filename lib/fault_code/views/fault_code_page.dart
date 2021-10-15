@@ -1,8 +1,12 @@
 import 'package:app/commons/colors.dart';
 import 'package:flutter/material.dart';
 
-class FaultCodes extends StatelessWidget {
-  const FaultCodes({Key? key}) : super(key: key);
+class FaultCodesPage extends StatelessWidget {
+  const FaultCodesPage({Key? key}) : super(key: key);
+
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => FaultCodesPage());
+  }
 
   @override
   Widget build(BuildContext context) {

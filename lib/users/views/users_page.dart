@@ -2,8 +2,12 @@ import 'package:app/commons/colors.dart';
 import 'package:app/drivers/view/drivers_page.dart';
 import 'package:flutter/material.dart';
 
-class Users extends StatelessWidget {
-  const Users({Key? key}) : super(key: key);
+class UsersPage extends StatelessWidget {
+  const UsersPage({Key? key}) : super(key: key);
+
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => UsersPage());
+  }
 
   @override
   Widget build(BuildContext context) {
