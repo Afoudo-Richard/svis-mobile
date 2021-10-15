@@ -6,11 +6,30 @@
     "submissionSusscess": "registration succesful please login to proceed",
     "tag": "Create an account"
   },
+  "passwordReset": {
+    "title": "Forgot Password",
+    "tag": "Please fill in exactly the information required."
+  },
+  "passwordUpdate": {
+    "title": "Update Password",
+    "tag": "Please fill in exactly the information provided."
+  },
   "forms": {
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
     "password": "Password",
+    "dob": "Date of Birth",
+    "gender": "Gender",
+    "timeZone": "Time Zone",
+    "phoneNumber": "Phone Number",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "city": "City",
+    "state": "State",
+    "countryOfRegistration": "Country of registration",
+    "region": "Region",
+    "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
     "passwordError": "Password does not match"
   },
@@ -18,6 +37,10 @@
   "login": "Login",
   "login.email": "Email or User ID",
   "forgotPassword": "Forgot Password",
+  "resetPassword": "Reset Password",
+  "terminateAccount": "Terminate Account",
+  "userProfile": "User Profile",
+  "contactInformation": "Contact Information",
   "welcome": "Welcome",
   "username": "Username",
   "rememberMe": "Remember Me",
@@ -30,8 +53,9 @@
   "settings": "Settings",
   "dashboard": "Dashboard",
   "help": "Help",
+  "generalInformation": "General Information",
   "editProfile": "Edit profile",
   "privacyPolicyAndTerms": "Privacy policy | Term of Services",
   "search" : "Search"
-  
+
 }

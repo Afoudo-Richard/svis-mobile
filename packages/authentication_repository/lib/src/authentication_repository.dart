@@ -8,7 +8,7 @@ enum AuthenticationStatus {
   authenticated,
   registration,
   unauthenticated,
-  passwordRecovery,
+  passwordReset,
 }
 
 class AuthenticationRepository {
@@ -30,6 +30,13 @@ class AuthenticationRepository {
     } else {
       throw response.error?.message ?? 'unable to login';
     }
+  }
+
+  Future<ParseResponse> resetPassword({
+    required String username,
+  }) async {
+    final ParseUser user = ParseUser(username.toLowerCase(), '', username);
+    return await user.requestPasswordReset();
   }
 
   void logOut() {

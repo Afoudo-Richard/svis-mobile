@@ -73,20 +73,27 @@ class AppDrawer extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'editProfile',
-                                      style: TextStyle(color: Colors.grey),
-                                    ).tr(),
-                                    IconButton(
-                                      onPressed: () => {},
-                                      icon: Icon(Icons.edit),
-                                      iconSize: 16,
-                                      color: Colors.blue,
-                                    )
-                                  ],
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.of(context)
+                                      .push(UserProfilePage.route());
+                                },
+                                child: Container(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'editProfile',
+                                        style: TextStyle(color: Colors.grey),
+                                      ).tr(),
+                                      SizedBox(width: 10),
+                                      Icon(
+                                        Icons.edit,
+                                        size: 16,
+                                        color: kAppAccent,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             ],

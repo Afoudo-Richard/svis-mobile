@@ -44,6 +44,8 @@ class AuthenticationBloc
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
         return emit(const AuthenticationState.unauthenticated());
+      case AuthenticationStatus.passwordReset:
+        return emit(const AuthenticationState.passwordReset());
       case AuthenticationStatus.welcome:
         if (state.status == AuthenticationStatus.authenticated) {
           final user = await _tryGetUser();

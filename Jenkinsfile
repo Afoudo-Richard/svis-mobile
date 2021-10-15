@@ -1,6 +1,7 @@
 pipeline {
     environment {
         def scannerHome = tool 'sonarqube'
+        ARTIFACTORY_CREDENTIALS = credentials('artifactory-developer-credentials')
     }
     agent {
         docker {
@@ -32,6 +33,7 @@ pipeline {
             steps {
                 sh 'flutter --version'
                 sh 'flutter -v build apk'
+                // sh "curl -v --user $ARTIFACTORY_CREDENTIALS_USR:$ARTIFACTORY_CREDENTIALS_PSW --data-binary @build/app/outputs/flutter-apk/app-release.apk -X PUT 'http://artifactory-1:8081/artifactory/libs-snapshot-local/svis-app/app-release.apk'"
             }
         }
         stage("Acceptance test") {
