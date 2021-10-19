@@ -45,8 +45,8 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   String? get city => get<String?>('city');
   set city(String? value) => set<String?>('city', value);
 
-  String? get timeZone => get<String?>('timeZone');
-  set timeZone(String? value) => set<String?>('timeZone', value);
+  // dynamic get timeZone => get<dynamic>('timeZone');
+  // set timeZone(dynamic value) => set<dynamic>('timeZone', value);
 
   String? get driverLicenceIssueDate => get<String?>('driverLicenceIssueDate');
   set driverLicenceIssueDate(String? value) =>
@@ -68,8 +68,11 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   String? get state => get<String?>('state');
   set state(String? value) => set<String?>('state', value);
 
-  String? get region => get<String?>('Region');
-  set region(String? value) => set<String?>('Region', value);
+  ParseFile? get profile => get<ParseFile?>('profile');
+  set profile(ParseFile? value) => set<ParseFile?>('profile', value);
+
+  // String? get region => get<String?>('Region');
+  // set region(String? value) => set<String?>('Region', value);
 
   String? get phoneNumber => get<String?>('phoneNumber');
   set phoneNumber(String? value) => set<String?>('phoneNumber', value);
@@ -77,8 +80,8 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   String? get postalCdode => get<String?>('postalCdode');
   set postalCdode(String? value) => set<String?>('postalCdode', value);
 
-  String? get dateOfBirth => get<String?>('dateOfBirth');
-  set dateOfBirth(String? value) => set<String?>('dateOfBirth', value);
+  DateTime? get dateOfBirth => get<DateTime?>('dateOfBirth');
+  set dateOfBirth(DateTime? value) => set<DateTime?>('dateOfBirth', value);
 
   @override
   List<Object?> get props => [
@@ -94,13 +97,13 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
         addressLine1,
         addressLine2,
         city,
-        timeZone,
+        // timeZone,
         driverLicenceIssueDate,
         driverLicenceExpiryDate,
         driverLicenceDocument,
         driverLicenceType,
         state,
-        region,
+        // region,
         phoneNumber,
         postalCdode,
         dateOfBirth,
