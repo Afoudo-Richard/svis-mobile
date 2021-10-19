@@ -2,6 +2,7 @@ import 'package:app/app.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/password_update/view/view.dart';
+import 'package:app/terminate_account/view/view.dart';
 import 'package:app/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -169,7 +170,9 @@ class UserProfileForm extends StatelessWidget {
                         kDangerColor.withOpacity(0.1),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(TerminateAccountPage.route());
+                    },
                     child: Text(
                       'terminateAccount',
                       style: TextStyle(color: kDangerColor),
