@@ -34,6 +34,8 @@ dependencies:
   parse_server_sdk_flutter: ^3.1.0
   hydrated_bloc: ^7.1.0
   charts_flutter: ^0.11.0
+  flutter_map: ^0.14.0
+  # latlong: ^0.6.1
 
 #dependency_overrides:
 #  bloc:

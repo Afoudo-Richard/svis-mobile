@@ -1,5 +1,6 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
+import 'package:app/commons/widgets/bar_chart.dart';
 import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
 import 'package:app/user_profile/user_profile.dart';
@@ -8,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_map/flutter_map.dart';
+//import 'package:latlong/latlong.dart';
+
+import '../data.dart';
 
 part 'app_drawer.dart';
 
@@ -95,7 +100,6 @@ class HomePage extends StatelessWidget {
                                 "Speed",
                                 style: TextStyle(fontSize: 10.0),
                               ),
-                             
                               PopupMenuButton(
                                 child: Container(
                                   alignment: Alignment.centerLeft,
@@ -104,61 +108,68 @@ class HomePage extends StatelessWidget {
                                     size: 15.0,
                                   ),
                                 ),
-                                offset: Offset.fromDirection(-50.0, -600.0),
+                                offset: Offset(20, 20),
                                 padding: EdgeInsets.all(2),
                                 itemBuilder: (context) => [
                                   PopupMenuItem(
-                                    child: Text('Advance tracking', style: TextStyle(fontSize: 10.0),),
+                                    height: 15,
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'View vehicles',
+                                      style: TextStyle(fontSize: 10.0),
+                                    ),
                                     value: 1,
                                   ),
                                   PopupMenuItem(
-                                    child: Text('Advance tracking', style: TextStyle(fontSize: 10.0),),
+                                    height: 15,
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'View Drivers',
+                                      style: TextStyle(fontSize: 10.0),
+                                    ),
                                     value: 1,
                                   ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          ElevatedButton(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('filter'),
-                                SizedBox(
-                                  width: 5.0,
-                                ),
-                                Icon(
-                                  Icons.filter_alt,
-                                  size: 12,
-                                ),
-                              ],
-                            ),
+                          ElevatedButton.icon(
                             onPressed: () {},
-                            style: Theme.of(context)
-                                .elevatedButtonTheme
-                                .style
-                                ?.copyWith(
-                                    padding: MaterialStateProperty.all(
-                                  const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 15),
-                                )),
+                            icon: Text(
+                              "Filter",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            label: Icon(
+                              Icons.filter_alt,
+                              size: 12,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size.zero, // <-- Add this
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0,
+                                  vertical: 4.0), // <-- and this
+                            ),
                           ),
-                          
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                //child: GaugeChart(GaugeChart._createSampleData() ,animate: true),
-                                child: Text("Chart"),
-                                width: 100,
+                              Icon(Icons.chevron_left),
+                              // IconButton(
+                              //   onPressed: () {},
+                              //   icon: Icon(Icons.chevron_left),
+                              //   padding: EdgeInsets.only(right: 4),
+                              // ),
+                              Expanded(
+                                child: BarChart(
+                                  data: barChartData,
+                                ),
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [],
-                              ),
+                              // IconButton(
+                              //   padding: EdgeInsets.zero,
+                              //   onPressed: () {},
+                              //   icon: Icon(Icons.chevron_right),
+                              // ),
+                              Icon(Icons.chevron_right),
                             ],
                           ),
                         ],
@@ -186,20 +197,86 @@ class HomePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Safety score",
-                            style: TextStyle(fontSize: 10.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Safety score",
+                                style: TextStyle(fontSize: 10.0),
+                              ),
+                              PopupMenuButton(
+                                child: Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(
+                                    Icons.more_vert,
+                                    size: 15.0,
+                                  ),
+                                ),
+                                offset: Offset(20, 20),
+                                padding: EdgeInsets.all(2),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    height: 15,
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'View vehicles',
+                                      style: TextStyle(fontSize: 10.0),
+                                    ),
+                                    value: 1,
+                                  ),
+                                  PopupMenuItem(
+                                    height: 15,
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'View Drivers',
+                                      style: TextStyle(fontSize: 10.0),
+                                    ),
+                                    value: 1,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Text(
+                              "Filter",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            label: Icon(
+                              Icons.filter_alt,
+                              size: 12,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size.zero,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                                vertical: 4.0,
+                              ),
+                            ),
                           ),
                           SafetyScoreItem(
-                            icon: Icon(Icons.car_rental),
+                            icon: Image.asset(
+                              'assets/icons/vehicles.png',
+                              height: 25,
+                              width: 25,
+                              color: kAppPrimaryColor,
+                            ),
                             label: "Vehicles",
                             percentage: "25",
+                            increased: false,
                           ),
                           Divider(),
                           SafetyScoreItem(
-                            icon: Icon(Icons.usb_rounded),
+                            icon: Image.asset(
+                              'assets/icons/drivers.png',
+                              height: 25,
+                              width: 25,
+                              color: kAppPrimaryColor,
+                            ),
                             label: "Drivers",
-                            percentage: "25",
+                            percentage: "75",
+                            increased: true,
                           ),
                         ],
                       ),
@@ -246,20 +323,49 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                height: 200.0,
+                height: 230.0,
                 decoration: BoxDecoration(
                   color: kAppPrimaryColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Stack(
                   children: [
+                    // FlutterMap(
+                    //   options: MapOptions(
+                    //     center: LatLng(51.5, -0.09),
+                    //     zoom: 13.0,
+                    //   ),
+                    //   layers: [
+                    //     TileLayerOptions(
+                    //       urlTemplate:
+                    //           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    //       subdomains: ['a', 'b', 'c'],
+                    //       attributionBuilder: (_) {
+                    //         return Text("© OpenStreetMap contributors");
+                    //       },
+                    //     ),
+                    //     MarkerLayerOptions(
+                    //       markers: [
+                    //         Marker(
+                    //           width: 80.0,
+                    //           height: 80.0,
+                    //           point: LatLng(51.5, -0.09),
+                    //           builder: (ctx) => Container(
+                    //             child: FlutterLogo(),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ],
+                    // ),
                     Positioned(
                       bottom: 0,
                       left: 0,
                       right: 0,
                       child: Container(
-                        height: 90.0,
-                        padding: EdgeInsets.all(5),
+                        height: 95.0,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -269,7 +375,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             MapItem(
                               icon: Icon(
-                                Icons.mail,
+                                Icons.location_searching_rounded,
                                 color: Colors.green,
                                 size: 15,
                               ),
@@ -279,7 +385,7 @@ class HomePage extends StatelessWidget {
                             ),
                             MapItem(
                               icon: Icon(
-                                Icons.mail,
+                                Icons.sensors,
                                 color: Colors.blue,
                                 size: 15,
                               ),
@@ -289,7 +395,7 @@ class HomePage extends StatelessWidget {
                             ),
                             MapItem(
                               icon: Icon(
-                                Icons.mail,
+                                Icons.warning,
                                 color: Colors.red,
                                 size: 15,
                               ),
@@ -323,6 +429,59 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: Text(
+                            "Filter",
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          label: Icon(
+                            Icons.filter_alt,
+                            size: 12,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size.zero, // <-- Add this
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.0,
+                                vertical: 4.0), // <-- and this
+                          ),
+                        ),
+                        PopupMenuButton(
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Icon(
+                              Icons.more_vert,
+                              size: 15.0,
+                            ),
+                          ),
+                          offset: Offset(20, 20),
+                          padding: EdgeInsets.all(2),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              height: 15,
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                'View',
+                                style: TextStyle(fontSize: 10.0),
+                              ),
+                              value: 1,
+                            ),
+                            PopupMenuItem(
+                              height: 15,
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                'Reset',
+                                style: TextStyle(fontSize: 10.0),
+                              ),
+                              value: 1,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 10.0,
                     ),
@@ -401,12 +560,11 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              
                             ],
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left:10.0),
+                          margin: EdgeInsets.only(left: 10.0),
                           child: Icon(Icons.chevron_right),
                         )
                       ],
@@ -455,10 +613,14 @@ class MapItem extends StatelessWidget {
             style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500)),
         Row(
           children: [
-            Icon(
-              Icons.car_rental,
-              size: 13.0,
+            Image.asset(
+              'assets/icons/vehicles.png',
+              height: 20,
+              width: 20,
               color: color,
+            ),
+            SizedBox(
+              width: 3.0,
             ),
             Text(
               label,
@@ -478,12 +640,14 @@ class SafetyScoreItem extends StatelessWidget {
       {Key? key,
       required this.label,
       required this.icon,
-      required this.percentage})
+      required this.percentage,
+      required this.increased})
       : super(key: key);
 
   final String label;
-  final Icon icon;
+  final Widget icon;
   final String percentage;
+  final bool increased;
 
   @override
   Widget build(BuildContext context) {
@@ -504,8 +668,8 @@ class SafetyScoreItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(
-              Icons.expand_less,
-              color: Colors.green,
+              increased ? Icons.expand_less : Icons.expand_more,
+              color: increased ? Colors.green : Colors.red,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
