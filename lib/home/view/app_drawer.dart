@@ -47,8 +47,18 @@ class AppDrawer extends StatelessWidget {
                           Row(
                             children: [
                               CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 35.0,
+                                radius: 35,
+                                child: state.user?.profile != null
+                                    ? CircleAvatar(
+                                        backgroundColor: kAppAccent,
+                                        radius: 32,
+                                        backgroundImage: NetworkImage(
+                                            state.user?.profile?.url ?? ''),
+                                      )
+                                    : CircleAvatar(
+                                        backgroundColor: kAppAccent,
+                                        radius: 38,
+                                      ),
                               ),
                               SizedBox(
                                 width: 10.0,

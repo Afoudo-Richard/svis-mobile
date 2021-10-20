@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 
 part 'password_update_event.dart';
 
@@ -79,18 +80,30 @@ class PasswordUpdateBloc
   ) async {
     if (state.status.isValidated) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      var user = await ParseUser.currentUser() as User;
       try {
-        /* ParseResponse response = await _authenticationRepository.resetPassword(
-          username: state.oldPassword.value,
-        );
+        var response = await ParseUser(
+                user.emailAddress, state.oldPassword.value, user.emailAddress)
+            .login();
         if (response.success) {
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+          user.password = state.password.value;
+          ParseResponse response = await user.save();
+          if (response.success) {
+            emit(state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              oldPassword: Name.pure(),
+              password: StrongPassword.pure(),
+              confirmPassword: ConfirmPassword.pure(),
+            ));
+          } else {
+            emit(state.copyWith(
+              status: FormzStatus.submissionFailure,
+              error: response.error?.message ?? 'unable to login',
+            ));
+          }
         } else {
-          emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
-            error: response.error?.message ?? 'unable to login',
-          ));
-        } */
+          throw response.error?.message ?? 'unable to login';
+        }
 
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } catch (error) {

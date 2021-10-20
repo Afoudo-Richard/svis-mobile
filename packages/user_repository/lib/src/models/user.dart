@@ -33,6 +33,56 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
   String? get country => get<String?>('country');
   set country(String? value) => set<String?>('country', value);
 
+  String? get gender => get<String?>('gender');
+  set gender(String? value) => set<String?>('gender', value);
+
+  String? get addressLine1 => get<String?>('addressLine1');
+  set addressLine1(String? value) => set<String?>('addressLine1', value);
+
+  String? get addressLine2 => get<String?>('addressLine2');
+  set addressLine2(String? value) => set<String?>('addressLine2', value);
+
+  String? get city => get<String?>('city');
+  set city(String? value) => set<String?>('city', value);
+
+  // dynamic get timeZone => get<dynamic>('timeZone');
+  // set timeZone(dynamic value) => set<dynamic>('timeZone', value);
+
+  String? get driverLicenceIssueDate => get<String?>('driverLicenceIssueDate');
+  set driverLicenceIssueDate(String? value) =>
+      set<String?>('driverLicenceIssueDate', value);
+
+  String? get driverLicenceExpiryDate =>
+      get<String?>('driverLicenceExpiryDate');
+  set driverLicenceExpiryDate(String? value) =>
+      set<String?>('driverLicenceExpiryDate', value);
+
+  String? get driverLicenceDocument => get<String?>('driverLicenceDocument');
+  set driverLicenceDocument(String? value) =>
+      set<String?>('driverLicenceDocument', value);
+
+  String? get driverLicenceType => get<String?>('driverLicenceType');
+  set driverLicenceType(String? value) =>
+      set<String?>('driverLicenceType', value);
+
+  String? get state => get<String?>('state');
+  set state(String? value) => set<String?>('state', value);
+
+  ParseFile? get profile => get<ParseFile?>('profile');
+  set profile(ParseFile? value) => set<ParseFile?>('profile', value);
+
+  // String? get region => get<String?>('Region');
+  // set region(String? value) => set<String?>('Region', value);
+
+  String? get phoneNumber => get<String?>('phoneNumber');
+  set phoneNumber(String? value) => set<String?>('phoneNumber', value);
+
+  String? get postalCdode => get<String?>('postalCdode');
+  set postalCdode(String? value) => set<String?>('postalCdode', value);
+
+  DateTime? get dateOfBirth => get<DateTime?>('dateOfBirth');
+  set dateOfBirth(DateTime? value) => set<DateTime?>('dateOfBirth', value);
+
   @override
   List<Object?> get props => [
         username,
@@ -42,5 +92,20 @@ class User extends ParseUser with EquatableMixin implements ParseCloneable {
         email,
         firstName,
         lastName,
+        country,
+        gender,
+        addressLine1,
+        addressLine2,
+        city,
+        // timeZone,
+        driverLicenceIssueDate,
+        driverLicenceExpiryDate,
+        driverLicenceDocument,
+        driverLicenceType,
+        state,
+        // region,
+        phoneNumber,
+        postalCdode,
+        dateOfBirth,
       ];
 }
