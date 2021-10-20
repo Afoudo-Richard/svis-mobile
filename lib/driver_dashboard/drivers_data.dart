@@ -1,4 +1,5 @@
-import 'package:app/drivers/models/driver_model.dart';
+import 'package:app/driver_dashboard/models/driver_model.dart';
+
 
 List<Driver> drivers = [
   Driver(

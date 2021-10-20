@@ -1,6 +1,6 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
-import 'package:app/drivers/models/driver_model.dart';
+import 'package:app/driver_dashboard/models/driver_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 

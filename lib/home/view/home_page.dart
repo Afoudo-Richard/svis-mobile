@@ -144,11 +144,13 @@ class HomePage extends StatelessWidget {
                               Icons.filter_alt,
                               size: 12,
                             ),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero, // <-- Add this
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.0,
-                                  vertical: 4.0), // <-- and this
+                            style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(Size.zero),
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 4.0),
+                              ),
+                              elevation: MaterialStateProperty.all(0),
                             ),
                           ),
                           Row(
@@ -248,12 +250,13 @@ class HomePage extends StatelessWidget {
                               Icons.filter_alt,
                               size: 12,
                             ),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15.0,
-                                vertical: 4.0,
+                            style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(Size.zero),
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.symmetric(
+                                    horizontal: 15.0, vertical: 4.0),
                               ),
+                              elevation: MaterialStateProperty.all(0),
                             ),
                           ),
                           SafetyScoreItem(
@@ -465,11 +468,13 @@ class HomePage extends StatelessWidget {
                             Icons.filter_alt,
                             size: 12,
                           ),
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size.zero, // <-- Add this
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.0,
-                                vertical: 4.0), // <-- and this
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size.zero),
+                            padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 4.0),
+                            ),
+                            elevation: MaterialStateProperty.all(0),
                           ),
                         ),
                         PopupMenuButton(
