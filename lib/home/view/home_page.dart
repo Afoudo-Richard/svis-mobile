@@ -4,6 +4,7 @@ import 'package:app/commons/time_item.dart';
 import 'package:app/commons/widgets/bar_chart.dart';
 import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
+import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
 import 'package:app/users/views/users_page.dart';
 import 'package:flutter/material.dart';
@@ -48,23 +49,51 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Builder(
                 builder: (context) {
-                  final user = context.select(
-                    (AuthenticationBloc bloc) => bloc.state.user,
+                  final profile = context.select(
+                    (AuthenticationBloc bloc) => bloc.state.profile,
+                  );
+                  final profileUsers = context.select(
+                    (AuthenticationBloc bloc) => bloc.state.profileUsers,
                   );
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Hi, ${user?.firstName ?? 'N/A'}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                      Expanded(
+                        child: Text(
+                          'Hi, ${profile?.profile?.companyName ?? 'N/A'}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.copyWith(fontWeight: FontWeight.w600),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: AssetImage("assets/images/user.png"),
-                        backgroundColor: kAppPrimaryColor,
+                      PopupMenuButton<ProfileUser>(
+                        iconSize: 30,
+                        padding: EdgeInsets.zero,
+                        icon: CircleAvatar(
+                          backgroundImage: AssetImage("assets/images/user.png"),
+                          backgroundColor: kAppPrimaryColor,
+                        ),
+                        onSelected: (ProfileUser profile) {
+                          context
+                              .read<AuthenticationBloc>()
+                              .add(AuthenticationProfileChanged(profile));
+                        },
+                        itemBuilder: (context) =>
+                            profileUsers
+                                ?.map((item) => PopupMenuItem<ProfileUser>(
+                                      child: Text(item.profile?.companyName ??
+                                              item.profile?.firstName ??
+                                              item.profile?.lastName ??
+                                              item.profile?.objectId ??
+                                              '')
+                                          .tr(),
+                                      value: item,
+                                    ))
+                                .toList() ??
+                            [],
                       ),
                     ],
                   );

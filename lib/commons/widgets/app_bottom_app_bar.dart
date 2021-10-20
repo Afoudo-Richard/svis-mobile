@@ -1,4 +1,6 @@
 import 'package:app/commons/colors.dart';
+import 'package:app/drivers/view/drivers_page.dart';
+import 'package:app/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -37,6 +39,9 @@ class AppBottomAppBar extends StatelessWidget {
                 label: 'Vehicle',
               ),
               _BottomBarItem(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(HomePage.route());
+                },
                 icon: Image.asset(
                   'assets/icons/dashboard.png',
                   height: 28,
@@ -45,6 +50,9 @@ class AppBottomAppBar extends StatelessWidget {
                 label: 'Dashboard',
               ),
               _BottomBarItem(
+                onTap: () {
+                  Navigator.of(context).push(Drivers.route());
+                },
                 icon: Image.asset(
                   'assets/icons/drivers.png',
                   height: 28,

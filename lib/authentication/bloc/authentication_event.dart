@@ -16,4 +16,13 @@ class AuthenticationStatusChanged extends AuthenticationEvent {
   List<Object> get props => [status];
 }
 
+class AuthenticationProfileChanged extends AuthenticationEvent {
+  const AuthenticationProfileChanged(this.profile);
+
+  final ProfileUser profile;
+
+  @override
+  List<Object> get props => [profile];
+}
+
 class AuthenticationLogoutRequested extends AuthenticationEvent {}

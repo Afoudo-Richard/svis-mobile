@@ -7,6 +7,9 @@ import 'package:app/commons/multi_select_item.dart';
 
 class Drivers extends StatefulWidget {
   const Drivers({Key? key}) : super(key: key);
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => Drivers());
+  }
 
   @override
   _DriversState createState() => _DriversState();
