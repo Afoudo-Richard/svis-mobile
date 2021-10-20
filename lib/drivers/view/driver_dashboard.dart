@@ -137,6 +137,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                 height: 20.0,
               ),
               Row(
+              
                 children: [
                   Expanded(
                     child: Container(
