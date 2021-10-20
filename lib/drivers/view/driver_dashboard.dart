@@ -51,9 +51,9 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -137,7 +137,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                 height: 20.0,
               ),
               Row(
-              
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Container(

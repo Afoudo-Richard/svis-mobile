@@ -1,3 +1,4 @@
+import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
 import 'package:app/commons/widgets/bar_chart.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_map/flutter_map.dart';
-//import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../data.dart';
 
@@ -323,41 +324,43 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                height: 230.0,
+                height: kDeviceSize.height * 0.3,
                 decoration: BoxDecoration(
                   color: kAppPrimaryColor,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Stack(
                   children: [
-                    // FlutterMap(
-                    //   options: MapOptions(
-                    //     center: LatLng(51.5, -0.09),
-                    //     zoom: 13.0,
-                    //   ),
-                    //   layers: [
-                    //     TileLayerOptions(
-                    //       urlTemplate:
-                    //           "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    //       subdomains: ['a', 'b', 'c'],
-                    //       attributionBuilder: (_) {
-                    //         return Text("© OpenStreetMap contributors");
-                    //       },
-                    //     ),
-                    //     MarkerLayerOptions(
-                    //       markers: [
-                    //         Marker(
-                    //           width: 80.0,
-                    //           height: 80.0,
-                    //           point: LatLng(51.5, -0.09),
-                    //           builder: (ctx) => Container(
-                    //             child: FlutterLogo(),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ],
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 90),
+                      child: FlutterMap(
+                        options: MapOptions(
+                          center: LatLng(51.5, -0.09),
+                          zoom: 13.0,
+                        ),
+                        layers: [
+                          TileLayerOptions(
+                            urlTemplate:
+                                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            subdomains: ['a', 'b', 'c'],
+                            attributionBuilder: (_) {
+                              return Text("© OpenStreetMap contributors");
+                            },
+                          ),
+                          MarkerLayerOptions(
+                            markers: [
+                              Marker(
+                                width: 80.0,
+                                height: 80.0,
+                                point: LatLng(51.5, -0.09),
+                                builder: (ctx) =>
+                                    Image.asset('assets/markers/online.png'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -407,6 +410,26 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Positioned(
+                      left: 10,
+                      top: 10,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: kAppPrimaryColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.fullscreen,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
