@@ -1,8 +1,8 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/drivers/models/driver_model.dart';
-import 'package:app/drivers/view/driver_dashboard.dart';
+import 'package:app/driver_dashboard/view/driver_dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:app/drivers/drivers_data.dart';
+import 'package:app/driver_dashboard/drivers_data.dart';
 import 'package:app/commons/multi_select_item.dart';
 
 class Drivers extends StatefulWidget {
