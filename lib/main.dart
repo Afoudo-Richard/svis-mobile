@@ -1,3 +1,4 @@
+import 'package:app/repository/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:app/app.dart';
@@ -46,7 +47,10 @@ registerParseServer() async {
           {client, debug, sessionToken}) =>
       User(username, password, emailAddress));
 
-  // ParseCoreData().registerSubClass(kIncidentReport, () => IncidentReport());
-  // ParseCoreData().registerSubClass(kIncidentReport, () => IncidentCategory());
-  // ParseCoreData().registerSubClass(kIncidentReport, () => Institution());
+  ParseCoreData().registerSubClass(kGroup, () => Group());
+  ParseCoreData().registerSubClass(kPermission, () => Permission());
+  ParseCoreData().registerSubClass(kProfile, () => Profile());
+  ParseCoreData().registerSubClass(kProfileUser, () => ProfileUser());
+  ParseCoreData().registerSubClass(kProfileUserTypes, () => ProfileUserTypes());
+  ParseCoreData().registerSubClass(kSVISRole, () => SvisRole());
 }

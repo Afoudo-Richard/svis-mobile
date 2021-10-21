@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:app/repository/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:user_repository/user_repository.dart';
 
 part 'authentication_event.dart';
@@ -18,6 +20,7 @@ class AuthenticationBloc
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
+    on<AuthenticationProfileChanged>(_onAuthenticationProfileChanged);
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
@@ -48,9 +51,8 @@ class AuthenticationBloc
         return emit(const AuthenticationState.passwordReset());
       case AuthenticationStatus.welcome:
         if (state.status == AuthenticationStatus.authenticated) {
-          final user = await _tryGetUser();
-          return emit(user != null
-              ? AuthenticationState.authenticated(user)
+          return emit(state.user?.objectId != null
+              ? state
               : const AuthenticationState.unauthenticated());
         } else {
           return emit(const AuthenticationState.welcome());
@@ -59,11 +61,32 @@ class AuthenticationBloc
         return emit(const AuthenticationState.registration());
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
+        final profiles = await _tryGetProfiles();
+
         return emit(user != null
-            ? AuthenticationState.authenticated(user)
+            ? AuthenticationState.authenticated(
+                user: user,
+                profileUsers: profiles,
+                profile: profiles.first,
+              )
             : const AuthenticationState.unauthenticated());
       default:
         return emit(const AuthenticationState.unknown());
+    }
+  }
+
+  void _onAuthenticationProfileChanged(
+    AuthenticationProfileChanged event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    if (event.profile != null) {
+      emit(
+        AuthenticationState.authenticated(
+          user: state.user,
+          profileUsers: state.profileUsers,
+          profile: event.profile,
+        ),
+      );
     }
   }
 
@@ -81,6 +104,13 @@ class AuthenticationBloc
     } catch (_) {
       return null;
     }
+  }
+
+  Future<List<ProfileUser>> _tryGetProfiles() async {
+    QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
+    query.whereEqualTo('User', await ParseUser.currentUser());
+    query.includeObject(['User', 'ProfileUserTypes', 'Profile']);
+    return query.find();
   }
 
   @override
