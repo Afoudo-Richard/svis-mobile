@@ -4,6 +4,8 @@ import 'package:app/driver_dashboard/view/driver_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:app/driver_dashboard/drivers_data.dart';
 import 'package:app/commons/multi_select_item.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 
 class Drivers extends StatefulWidget {
   const Drivers({Key? key}) : super(key: key);
@@ -21,6 +23,23 @@ class _DriversState extends State<Drivers> {
 
     controller.disableEditingWhenNoneSelected = true;
     controller.set(drivers.length);
+    getUsers().then((response){
+
+      //print(respnse.result);
+      // for(var user in response.result){
+      //   print(user.toString());
+      // }
+      ParseUser.currentUser().then((user) => print(user.toString()));
+    }).onError((error, stackTrace){
+      print(error);
+      print("An error occured");
+    });
+
+  }
+
+  Future<ParseResponse> getUsers() async {
+    var response = await ParseUser.all();
+    return response;
   }
 
   @override
@@ -137,7 +156,6 @@ class _DriversState extends State<Drivers> {
                   },
                   onTap: () {
                     if (!controller.isSelecting) {
-                      print(controller.isSelecting);
                       Navigator.of(context)
                           .push(DriverDashboardPage.route(drivers[index]));
                     } else {
@@ -161,7 +179,6 @@ class _DriversState extends State<Drivers> {
               },
               onTap: () {
                 if (!controller.isSelecting) {
-                  print(controller.isSelecting);
                   Navigator.of(context)
                       .push(DriverDashboardPage.route(drivers[index]));
                 } else {

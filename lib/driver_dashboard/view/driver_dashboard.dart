@@ -163,10 +163,12 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                           ),
                           Column(
                             children: [
-                              Container(
-                                //child: GaugeChart(GaugeChart._createSampleData() ,animate: true),
-                                child: Text("Chart"),
-                                width: 100,
+                              Expanded(
+                                child: Container(
+                                  //child: GaugeChart(GaugeChart._createSampleData() ,animate: true),
+                                  child: Text("Chart"),
+                                  
+                                ),
                               ),
                               Row(
                                 mainAxisAlignment:
