@@ -1,5 +1,5 @@
 import 'package:app/commons/colors.dart';
-import 'package:app/drivers/view/drivers_page.dart';
+// import 'package:app/drivers/view/drivers_page.dart';
 import 'package:app/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -51,7 +51,7 @@ class AppBottomAppBar extends StatelessWidget {
               ),
               _BottomBarItem(
                 onTap: () {
-                  Navigator.of(context).push(Drivers.route());
+                  // Navigator.of(context).push(Drivers.route());
                 },
                 icon: Image.asset(
                   'assets/icons/drivers.png',

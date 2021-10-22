@@ -13,14 +13,14 @@ class DriversState extends Equatable {
   }
 
   final DriversStatus status;
-  final List<User> drivers;
+  final List<User?> drivers;
   final bool hasReachedMax;
   final MultiSelectController isSelectingController = MultiSelectController();
 
 
 
   DriversState copyWith({
-    List<User>? drivers,
+    List<User?>? drivers,
     bool? hasReachedMax,
     DriversStatus? status,
   }) {

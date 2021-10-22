@@ -8,9 +8,9 @@ import 'package:easy_localization/easy_localization.dart';
 
 class DriverDashboardPage extends StatefulWidget {
   const DriverDashboardPage({Key? key, required this.user}) : super(key: key);
-  final User user;
+  final User? user;
 
-  static Route route(User user){
+  static Route route(User? user){
     return MaterialPageRoute<void>(
         builder: (_) => DriverDashboardPage(user: user));
   }
@@ -76,7 +76,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.user.lastName ?? "",
+                            widget.user?.lastName ?? "",
                             style: TextStyle(
                                 color: kAppPrimaryColor,
                                 fontSize: 20,

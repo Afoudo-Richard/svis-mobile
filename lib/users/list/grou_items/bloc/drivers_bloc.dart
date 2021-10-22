@@ -1,4 +1,6 @@
 import 'package:app/commons/multi_select_item.dart';
+import 'package:app/repository/models/profile_user.dart';
+import 'package:app/repository/models/profile_user_types.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -8,7 +10,11 @@ part 'drivers_event.dart';
 part 'drivers_state.dart';
 
 class DriversBloc extends Bloc<DriversEvent, DriversState> {
-  DriversBloc() : super(DriversState()) {
+  ProfileUserTypes type;
+  final ProfileUser profile;
+
+  DriversBloc({required this.type, required this.profile})
+      : super(DriversState()) {
     on<DriversFetch>(_onDriversFetched);
   }
 
@@ -42,10 +48,13 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
     }
   }
 
-  Future<List<User>> _fetchUsers([int startIndex = 0]) async {
-    QueryBuilder<User> query = QueryBuilder<User>(User(null, null, null));
+  Future<List<User?>> _fetchUsers([int startIndex = 0]) async {
+    QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
     query.setAmountToSkip(startIndex);
-    return query.find();
+    query.whereEqualTo('Profile', profile.profile);
+    query.whereEqualTo('ProfileUserTypes', type);
+    query.includeObject(['ProfileUserTypes', 'User']);
+    query.setLimit(20);
+    return (await query.find()).map((e) => e.user).toList();
   }
-
 }

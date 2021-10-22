@@ -36,7 +36,8 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
         final items = await _fetchItems();
         return emit(state.copyWith(
           status: UserListStatus.success,
-          items: items
+          profileUsers: items,
+          profileUserTypes: items
               .where((element) => element.profileUserType != null)
               .map((item) => item.profileUserType as ProfileUserTypes)
               .toList()
@@ -46,12 +47,13 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
         ));
       }
 
-      final items = await _fetchItems(state.items.length);
+      final items = await _fetchItems(state.profileUserTypes.length);
       emit(items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: UserListStatus.success,
-              items: List.of(state.items)
+              profileUsers: List.of(state.profileUsers)..addAll(items),
+              profileUserTypes: List.of(state.profileUserTypes)
                 ..addAll(items
                     .where((element) => element.profileUserType != null)
                     .map((item) => item.profileUserType as ProfileUserTypes)
