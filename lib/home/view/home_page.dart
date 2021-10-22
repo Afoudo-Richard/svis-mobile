@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'Hi, ${profile?.profile?.companyName ?? 'N/A'}',
+                          'Hi, ${profile?.profile?.companyName ?? 'Personal'}',
                           style: Theme.of(context)
                               .textTheme
                               .headline4
@@ -85,10 +85,7 @@ class HomePage extends StatelessWidget {
                             profileUsers
                                 ?.map((item) => PopupMenuItem<ProfileUser>(
                                       child: Text(item.profile?.companyName ??
-                                              item.profile?.firstName ??
-                                              item.profile?.lastName ??
-                                              item.profile?.objectId ??
-                                              '')
+                                              'Personal')
                                           .tr(),
                                       value: item,
                                     ))

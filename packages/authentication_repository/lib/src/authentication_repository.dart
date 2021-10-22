@@ -52,10 +52,15 @@ class AuthenticationRepository {
     required String firstName,
     required String lastName,
   }) async {
-    var user = ParseUser(email, password, email)
-      ..set('firstName', firstName)
-      ..set('lastName', lastName);
-    var response = await user.signUp();
+    final ParseCloudFunction function = ParseCloudFunction('register');
+    final Map<String, String> params = <String, String>{
+      'email': email,
+      'username': email,
+      'password': password,
+      'firstName': firstName,
+      'lastName': lastName,
+    };
+    ParseResponse response = await function.execute(parameters: params);
     if (response.success && response.result['code'] == null) {
       return Future.value(response.result);
     } else {
