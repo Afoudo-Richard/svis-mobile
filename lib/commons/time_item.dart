@@ -11,6 +11,7 @@ class TimeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2.0),
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
         decoration: BoxDecoration(
           color: Colors.white,

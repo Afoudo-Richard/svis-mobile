@@ -1,16 +1,18 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
-import 'package:app/drivers/models/driver_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:user_repository/user_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 class DriverDashboardPage extends StatefulWidget {
-  const DriverDashboardPage({Key? key, required this.driver}) : super(key: key);
-  final Driver driver;
+  const DriverDashboardPage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
-  static Route route(Driver driver) {
+  static Route route(User user){
     return MaterialPageRoute<void>(
-        builder: (_) => DriverDashboardPage(driver: driver));
+        builder: (_) => DriverDashboardPage(user: user));
   }
 
   @override
@@ -22,38 +24,38 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Driver"),
+        title: Text("driver").tr(),
         actions: [
           PopupMenuButton(
             iconSize: 35.0,
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text('Advance tracking'),
+                child: Text('Advance tracking').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Add driver'),
+                child: Text('addDriver').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('View'),
+                child: Text('view').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Edit'),
+                child: Text('edit').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Delete'),
+                child: Text('delete').tr(),
                 value: 1,
               ),
             ],
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -74,7 +76,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.driver.name,
+                            widget.user.lastName ?? "",
                             style: TextStyle(
                                 color: kAppPrimaryColor,
                                 fontSize: 20,
@@ -89,7 +91,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                 width: 7.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: widget.driver.isActive
+                                  color: true
                                       ? Colors.blue
                                       : Colors.red,
                                 ),
@@ -99,7 +101,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    (widget.driver.isActive
+                                    (true
                                             ? "Active"
                                             : "Inactive") +
                                         " | Vehicle LTR 23214",
@@ -108,13 +110,13 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                     ),
                                   ),
                                   Text(
-                                    "More information",
+                                    "moreInformation",
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.blue,
                                         decorationStyle:
                                             TextDecorationStyle.solid),
-                                  ),
+                                  ).tr(),
                                 ],
                               ),
                             ],
@@ -137,6 +139,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                 height: 20.0,
               ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Container(
@@ -165,11 +168,9 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                               Container(
                                 //child: GaugeChart(GaugeChart._createSampleData() ,animate: true),
                                 child: Text("Chart"),
-                                width: 100,
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   OperatingScoreItem(
                                     value: "30%",
@@ -178,7 +179,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.green[900],
                                       size: 15,
                                     ),
-                                    label: "low risk",
+                                    label: "lowRisk".tr(),
                                   ),
                                   OperatingScoreItem(
                                     value: "20%",
@@ -187,7 +188,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.red[900],
                                       size: 15,
                                     ),
-                                    label: "High risk",
+                                    label: "highRisk".tr(),
                                   ),
                                   OperatingScoreItem(
                                     value: "25%",
@@ -196,7 +197,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.orange[900],
                                       size: 15,
                                     ),
-                                    label: "Medium risk",
+                                    label: "mediumRisk".tr(),
                                   ),
                                 ],
                               ),
@@ -326,10 +327,9 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Recent Actions",
-                    style:
-                        TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
-                  ),
+                    "recentActions",
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
+                  ).tr(),
                   PopupMenuButton(
                     iconSize: 35.0,
                     padding: EdgeInsets.zero,
@@ -370,53 +370,55 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
               ),
               SizedBox(height: 20.0),
 
-              Column(children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: Transform.translate(
-                            offset: Offset(-16, 0),
-                            child: Text('Role'),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Transform.translate(
+                              offset: Offset(-16, 0),
+                              child: Text('Role'),
+                            ),
+                            //trailing: Icon(Icons.chevron_right_outlined),
+                            trailing: Transform.translate(
+                              offset: Offset(16, 0),
+                              child: Icon(Icons.chevron_right_outlined),
+                            ),
                           ),
-                          //trailing: Icon(Icons.chevron_right_outlined),
-                          trailing: Transform.translate(
-                            offset: Offset(16, 0),
-                            child: Icon(Icons.chevron_right_outlined),
+                          Divider(),
+                          ListTile(
+                            leading: Transform.translate(
+                              offset: Offset(-16, 0),
+                              child: Text('Group'),
+                            ),
+                            //trailing: Icon(Icons.chevron_right_outlined),
+                            trailing: Transform.translate(
+                              offset: Offset(16, 0),
+                              child: Icon(Icons.chevron_right_outlined),
+                            ),
                           ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          leading: Transform.translate(
-                            offset: Offset(-16, 0),
-                            child: Text('Group'),
+                          Divider(),
+                          ListTile(
+                            leading: Transform.translate(
+                              offset: Offset(-16, 0),
+                              child: Text('Permisions'),
+                            ),
+                            //trailing: Icon(Icons.chevron_right_outlined),
+                            trailing: Transform.translate(
+                              offset: Offset(16, 0),
+                              child: Icon(Icons.chevron_right_outlined),
+                            ),
                           ),
-                          //trailing: Icon(Icons.chevron_right_outlined),
-                          trailing: Transform.translate(
-                            offset: Offset(16, 0),
-                            child: Icon(Icons.chevron_right_outlined),
-                          ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          leading: Transform.translate(
-                            offset: Offset(-16, 0),
-                            child: Text('Permisions'),
-                          ),
-                          //trailing: Icon(Icons.chevron_right_outlined),
-                          trailing: Transform.translate(
-                            offset: Offset(16, 0),
-                            child: Icon(Icons.chevron_right_outlined),
-                          ),
-                        ),
-                        Divider(),
-                      ],
+                          Divider(),
+                        ],
+                      ),
                     ),
                   ),
-                )
-              ])
+                ],
+              ),
             ],
           ),
         ),
@@ -494,9 +496,10 @@ class RecentActionItem extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text(date, style: TextStyle(
-                    fontSize: 13.0
-                  ),),
+                  Text(
+                    date,
+                    style: TextStyle(fontSize: 13.0),
+                  ),
                 ],
               ),
             ],
@@ -506,8 +509,6 @@ class RecentActionItem extends StatelessWidget {
     );
   }
 }
-
-
 
 class EventItem extends StatelessWidget {
   const EventItem(
