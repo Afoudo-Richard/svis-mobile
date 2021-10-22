@@ -56,6 +56,24 @@
   "generalInformation": "General Information",
   "editProfile": "Edit profile",
   "privacyPolicyAndTerms": "Privacy policy | Term of Services",
-  "search" : "Search"
-
+  "search" : "Search",
+  "driver": "Driver",
+  "drivers": "Drivers",
+  "recentActions": "Recent Actions",
+  "addDriver": "Add Driver",
+  "archived" : "Archived",
+  "assign": "Assign",
+  "select": "Select",
+  "delete": "Delete",
+  "failedToFetchDrivers": "Failed to fetch drivers",
+  "reload":"Reload",
+  "noDrivers": "No drivers",
+  "advanceTracking": "Advance tracking",
+  "view": "View",
+  "edit": "Edit",
+  "moreInformation": "More information",
+  "lowRisk": "Low risk",
+  "highRisk": "High risk",
+  "mediumRisk": "Medium risk"
+  
 }

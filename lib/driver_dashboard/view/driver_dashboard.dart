@@ -1,9 +1,10 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
-import 'package:app/driver_dashboard/models/driver_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:user_repository/user_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 class DriverDashboardPage extends StatefulWidget {
   const DriverDashboardPage({Key? key, required this.user}) : super(key: key);
@@ -23,29 +24,29 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Driver"),
+        title: Text("driver").tr(),
         actions: [
           PopupMenuButton(
             iconSize: 35.0,
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text('Advance tracking'),
+                child: Text('Advance tracking').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Add driver'),
+                child: Text('addDriver').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('View'),
+                child: Text('view').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Edit'),
+                child: Text('edit').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Delete'),
+                child: Text('delete').tr(),
                 value: 1,
               ),
             ],
@@ -109,13 +110,13 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                     ),
                                   ),
                                   Text(
-                                    "More information",
+                                    "moreInformation",
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.blue,
                                         decorationStyle:
                                             TextDecorationStyle.solid),
-                                  ),
+                                  ).tr(),
                                 ],
                               ),
                             ],
@@ -178,7 +179,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.green[900],
                                       size: 15,
                                     ),
-                                    label: "low risk",
+                                    label: "lowRisk".tr(),
                                   ),
                                   OperatingScoreItem(
                                     value: "20%",
@@ -187,7 +188,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.red[900],
                                       size: 15,
                                     ),
-                                    label: "High risk",
+                                    label: "highRisk".tr(),
                                   ),
                                   OperatingScoreItem(
                                     value: "25%",
@@ -196,7 +197,7 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                                       color: Colors.orange[900],
                                       size: 15,
                                     ),
-                                    label: "Medium risk",
+                                    label: "mediumRisk".tr(),
                                   ),
                                 ],
                               ),
@@ -326,9 +327,9 @@ class _DriverDashboardPageState extends State<DriverDashboardPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Recent Actions",
+                    "recentActions",
                     style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20.0),
-                  ),
+                  ).tr(),
                   PopupMenuButton(
                     iconSize: 35.0,
                     padding: EdgeInsets.zero,

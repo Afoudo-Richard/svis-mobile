@@ -1,9 +1,11 @@
+import 'package:app/commons/colors.dart';
 import 'package:app/driver_dashboard/view/driver_dashboard.dart';
 import 'package:app/drivers/bloc/drivers_bloc.dart';
 import 'package:app/drivers/view/drivers_page.dart';
 import 'package:app/drivers/widgets/bottom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DriversList extends StatefulWidget {
   const DriversList({Key? key}) : super(key: key);
@@ -28,14 +30,12 @@ class _DriversListState extends State<DriversList> {
     final driversBloc = BlocProvider.of<DriversBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Drivers"),
+        title: Text("drivers").tr(),
         actions: [
           if (driversBloc.state.isSelectingController.isSelecting) ...[
             IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () {
-                context.read<DriversBloc>().add((DeleteUsers()));
-              },
+              onPressed: () {},
             ),
             IconButton(
               icon: Icon(Icons.event_note),
@@ -47,23 +47,23 @@ class _DriversListState extends State<DriversList> {
             iconSize: 35.0,
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: Text('Add driver'),
+                child: Text('addDriver').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Archived'),
+                child: Text('archived').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Assign'),
+                child: Text('assign').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Select'),
+                child: Text('select').tr(),
                 value: 1,
               ),
               PopupMenuItem(
-                child: Text('Delete'),
+                child: Text('delete').tr(),
                 value: 1,
               ),
             ],
@@ -79,9 +79,9 @@ class _DriversListState extends State<DriversList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Failed to fetch drivers",
+                    "failedToFetchDrivers",
                     style: TextStyle(fontSize: 18.0),
-                  ),
+                  ).tr(),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -89,7 +89,7 @@ class _DriversListState extends State<DriversList> {
                     onPressed: () {
                       context.read<DriversBloc>().add(DriversFetch());
                     },
-                    child: Text("Reload"),
+                    child: Text("Reload").tr(),
                   ),
                 ],
               ),
@@ -97,7 +97,7 @@ class _DriversListState extends State<DriversList> {
           case DriversStatus.succes:
             if (state.drivers.isEmpty) {
               return Center(
-                child: Text("No drivers"),
+                child: Text("noDrivers").tr(),
               );
             }
 
@@ -111,29 +111,104 @@ class _DriversListState extends State<DriversList> {
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: index >= state.drivers.length
                         ? BottomLoader()
-                        : DriverItem(
-                            isSelecting:
-                                state.isSelectingController.isSelecting,
-                            user: state.drivers[index],
-                            onSelected: () {
-                              setState(() {
-                                state.isSelectingController.toggle(index);
-                              });
-                            },
-                            onTap: () {
-                              if (!state.isSelectingController.isSelecting) {
-                                Navigator.of(context).push(
-                                    DriverDashboardPage.route(
-                                        state.drivers[index]));
-                              } else {
-                                setState(() {
-                                  state.isSelectingController.toggle(index);
-                                });
-                              }
-                            },
-                            isSelected:
-                                state.isSelectingController.isSelected(index),
-                          ),
+                        : index == 0
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          onChanged: (data) => {},
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.white,
+                                            prefixIcon: Icon(
+                                              Icons.search,
+                                              color: Colors.blue,
+                                              size: 25.0,
+                                            ),
+                                            labelText: "search".tr(),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey,
+                                                    width: 0.0)),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5.0),
+                                      Container(
+                                        child: IconButton(
+                                          onPressed: () => {},
+                                          icon: Icon(Icons.filter_alt),
+                                          color: Colors.white,
+                                          iconSize: 30.0,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: kAppPrimaryColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.0),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  DriverItem(
+                                    isSelecting:
+                                        state.isSelectingController.isSelecting,
+                                    user: state.drivers[index],
+                                    onSelected: () {
+                                      setState(() {
+                                        state.isSelectingController
+                                            .toggle(index);
+                                      });
+                                    },
+                                    onTap: () {
+                                      if (!state
+                                          .isSelectingController.isSelecting) {
+                                        Navigator.of(context).push(
+                                            DriverDashboardPage.route(
+                                                state.drivers[index]));
+                                      } else {
+                                        setState(() {
+                                          state.isSelectingController
+                                              .toggle(index);
+                                        });
+                                      }
+                                    },
+                                    isSelected: state.isSelectingController
+                                        .isSelected(index),
+                                  )
+                                ],
+                              )
+                            : DriverItem(
+                                isSelecting:
+                                    state.isSelectingController.isSelecting,
+                                user: state.drivers[index],
+                                onSelected: () {
+                                  setState(() {
+                                    state.isSelectingController.toggle(index);
+                                  });
+                                },
+                                onTap: () {
+                                  if (!state
+                                      .isSelectingController.isSelecting) {
+                                    Navigator.of(context).push(
+                                        DriverDashboardPage.route(
+                                            state.drivers[index]));
+                                  } else {
+                                    setState(() {
+                                      state.isSelectingController.toggle(index);
+                                    });
+                                  }
+                                },
+                                isSelected: state.isSelectingController
+                                    .isSelected(index),
+                              ),
                   );
                 });
           default:

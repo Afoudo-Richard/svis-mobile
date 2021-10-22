@@ -32,21 +32,6 @@ class DriversState extends Equatable {
   }
 
   @override
-  String toString() =>
-      'DriversLoaded { drivers : ${drivers.length}, hasReachedMax: $hasReachedMax, status: $status';
-
-  @override
   List<Object> get props => [status, drivers, hasReachedMax];
 }
 
-class DriverLoadingState extends DriversState {
-  @override
-  // TODO: implement props
-  List<Object> get props => [];
-}
-
-class DriverLoadedState extends DriversState {
-  @override
-  // TODO: implement props
-  List<Object> get props => [];
-}

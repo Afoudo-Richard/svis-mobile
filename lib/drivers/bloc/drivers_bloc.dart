@@ -1,5 +1,4 @@
 import 'package:app/commons/multi_select_item.dart';
-import 'package:app/driver_dashboard/models/driver_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -11,7 +10,6 @@ part 'drivers_state.dart';
 class DriversBloc extends Bloc<DriversEvent, DriversState> {
   DriversBloc() : super(DriversState()) {
     on<DriversFetch>(_onDriversFetched);
-    on<DeleteUsers>(_onDeleteUsers);
   }
 
   Future<void> _onDriversFetched(
@@ -50,14 +48,4 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
     return query.find();
   }
 
-  _onDeleteUsers(DriversEvent event, Emitter<DriversState> emit) {
-    var list = state.isSelectingController.selectedIndexes;
-    list.sort((b, a) =>
-        a.compareTo(b)); //reoder from biggest number, so it wont error
-    list.forEach((element) {
-      state.drivers.removeAt(element);
-    });
-
-    state.isSelectingController.set(state.drivers.length);
-  }
 }

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:app/driver_dashboard/models/driver_model.dart';
 import 'package:user_repository/user_repository.dart';
 
 class Drivers extends StatefulWidget {
@@ -24,7 +23,7 @@ class Drivers extends StatefulWidget {
 
 class _DriversState extends State<Drivers> {
   MultiSelectController controller = new MultiSelectController();
-  List<Driver> drivers = [];
+
 
   @override
   void initState() {
@@ -38,124 +37,8 @@ class _DriversState extends State<Drivers> {
     //   print(error);
     // });
 
-    controller.disableEditingWhenNoneSelected = true;
-    controller.set(drivers.length);
   }
 
-  Future<List<Driver>> getDrivers() async {
-    List<Driver> list = [];
-
-    var response = await ParseObject("_User").getAll();
-
-    if (response.success) {
-      var data = response.result;
-      print("Printing data");
-
-      print(data.runtimeType);
-
-      list = data!.map<Driver>((d) => Driver.fromJson(d)).toList();
-    }
-
-    return list;
-  }
-
-  Widget listViewWidget(List<User> users) {
-    return ListView.builder(
-      itemCount: drivers.length,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Column(
-            children: [
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onChanged: (data) => {},
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.blue,
-                          size: 25.0,
-                        ),
-                        labelText: "Search",
-                        enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5.0),
-                  Container(
-                    child: IconButton(
-                      onPressed: () => {},
-                      icon: Icon(Icons.filter_alt),
-                      color: Colors.white,
-                      iconSize: 30.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: kAppPrimaryColor,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5.0),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              DriverItem(
-                isSelecting: controller.isSelecting,
-                user: users[index],
-                onSelected: () {
-                  setState(() {
-                    controller.toggle(index);
-                  });
-                },
-                onTap: () {
-                  if (!controller.isSelecting) {
-                    Navigator.of(context)
-                        .push(DriverDashboardPage.route(users[index]));
-                  } else {
-                    setState(() {
-                      controller.toggle(index);
-                    });
-                  }
-                },
-                isSelected: controller.isSelected(index),
-              )
-            ],
-          );
-        } else {
-          return DriverItem(
-            isSelecting: controller.isSelecting,
-            user: users[index],
-            onSelected: () {
-              setState(() {
-                controller.toggle(index);
-              });
-            },
-            onTap: () {
-              if (!controller.isSelecting) {
-                Navigator.of(context)
-                    .push(DriverDashboardPage.route(users[index]));
-              } else {
-                setState(() {
-                  controller.toggle(index);
-                });
-              }
-            },
-            isSelected: controller.isSelected(index),
-          );
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
