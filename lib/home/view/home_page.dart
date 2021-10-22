@@ -6,7 +6,7 @@ import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
-import 'package:app/users/views/users_page.dart';
+import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/authentication/authentication.dart';
