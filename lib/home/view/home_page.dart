@@ -6,7 +6,7 @@ import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
-import 'package:app/users/views/users_page.dart';
+import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/authentication/authentication.dart';
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          'Hi, ${profile?.profile?.companyName ?? 'N/A'}',
+                          'Hi, ${profile?.profile?.companyName ?? 'Personal'}',
                           style: Theme.of(context)
                               .textTheme
                               .headline4
@@ -85,10 +85,7 @@ class HomePage extends StatelessWidget {
                             profileUsers
                                 ?.map((item) => PopupMenuItem<ProfileUser>(
                                       child: Text(item.profile?.companyName ??
-                                              item.profile?.firstName ??
-                                              item.profile?.lastName ??
-                                              item.profile?.objectId ??
-                                              '')
+                                              'Personal')
                                           .tr(),
                                       value: item,
                                     ))
