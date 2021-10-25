@@ -6,12 +6,9 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:user_repository/user_repository.dart';
 part 'user_list_event.dart';
 
 part 'user_list_state.dart';
-
-const _incidentReportsLimit = 20;
 
 extension Unique<E, Id> on List<E> {
   List<E> unique([Id Function(E element)? id, bool inplace = true]) {

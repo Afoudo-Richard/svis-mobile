@@ -4,7 +4,7 @@ enum DriversStatus { initial, succes, failure }
 
 class DriversState extends Equatable {
   DriversState({
-    this.drivers = const <User>[],
+    this.drivers = const <ProfileUser>[],
     this.hasReachedMax = false,
     this.status = DriversStatus.initial,
   }){
@@ -13,14 +13,14 @@ class DriversState extends Equatable {
   }
 
   final DriversStatus status;
-  final List<User?> drivers;
+  final List<ProfileUser?> drivers;
   final bool hasReachedMax;
   final MultiSelectController isSelectingController = MultiSelectController();
 
 
 
   DriversState copyWith({
-    List<User?>? drivers,
+    List<ProfileUser?>? drivers,
     bool? hasReachedMax,
     DriversStatus? status,
   }) {
