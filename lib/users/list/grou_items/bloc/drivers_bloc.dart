@@ -24,6 +24,15 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
     try {
       if (state.status == DriversStatus.initial) {
         final users = await _fetchUsers();
+        if (users.length < 20) {
+          return emit(
+            state.copyWith(
+              status: DriversStatus.succes,
+              drivers: users,
+              hasReachedMax: true,
+            ),
+          );
+        }
         return emit(
           state.copyWith(
             status: DriversStatus.succes,
@@ -33,7 +42,7 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
         );
       }
 
-      final users = await _fetchUsers();
+      final users = await _fetchUsers(state.drivers.length);
 
       emit(
         users.isEmpty
