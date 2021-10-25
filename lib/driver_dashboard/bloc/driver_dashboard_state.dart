@@ -7,4 +7,6 @@ abstract class DriverDashboardState extends Equatable {
   List<Object> get props => [];
 }
 
-class DriverDashboardInitial extends DriverDashboardState {}
+class DriverDashboard extends DriverDashboardState {
+  User? user;
+}
