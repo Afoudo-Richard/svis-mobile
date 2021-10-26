@@ -53,4 +53,5 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kProfileUser, () => ProfileUser());
   ParseCoreData().registerSubClass(kProfileUserTypes, () => ProfileUserTypes());
   ParseCoreData().registerSubClass(kSVISRole, () => SvisRole());
+  ParseCoreData().registerSubClass(kProfileUserGroup, () => ProfileUserGroup());
 }

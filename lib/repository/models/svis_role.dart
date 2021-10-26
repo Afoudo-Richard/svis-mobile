@@ -1,3 +1,4 @@
+import 'package:app/repository/models/permission.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 const String kSVISRole = 'SVISRole';
@@ -27,6 +28,10 @@ class SvisRole extends ParseObject implements ParseCloneable {
 
   bool? get status {
     return this.get('Activate');
+  }
+
+  ParseRelation<Permission>? get permissions {
+    return this.getRelation('Permissions');
   }
 
   set status(bool? value) {

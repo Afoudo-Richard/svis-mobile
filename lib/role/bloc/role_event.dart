@@ -8,3 +8,11 @@ abstract class RoleEvent extends Equatable {
 }
 
 class FetchRoleEvent extends RoleEvent {}
+
+class TextChanged extends RoleEvent {
+  const TextChanged({required this.text});
+  final String text;
+
+  @override
+  List<Object> get props => [text];
+}

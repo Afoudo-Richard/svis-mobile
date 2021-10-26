@@ -2,7 +2,6 @@ import 'package:app/repository/models/group.dart';
 import 'package:app/repository/models/permission.dart';
 import 'package:app/repository/models/profile.dart';
 import 'package:app/repository/models/profile_user_types.dart';
-import 'package:app/repository/models/svis_role.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:user_repository/user_repository.dart';
 
