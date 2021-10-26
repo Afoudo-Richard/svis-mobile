@@ -108,6 +108,7 @@ class _AppViewState extends State<AppView> {
         appBarTheme: AppBarTheme(
           elevation: 0,
           backgroundColor: kScaffoldBackground,
+          centerTitle: false,
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: kAppPrimaryColor,
                 displayColor: kAppPrimaryColor,

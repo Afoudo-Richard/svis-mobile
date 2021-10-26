@@ -30,14 +30,11 @@ class ProfileUser extends ParseObject implements ParseCloneable {
   Profile? get profile => get<Profile?>('Profile');
   set profile(Profile? value) => set<Profile?>('Profile', value);
 
-  Group? get group => this.get('Groups');
-  set group(Group? value) => this.set('Groups', value);
+  ParseRelation<Group>? get group => this.getRelation('Groups');
 
-  SvisRole? get role => this.get('Roles');
-  set role(SvisRole? value) => this.set('Roles', value);
+  ParseRelation<ParseObject>? get role => this.getRelation('Roles');
 
-  Permission? get permission => this.get('Permissions');
-  set permission(Permission? value) => this.set('Permissions', value);
+  ParseRelation<Permission>? get permission => this.getRelation('Permissions');
 
   bool get status => this.get('status');
   set status(bool value) => this.set('status', value);
