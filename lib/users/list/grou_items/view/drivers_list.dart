@@ -1,10 +1,7 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
-<<<<<<< HEAD
 import 'package:app/repository/models/models.dart';
-=======
->>>>>>> origin
 import 'package:app/repository/models/profile_user_types.dart';
 import 'package:app/users/list/grou_items/user_group_items.dart';
 import 'package:app/users/users.dart';

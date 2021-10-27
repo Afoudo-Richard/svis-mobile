@@ -1,6 +1,4 @@
-import 'package:app/repository/models/event_log.dart';
 import 'package:app/repository/models/models.dart';
-import 'package:app/repository/models/vehicle.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:app/app.dart';
@@ -48,9 +46,6 @@ registerParseServer() async {
   ParseCoreData().registerUserSubClass((username, password, emailAddress,
           {client, debug, sessionToken}) =>
       User(username, password, emailAddress));
-
-  ParseCoreData().registerSubClass(kEventLog, () => EventLog());
-  ParseCoreData().registerSubClass(kVehicle, () => Vehicle());
 
   ParseCoreData().registerSubClass(kGroup, () => Group());
   ParseCoreData().registerSubClass(kPermission, () => Permission());

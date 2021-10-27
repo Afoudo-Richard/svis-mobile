@@ -1,6 +1,5 @@
 part of 'driver_dashboard_bloc.dart';
 
-<<<<<<< HEAD
 
 enum RecentActionStatus { initial, success, loading, failure }
 class DriverDashboardState extends Equatable {
@@ -36,12 +35,4 @@ class DriverDashboardState extends Equatable {
 
   @override
   List<Object> get props => [user, permissions, groups, recentActions, recentActionStatus];
-=======
-class DriverDashboardState extends Equatable {
-  const DriverDashboardState(this.user);
-  final User user;
-
-  @override
-  List<Object> get props => [user];
->>>>>>> origin
 }
