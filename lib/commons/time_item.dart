@@ -10,6 +10,7 @@ class TimeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 2.0),
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),

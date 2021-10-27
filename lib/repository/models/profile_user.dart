@@ -12,6 +12,8 @@ class ProfileUser extends ParseObject implements ParseCloneable {
   ProfileUser() : super(kProfileUser);
   ProfileUser.clone() : this();
 
+  get lastName => null;
+
   @override
   ProfileUser clone(Map<String, dynamic> map) =>
       ProfileUser.clone()..fromJson(map);

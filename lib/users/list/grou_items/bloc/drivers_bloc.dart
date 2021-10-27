@@ -57,13 +57,13 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
     }
   }
 
-  Future<List<User?>> _fetchUsers([int startIndex = 0]) async {
+  Future<List<ProfileUser?>> _fetchUsers([int startIndex = 0]) async {
     QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
     query.setAmountToSkip(startIndex);
     query.whereEqualTo('Profile', profile.profile);
     query.whereEqualTo('ProfileUserTypes', type);
     query.includeObject(['ProfileUserTypes', 'User']);
     query.setLimit(20);
-    return (await query.find()).map((e) => e.user).toList();
+    return (await query.find());
   }
 }

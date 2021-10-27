@@ -1,6 +1,7 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
+import 'package:app/repository/models/models.dart';
 import 'package:app/repository/models/profile_user_types.dart';
 import 'package:app/users/list/grou_items/user_group_items.dart';
 import 'package:app/users/users.dart';
@@ -92,7 +93,7 @@ class _DriversListState extends State<DriversList> {
                     onPressed: () {
                       context.read<DriversBloc>().add(DriversFetch());
                     },
-                    child: Text("Reload").tr(),
+                    child: Text("reload").tr(),
                   ),
                 ],
               ),
@@ -253,7 +254,7 @@ class DriverItem extends StatefulWidget {
       required this.onSelected})
       : super(key: key);
 
-  final User? user;
+  final ProfileUser? user;
   final bool isSelecting;
   final VoidCallback onSelected;
   final bool isSelected;
@@ -312,7 +313,7 @@ class _DriverItemState extends State<DriverItem> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.user?.lastName ?? "",
+                            widget.user?.user!.lastName ?? "",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
