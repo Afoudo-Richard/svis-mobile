@@ -1,7 +1,7 @@
+import 'package:app/group/assign/view/view.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/role/assign/assign_role.dart';
 import 'package:flutter/material.dart';
-import 'package:user_repository/user_repository.dart';
 
 Future<void> asignUsers(BuildContext context, List<ProfileUser?> users) async {
   showDialog(
@@ -52,11 +52,17 @@ class _AssignDialog extends StatelessWidget {
             Divider(),
             ListTile(
               title: Text('group'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  AssignGroupsPage.route(users: users),
+                );
+              },
             ),
-            Divider(),
+            /* Divider(),
             ListTile(
               title: Text('permission'),
-            ),
+            ), */
           ],
         ),
       ),
