@@ -396,7 +396,7 @@ class UserDashboardView extends StatelessWidget {
                                   query.whereEqualTo(
                                       'Profile', state.user.profile);
                                   query.whereContainedIn(
-                                      'Users', [await ParseUser.currentUser()]);
+                                      'Users', [state.user.user]);
                                   query.includeObject(['Permissions']);
                                   Navigator.of(context).push(
                                     RolePage.route(query: query),

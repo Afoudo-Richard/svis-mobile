@@ -123,6 +123,19 @@ class _AppViewState extends State<AppView> {
             ),
           ),
         ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.all(13),
+            ),
+            side: MaterialStateProperty.all(
+              BorderSide(
+                color: kAppPrimaryColor,
+                width: 2,
+              ),
+            ),
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           contentPadding: const EdgeInsets.all(0),
           hintStyle: TextStyle(

@@ -2,12 +2,15 @@ import 'package:app/repository/models/group.dart';
 import 'package:app/repository/models/permission.dart';
 import 'package:app/repository/models/profile.dart';
 import 'package:app/repository/models/profile_user_types.dart';
+import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:user_repository/user_repository.dart';
 
 const String kProfileUser = 'ProfileUsers';
 
-class ProfileUser extends ParseObject implements ParseCloneable {
+class ProfileUser extends ParseObject
+    with EquatableMixin
+    implements ParseCloneable {
   ProfileUser() : super(kProfileUser);
   ProfileUser.clone() : this();
 
@@ -35,12 +38,17 @@ class ProfileUser extends ParseObject implements ParseCloneable {
 
   ParseRelation<Permission>? get permission => this.getRelation('Permissions');
 
-  bool get status => this.get('status');
-  set status(bool value) => this.set('status', value);
+  bool? get status => this.get('status');
+  set status(bool? value) => this.set('status', value);
 
   DateTime? get expirationDate => this.get('expirationDate');
   set expirationDate(DateTime? value) => this.set('expirationDate', value);
 
   String? get accessMode => this.get('accessMode');
   set accessMode(String? value) => this.set('accessMode', value);
+
+  @override
+  List<Object?> get props => [
+        objectId,
+      ];
 }

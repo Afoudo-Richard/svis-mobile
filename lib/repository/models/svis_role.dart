@@ -1,9 +1,13 @@
 import 'package:app/repository/models/permission.dart';
+import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 
 const String kSVISRole = 'SVISRole';
 
-class SvisRole extends ParseObject implements ParseCloneable {
+class SvisRole extends ParseObject
+    with EquatableMixin
+    implements ParseCloneable {
   SvisRole() : super(kSVISRole);
   SvisRole.clone() : this();
 
@@ -33,8 +37,16 @@ class SvisRole extends ParseObject implements ParseCloneable {
   ParseRelation<Permission>? get permissions {
     return this.getRelation('Permissions');
   }
+  ParseRelation<User>? get users {
+    return this.getRelation('Users');
+  }
 
   set status(bool? value) {
     this.set('Activate', value);
   }
+
+  @override
+  List<Object?> get props => [
+        objectId,
+      ];
 }

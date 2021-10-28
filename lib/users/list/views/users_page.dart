@@ -67,12 +67,6 @@ class UsersPage extends StatelessWidget {
           }
         },
       ),
-
-      // ListView(
-      //   children: [
-      //     UserItem()
-      //   ]
-      // ),
     );
   }
 }

@@ -4,10 +4,13 @@ import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/profile_user_types.dart';
 import 'package:app/users/list/grou_items/user_group_items.dart';
+import 'package:app/users/list/grou_items/view/assign_users.dart';
 import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+part 'user_list_item.dart';
 
 class DriversList extends StatefulWidget {
   final ProfileUserTypes type;
@@ -160,7 +163,7 @@ class _DriversListState extends State<DriversList> {
                                   SizedBox(
                                     height: 20.0,
                                   ),
-                                  DriverItem(
+                                  UserListItem(
                                     isSelecting:
                                         state.isSelectingController.isSelecting,
                                     user: state.drivers[index],
@@ -188,7 +191,7 @@ class _DriversListState extends State<DriversList> {
                                   )
                                 ],
                               )
-                            : DriverItem(
+                            : UserListItem(
                                 isSelecting:
                                     state.isSelectingController.isSelecting,
                                 user: state.drivers[index],
@@ -240,174 +243,5 @@ class _DriversListState extends State<DriversList> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
-  }
-}
-
-class DriverItem extends StatefulWidget {
-  const DriverItem(
-      {Key? key,
-      required this.user,
-      required this.isSelecting,
-      required this.isSelected,
-      required this.onTap,
-      required this.onSelected})
-      : super(key: key);
-
-  final ProfileUser? user;
-  final bool isSelecting;
-  final VoidCallback onSelected;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  _DriverItemState createState() => _DriverItemState();
-}
-
-class _DriverItemState extends State<DriverItem> {
-  bool isSelected = false;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: InkWell(
-        child: MultiSelectItem(
-          isSelecting: widget.isSelecting,
-          onSelected: widget.onSelected,
-          child: GestureDetector(
-            onTap: widget.onTap,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: 0.5, color: Colors.grey),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/user.png"),
-                            backgroundColor: kAppPrimaryColor,
-                            radius: 25.0,
-                          ),
-                          widget.isSelected
-                              ? CircleAvatar(
-                                  backgroundColor:
-                                      kAppPrimaryColor.withOpacity(0.5),
-                                  radius: 25.0,
-                                  child: Icon(Icons.check_sharp),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.user?.user?.lastName ?? "",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 4.0, right: 2.0),
-                                height: 7.0,
-                                width: 7.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: true ? Colors.blue : Colors.red,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    true ? "Active" : "Inactive",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Role:Admin | Group:Operations",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "84%",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Icon(
-                              true ? Icons.expand_less : Icons.expand_more,
-                              color: true ? Colors.green : Colors.red,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Last 24hrs",
-                          style: TextStyle(
-                            fontSize: 10,
-                          ),
-                        ),
-                      ]),
-                  PopupMenuButton(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(Icons.more_vert),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: Text('View'),
-                        value: 1,
-                      ),
-                      PopupMenuItem(
-                        child: Text('Assign'),
-                        value: 1,
-                      ),
-                      PopupMenuItem(
-                        child: Text('Archive'),
-                        value: 1,
-                      ),
-                      PopupMenuItem(
-                        child: Text('Delete'),
-                        value: 1,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
