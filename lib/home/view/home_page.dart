@@ -4,6 +4,7 @@ import 'package:app/commons/time_item.dart';
 import 'package:app/commons/widgets/bar_chart.dart';
 import 'package:app/commons/widgets/widgets.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
+import 'package:app/profile/profile.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
 import 'package:app/users/users.dart';
@@ -52,9 +53,6 @@ class HomePage extends StatelessWidget {
                   final profile = context.select(
                     (AuthenticationBloc bloc) => bloc.state.profile,
                   );
-                  final profileUsers = context.select(
-                    (AuthenticationBloc bloc) => bloc.state.profileUsers,
-                  );
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -70,28 +68,30 @@ class HomePage extends StatelessWidget {
                           softWrap: false,
                         ),
                       ),
-                      PopupMenuButton<ProfileUser>(
-                        iconSize: 30,
-                        padding: EdgeInsets.zero,
-                        icon: CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/user.png"),
-                          backgroundColor: kAppPrimaryColor,
+                      InkWell(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage: NetworkImage(
+                                profile?.profile?.profileImage?.url ??
+                                    'https://sumelongenterprise.com/sites/default/files/logo_0.png',
+                              ),
+                              backgroundColor: kAppPrimaryColor,
+                            ),
+                            Icon(Icons.expand_more)
+                          ],
                         ),
-                        onSelected: (ProfileUser profile) {
-                          context
-                              .read<AuthenticationBloc>()
-                              .add(AuthenticationProfileChanged(profile));
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (BuildContext context) {
+                              return _ProfileSwitcher();
+                            },
+                          );
                         },
-                        itemBuilder: (context) =>
-                            profileUsers
-                                ?.map((item) => PopupMenuItem<ProfileUser>(
-                                      child: Text(item.profile?.companyName ??
-                                              'Personal')
-                                          .tr(),
-                                      value: item,
-                                    ))
-                                .toList() ??
-                            [],
                       ),
                     ],
                   );
@@ -633,6 +633,158 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: AppBottomAppBar(),
+    );
+  }
+}
+
+class _ProfileSwitcher extends StatelessWidget {
+  const _ProfileSwitcher({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(25),
+          topLeft: Radius.circular(25),
+        ),
+        color: Colors.white,
+      ),
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              DraggableScrollableSheet(
+                initialChildSize: 0.6, // half screen on load
+                maxChildSize: 0.9, // full screen on scroll
+                minChildSize: 0.3,
+                expand: false,
+                builder: (
+                  BuildContext context,
+                  ScrollController scrollController,
+                ) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'profiles',
+                          style: Theme.of(context).textTheme.headline4,
+                        ).tr(),
+                        SizedBox(height: 10),
+                        Text(
+                          'active',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(color: Colors.grey.shade600),
+                        ).tr(),
+                        _ProfileSwicheritem(item: state.profile),
+                        Divider(color: Colors.grey.shade600),
+                        Text(
+                          'others',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(color: Colors.grey.shade600),
+                        ).tr(),
+                        Expanded(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: state.profileUsers?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var _profile = state.profileUsers?[index];
+                              return _ProfileSwicheritem(
+                                isCurrentProfile: _profile?.profile?.objectId ==
+                                    state.profile?.profile?.objectId,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  context.read<AuthenticationBloc>().add(
+                                      AuthenticationProfileChanged(
+                                          _profile as ProfileUser));
+                                },
+                                item: _profile,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              Positioned(
+                left: kDeviceSize.width * 0.2,
+                right: kDeviceSize.width * 0.2,
+                bottom: 30,
+                child: FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.of(context).push(CreateProfilePage.route());
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('create profile'),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ProfileSwicheritem extends StatelessWidget {
+  final ProfileUser? item;
+
+  final GestureTapCallback? onTap;
+
+  final bool? isCurrentProfile;
+
+  const _ProfileSwicheritem({
+    Key? key,
+    this.item,
+    this.onTap,
+    this.isCurrentProfile,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: EdgeInsets.zero,
+      title: Text(
+        item?.profile?.companyName ?? item?.profile?.name ?? 'n/a',
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        softWrap: false,
+      ),
+      subtitle: Text(
+        item?.profile?.address ?? 'n/a',
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        softWrap: false,
+      ),
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(
+          item?.profile?.profileImage?.url ??
+              'https://sumelongenterprise.com/sites/default/files/logo_0.png',
+        ),
+      ),
+      trailing: (isCurrentProfile ?? false)
+          ? CircleAvatar(
+              backgroundColor: kAppAccent.withOpacity(0.2),
+              child: Center(
+                child: Icon(
+                  Icons.check,
+                  color: kAppAccent,
+                ),
+              ),
+            )
+          : Container(width: 0, height: 0),
     );
   }
 }

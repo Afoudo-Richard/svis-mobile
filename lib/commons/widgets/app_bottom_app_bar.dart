@@ -48,7 +48,7 @@ class AppBottomAppBar extends StatelessWidget {
                   width: 28,
                 ),
                 label: 'Dashboard',
-              ),
+              ),/* 
               _BottomBarItem(
                 onTap: () {
                   // Navigator.of(context).push(Drivers.route());
@@ -59,7 +59,7 @@ class AppBottomAppBar extends StatelessWidget {
                   width: 28,
                 ),
                 label: 'Drivers',
-              ),
+              ), */
               _BottomBarItem(
                 icon: Image.asset(
                   'assets/icons/activity.png',
