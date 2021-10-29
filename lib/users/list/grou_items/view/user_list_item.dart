@@ -75,7 +75,7 @@ class _UserListItemState extends State<UserListItem> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.user?.user?.lastName ?? "",
+                            widget.user?.user?.fullName ?? "",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
@@ -209,7 +209,7 @@ class SimpleUserListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user?.user?.lastName ?? "",
+                    user?.user?.fullName ?? "",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 18,

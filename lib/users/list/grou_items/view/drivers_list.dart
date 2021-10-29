@@ -12,6 +12,14 @@ import 'package:easy_localization/easy_localization.dart';
 
 part 'user_list_item.dart';
 
+enum UserListOptions {
+  add,
+  assign,
+  select,
+  archived,
+  delete,
+}
+
 class DriversList extends StatefulWidget {
   final ProfileUserTypes type;
 
@@ -49,30 +57,26 @@ class _DriversListState extends State<DriversList> {
             ),
           ] else
             ...[],
-          PopupMenuButton(
+          PopupMenuButton<UserListOptions>(
             iconSize: 35.0,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text('addDriver').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('archived').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('assign').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('select').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('delete').tr(),
-                value: 1,
-              ),
-            ],
+            onSelected: (UserListOptions item) async {
+              switch (item) {
+                case UserListOptions.assign:
+                  await asignUsers(context, []);
+                  break;
+                case UserListOptions.delete:
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (context) {
+              return UserListOptions.values.map((item) {
+                return PopupMenuItem(
+                  child: Text(item.toString().split('.').last).tr(),
+                  value: item,
+                );
+              }).toList();
+            },
           )
         ],
       ),

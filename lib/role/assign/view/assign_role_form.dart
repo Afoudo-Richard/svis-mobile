@@ -49,7 +49,7 @@ class AssignRoleForm extends StatelessWidget {
                 SnackBar(
                   elevation: 0,
                   content: Text(
-                    state.submission.error ?? 'errpr',
+                    state.submission.error ?? 'error',
                     style: TextStyle(
                       color: Colors.red,
                     ),
@@ -113,7 +113,7 @@ class _AssignRoleActions extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('assignPermission').tr(),
+                      Text('assignRole').tr(),
                     ],
                   ),
                 ),
@@ -159,12 +159,12 @@ class _RoleInput extends StatelessWidget {
                 ),
               ),
               title: Text(
-                'users',
+                'roles',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
                       color: Colors.grey.shade800,
                     ),
               ).tr(),
-              buttonText: Text('searchUsers').tr(),
+              buttonText: Text('searchRoles').tr(),
               initialValue: state.roles.value,
               items: roles.map(
                 (item) {

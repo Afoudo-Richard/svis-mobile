@@ -1,9 +1,16 @@
 import 'package:app/authentication/authentication.dart';
 import 'package:app/repository/models/profile_user.dart';
+import 'package:app/users/list/grou_items/view/assign_users.dart';
 import 'package:app/users/list/user_list.dart';
 import 'package:app/users/list/views/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+enum UsersPageOptions {
+  assign,
+  delete,
+}
 
 class UsersPage extends StatelessWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -25,32 +32,24 @@ class UsersPage extends StatelessWidget {
           ),
           PopupMenuButton(
             iconSize: 35.0,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text('View'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Add'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Edit'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Assign'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Archive'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Delete'),
-                value: 1,
-              ),
-            ],
+            onSelected: (UsersPageOptions item) async {
+              switch (item) {
+                case UsersPageOptions.assign:
+                  await asignUsers(context, []);
+                  break;
+                case UsersPageOptions.delete:
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (context) {
+              return UsersPageOptions.values.map((item) {
+                return PopupMenuItem(
+                  child: Text(item.toString().split('.').last).tr(),
+                  value: item,
+                );
+              }).toList();
+            },
           )
         ],
       ),

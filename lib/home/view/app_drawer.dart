@@ -211,6 +211,21 @@ class AppDrawer extends StatelessWidget {
                       ).tr(),
                       onTap: () => {},
                     ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.logout,
+                        size: 35.0,
+                        color: kAppPrimaryColor,
+                      ),
+                      title: Text(
+                        'logout',
+                      ).tr(),
+                      onTap: () {
+                        context
+                            .read<AuthenticationBloc>()
+                            .add(AuthenticationLogoutRequested());
+                      },
+                    ),
                   ],
                 ),
               ),

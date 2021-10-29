@@ -117,7 +117,7 @@ class _AssignGroupsActions extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('assignPermission').tr(),
+                      Text('assignGroup').tr(),
                     ],
                   ),
                 ),
@@ -163,12 +163,12 @@ class _GroupsInput extends StatelessWidget {
                 ),
               ),
               title: Text(
-                'users',
+                'groups',
                 style: Theme.of(context).textTheme.headline4?.copyWith(
                       color: Colors.grey.shade800,
                     ),
               ).tr(),
-              buttonText: Text('searchUsers').tr(),
+              buttonText: Text('searchGroups').tr(),
               initialValue: state.groups.value,
               items: groups.map(
                 (item) {

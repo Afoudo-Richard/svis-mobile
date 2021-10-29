@@ -65,8 +65,9 @@ class HomePage extends StatelessWidget {
                               .textTheme
                               .headline4
                               ?.copyWith(fontWeight: FontWeight.w600),
+                          overflow: TextOverflow.fade,
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
                       ),
                       PopupMenuButton<ProfileUser>(
@@ -626,14 +627,6 @@ class HomePage extends StatelessWidget {
                     Divider(),
                   ],
                 ),
-              ),
-              ElevatedButton(
-                child: const Text('Logout'),
-                onPressed: () {
-                  context
-                      .read<AuthenticationBloc>()
-                      .add(AuthenticationLogoutRequested());
-                },
               ),
             ],
           ),
