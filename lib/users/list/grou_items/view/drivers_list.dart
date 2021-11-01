@@ -2,13 +2,24 @@ import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/profile_user_types.dart';
 import 'package:app/users/list/grou_items/user_group_items.dart';
+import 'package:app/users/list/grou_items/view/assign_users.dart';
 import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:user_repository/user_repository.dart';
+
+part 'user_list_item.dart';
+
+enum UserListOptions {
+  add,
+  assign,
+  select,
+  archived,
+  delete,
+}
 
 class DriversList extends StatefulWidget {
   final ProfileUserTypes type;
@@ -47,30 +58,26 @@ class _DriversListState extends State<DriversList> {
             ),
           ] else
             ...[],
-          PopupMenuButton(
+          PopupMenuButton<UserListOptions>(
             iconSize: 35.0,
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text('addDriver').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('archived').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('assign').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('select').tr(),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('delete').tr(),
-                value: 1,
-              ),
-            ],
+            onSelected: (UserListOptions item) async {
+              switch (item) {
+                case UserListOptions.assign:
+                  await asignUsers(context, []);
+                  break;
+                case UserListOptions.delete:
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (context) {
+              return UserListOptions.values.map((item) {
+                return PopupMenuItem(
+                  child: Text(item.toString().split('.').last).tr(),
+                  value: item,
+                );
+              }).toList();
+            },
           )
         ],
       ),
@@ -161,7 +168,7 @@ class _DriversListState extends State<DriversList> {
                                   SizedBox(
                                     height: 20.0,
                                   ),
-                                  DriverItem(
+                                  UserListItem(
                                     isSelecting:
                                         state.isSelectingController.isSelecting,
                                     user: state.drivers[index],
@@ -189,7 +196,7 @@ class _DriversListState extends State<DriversList> {
                                   )
                                 ],
                               )
-                            : DriverItem(
+                            : UserListItem(
                                 isSelecting:
                                     state.isSelectingController.isSelecting,
                                 user: state.drivers[index],

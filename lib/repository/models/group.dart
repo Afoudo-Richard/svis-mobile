@@ -1,7 +1,9 @@
+import 'package:app/repository/models/permission.dart';
 import 'package:app/repository/models/profile.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 
-const String kGroup = 'Group';
+const String kGroup = 'Groups';
 
 class Group extends ParseObject implements ParseCloneable {
   Group() : super(kGroup);
@@ -56,5 +58,12 @@ class Group extends ParseObject implements ParseCloneable {
 
   set profile(Profile? value) {
     set('profile', value);
+  }
+
+  ParseRelation<Permission>? get permissions {
+    return this.getRelation('Permissions');
+  }
+  ParseRelation<User>? get users {
+    return this.getRelation('Users');
   }
 }

@@ -1,9 +1,10 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/profile_user.dart';
+import 'package:app/users/details/view/user_dashboard_view.dart';
 import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -32,4 +33,3 @@ class DriverDashboardPage extends StatelessWidget {
     );
   }
 }
-

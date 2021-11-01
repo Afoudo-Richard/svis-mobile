@@ -1,19 +1,21 @@
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
+import 'package:app/group/view/view.dart';
+import 'package:app/permission/permission.dart';
+import 'package:app/repository/models/svis_role.dart';
+import 'package:app/role/role.dart';
+import 'package:app/users/users.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-
-import '../details.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class UserDashboardView extends StatelessWidget {
-  UserDashboardView({
+  const UserDashboardView({
     Key? key,
   }) : super(key: key);
-
-  late DriverDashboardBloc driverDashboardBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,7 @@ class UserDashboardView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                state.user.user!.lastName ?? "",
+                                state.user.user?.lastName ?? "",
                                 style: TextStyle(
                                     color: kAppPrimaryColor,
                                     fontSize: 20,
@@ -428,6 +430,18 @@ class UserDashboardView extends StatelessWidget {
                                   offset: Offset(16, 0),
                                   child: Icon(Icons.chevron_right_outlined),
                                 ),
+                                onTap: () async {
+                                  QueryBuilder<SvisRole> query =
+                                      QueryBuilder<SvisRole>(SvisRole());
+                                  query.whereEqualTo(
+                                      'Profile', state.user.profile);
+                                  query.whereContainedIn(
+                                      'Users', [state.user.user]);
+                                  query.includeObject(['Permissions']);
+                                  Navigator.of(context).push(
+                                    RolePage.route(query: query),
+                                  );
+                                },
                               ),
                               Divider(),
                               ListTile(
@@ -440,6 +454,11 @@ class UserDashboardView extends StatelessWidget {
                                   offset: Offset(16, 0),
                                   child: Icon(Icons.chevron_right_outlined),
                                 ),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    GroupPage.route(user: state.user),
+                                  );
+                                },
                               ),
                               Divider(),
                               ListTile(
@@ -452,6 +471,15 @@ class UserDashboardView extends StatelessWidget {
                                   offset: Offset(16, 0),
                                   child: Icon(Icons.chevron_right_outlined),
                                 ),
+
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    PermissionPage.route(
+                                      user: state.user,
+                                      query: state.user.permission?.getQuery(),
+                                    ),
+                                  );
+                                },
                               ),
                               Divider(),
                             ],

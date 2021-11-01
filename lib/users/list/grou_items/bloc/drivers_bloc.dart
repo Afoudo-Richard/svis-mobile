@@ -4,7 +4,6 @@ import 'package:app/repository/models/profile_user_types.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:user_repository/user_repository.dart';
 
 part 'drivers_event.dart';
 part 'drivers_state.dart';

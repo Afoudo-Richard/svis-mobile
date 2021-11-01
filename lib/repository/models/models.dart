@@ -6,3 +6,4 @@ export 'profile.dart';
 export 'svis_role.dart';
 export 'vehicle.dart';
 export 'event_log.dart';
+export 'profile_user_group.dart';

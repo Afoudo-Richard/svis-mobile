@@ -3,7 +3,6 @@ import 'package:app/repository/models/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:user_repository/user_repository.dart';
 
 part 'driver_dashboard_event.dart';
 part 'driver_dashboard_state.dart';

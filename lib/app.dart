@@ -108,6 +108,7 @@ class _AppViewState extends State<AppView> {
         appBarTheme: AppBarTheme(
           elevation: 0,
           backgroundColor: kScaffoldBackground,
+          centerTitle: false,
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: kAppPrimaryColor,
                 displayColor: kAppPrimaryColor,
@@ -119,6 +120,19 @@ class _AppViewState extends State<AppView> {
           style: ButtonStyle(
             padding: MaterialStateProperty.all(
               const EdgeInsets.all(13),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.all(13),
+            ),
+            side: MaterialStateProperty.all(
+              BorderSide(
+                color: kAppPrimaryColor,
+                width: 2,
+              ),
             ),
           ),
         ),
