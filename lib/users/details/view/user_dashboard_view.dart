@@ -323,217 +323,7 @@ class UserDashboardView extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return Dialog(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      "Date | Time",
-                                                      style: TextStyle(
-                                                          fontSize: 10),
-                                                    ),
-                                                    style: ButtonStyle(
-                                                      minimumSize:
-                                                          MaterialStateProperty
-                                                              .all(Size.zero),
-                                                      padding:
-                                                          MaterialStateProperty
-                                                              .all(
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 15.0,
-                                                            vertical: 4.0),
-                                                      ),
-                                                      elevation:
-                                                          MaterialStateProperty
-                                                              .all(0),
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 10.0),
-                                                  ElevatedButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      "Region",
-                                                      style: TextStyle(
-                                                          fontSize: 10),
-                                                    ),
-                                                    style: ButtonStyle(
-                                                      minimumSize:
-                                                          MaterialStateProperty
-                                                              .all(Size.zero),
-                                                      padding:
-                                                          MaterialStateProperty
-                                                              .all(
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 15.0,
-                                                            vertical: 4.0),
-                                                      ),
-                                                      elevation:
-                                                          MaterialStateProperty
-                                                              .all(0),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              PopupMenuButton(
-                                                child: Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Icon(
-                                                    Icons.more_vert,
-                                                    size: 15.0,
-                                                  ),
-                                                ),
-                                                offset: Offset(20, 20),
-                                                padding: EdgeInsets.all(2),
-                                                itemBuilder: (context) => [
-                                                  PopupMenuItem(
-                                                    height: 15,
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: Text(
-                                                      'View vehicles',
-                                                      style: TextStyle(
-                                                          fontSize: 10.0),
-                                                    ),
-                                                    value: 1,
-                                                  ),
-                                                  PopupMenuItem(
-                                                    height: 15,
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: Text(
-                                                      'View Drivers',
-                                                      style: TextStyle(
-                                                          fontSize: 10.0),
-                                                    ),
-                                                    value: 1,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Date"),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons
-                                                        .calendar_today_outlined,
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(width: 10.0),
-                                              Expanded(
-                                                child: DateTimePicker(
-                                                  type: DateTimePickerType.date,
-                                                  initialValue:
-                                                      DateTime.now().toString(),
-                                                  firstDate: DateTime(2000),
-                                                  lastDate: DateTime(2100),
-                                                  dateLabelText: 'From',
-                                                  onChanged: (val) =>
-                                                      print(val),
-                                                  validator: (val) {
-                                                    print(val);
-                                                    return null;
-                                                  },
-                                                  onSaved: (val) => print(val),
-                                                ),
-                                              ),
-                                              SizedBox(width: 10.0),
-                                              Expanded(
-                                                child: DateTimePicker(
-                                                  type: DateTimePickerType.date,
-                                                  initialValue:
-                                                      DateTime.now().toString(),
-                                                  firstDate: DateTime(2000),
-                                                  lastDate: DateTime(2100),
-                                                  dateLabelText: 'To',
-                                                  onChanged: (val) =>
-                                                      print(val),
-                                                  validator: (val) {
-                                                    print(val);
-                                                    return null;
-                                                  },
-                                                  onSaved: (val) => print(val),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(),
-                                          Row(
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Time"),
-                                                  SizedBox(
-                                                    height: 10.0,
-                                                  ),
-                                                  Icon(
-                                                    Icons.access_time_filled,
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(width: 10.0),
-                                              Expanded(
-                                                child: DateTimePicker(
-                                                  type: DateTimePickerType.time,
-                                                  initialValue: "",
-                                                  timeLabelText: 'From',
-                                                  onChanged: (val) =>
-                                                      print(val),
-                                                  validator: (val) {
-                                                    print(val);
-                                                    return null;
-                                                  },
-                                                  onSaved: (val) => print(val),
-                                                ),
-                                              ),
-                                              SizedBox(width: 10.0),
-                                              Expanded(
-                                                child: DateTimePicker(
-                                                  type: DateTimePickerType.time,
-                                                  initialValue: "",
-                                                  timeLabelText: 'To',
-                                                  onChanged: (val) =>
-                                                      print(val),
-                                                  validator: (val) {
-                                                    print(val);
-                                                    return null;
-                                                  },
-                                                  onSaved: (val) => print(val),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                  return FilterAction();
                                 })
                           },
                           icon: Icon(Icons.filter_alt),
@@ -676,6 +466,227 @@ class UserDashboardView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class FilterAction extends StatelessWidget {
+  const FilterAction({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16.0, vertical: 8),
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Date | Time",
+                        style: TextStyle(
+                            fontSize: 10),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty
+                                .all(Size.zero),
+                        padding:
+                            MaterialStateProperty
+                                .all(
+                          EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                              vertical: 4.0),
+                        ),
+                        elevation:
+                            MaterialStateProperty
+                                .all(0),
+                      ),
+                    ),
+                    SizedBox(width: 10.0),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Region",
+                        style: TextStyle(
+                            fontSize: 10),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty
+                                .all(Size.zero),
+                        padding:
+                            MaterialStateProperty
+                                .all(
+                          EdgeInsets.symmetric(
+                              horizontal: 15.0,
+                              vertical: 4.0),
+                        ),
+                        elevation:
+                            MaterialStateProperty
+                                .all(0),
+                      ),
+                    ),
+                  ],
+                ),
+                PopupMenuButton(
+                  child: Container(
+                    alignment:
+                        Alignment.centerLeft,
+                    child: Icon(
+                      Icons.more_vert,
+                      size: 15.0,
+                    ),
+                  ),
+                  offset: Offset(20, 20),
+                  padding: EdgeInsets.all(2),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      height: 15,
+                      padding:
+                          EdgeInsets.all(5.0),
+                      child: Text(
+                        'View vehicles',
+                        style: TextStyle(
+                            fontSize: 10.0),
+                      ),
+                      value: 1,
+                    ),
+                    PopupMenuItem(
+                      height: 15,
+                      padding:
+                          EdgeInsets.all(5.0),
+                      child: Text(
+                        'View Drivers',
+                        style: TextStyle(
+                            fontSize: 10.0),
+                      ),
+                      value: 1,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    Text("Date"),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Icon(
+                      Icons
+                          .calendar_today_outlined,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    type: DateTimePickerType.date,
+                    initialValue:
+                        DateTime.now().toString(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    dateLabelText: 'From',
+                    onChanged: (val) =>
+                        print(val),
+                    validator: (val) {
+                      print(val);
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    type: DateTimePickerType.date,
+                    initialValue:
+                        DateTime.now().toString(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    dateLabelText: 'To',
+                    onChanged: (val) =>
+                        print(val),
+                    validator: (val) {
+                      print(val);
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+              ],
+            ),
+            Divider(),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    Text("Time"),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Icon(
+                      Icons.access_time_filled,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    type: DateTimePickerType.time,
+                    initialValue: "",
+                    timeLabelText: 'From',
+                    onChanged: (val) =>
+                        print(val),
+                    validator: (val) {
+                      print(val);
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    type: DateTimePickerType.time,
+                    initialValue: "",
+                    timeLabelText: 'To',
+                    onChanged: (val) =>
+                        print(val),
+                    validator: (val) {
+                      print(val);
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
