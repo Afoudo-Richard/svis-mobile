@@ -1,7 +1,9 @@
-import 'package:app/app.dart';
-import 'package:app/commons/colors.dart';
+import 'package:app/authentication/authentication.dart';
+import 'package:app/profile/create/view/create_profile_form.dart';
+import 'package:app/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateProfilePage extends StatelessWidget {
   static Route route() {
@@ -17,39 +19,14 @@ class CreateProfilePage extends StatelessWidget {
         title: Text('addProfile').tr(),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        child: CircleAvatar(
-                          backgroundColor: kAppAccent,
-                          radius: 38,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: IconButton(
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.cancel_rounded),
-                          onPressed: () {},
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Text('Change image'),
-                SizedBox(height: kDeviceSize.height * 0.02),
-              ],
-            )
-          ],
+        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            return BlocProvider(
+              create: (context) =>
+                  CreateProfileBloc(profileUserTypes: state.profileUserTypes),
+              child: CreateProfileForm(),
+            );
+          },
         ),
       ),
     );

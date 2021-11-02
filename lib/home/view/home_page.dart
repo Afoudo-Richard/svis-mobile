@@ -723,6 +723,7 @@ class _ProfileSwitcher extends StatelessWidget {
                 bottom: 30,
                 child: FloatingActionButton.extended(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.of(context).push(CreateProfilePage.route());
                   },
                   icon: Icon(Icons.add),

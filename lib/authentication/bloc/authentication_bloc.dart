@@ -62,12 +62,14 @@ class AuthenticationBloc
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
         final profiles = await _tryGetProfiles();
+        final profileUserTypes = await _tryGetProfileUserType();
 
         return emit(user != null
             ? AuthenticationState.authenticated(
                 user: user,
                 profileUsers: profiles,
                 profile: profiles.first,
+                profileUserTypes: profileUserTypes,
               )
             : const AuthenticationState.unauthenticated());
       default:
@@ -85,6 +87,7 @@ class AuthenticationBloc
           user: state.user,
           profileUsers: state.profileUsers,
           profile: event.profile,
+          profileUserTypes: state.profileUserTypes,
         ),
       );
     }
@@ -110,6 +113,12 @@ class AuthenticationBloc
     QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
     query.whereEqualTo('User', await ParseUser.currentUser());
     query.includeObject(['User', 'ProfileUserTypes', 'Profile']);
+    return query.find();
+  }
+
+  Future<List<ProfileUserTypes>> _tryGetProfileUserType() async {
+    QueryBuilder<ProfileUserTypes> query =
+        QueryBuilder<ProfileUserTypes>(ProfileUserTypes());
     return query.find();
   }
 
