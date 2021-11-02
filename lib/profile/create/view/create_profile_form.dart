@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/profile/profile.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,35 +57,7 @@ class CreateProfileForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: kDeviceSize.height * 0.01),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        child: CircleAvatar(
-                          backgroundColor: kAppAccent,
-                          radius: 38,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: IconButton(
-                          alignment: Alignment.topRight,
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.cancel_rounded),
-                          onPressed: () {},
-                        ),
-                      )
-                    ],
-                  ),
-                  Text('Change image'),
-                ],
-              ),
-            ),
+            _ProfileImagePicker(),
             SizedBox(height: kDeviceSize.height * 0.03),
             Text(
               'contactInformation',
@@ -132,6 +107,69 @@ class CreateProfileForm extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ProfileImagePicker extends StatelessWidget {
+  const _ProfileImagePicker({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreateProfileBloc, CreateProfileState>(
+      builder: (context, state) {
+        return Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(type: FileType.image);
+
+                      if (result != null) {
+                        File file = File(result.files.single.path ?? '');
+                        context.read<CreateProfileBloc>().add(
+                              ProfileChanged(file),
+                            );
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      child: CircleAvatar(
+                        backgroundColor: kAppAccent,
+                        backgroundImage: (state.profile.value != null)
+                            ? FileImage(state.profile.value as File)
+                            : null,
+                        radius: 38,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: InkWell(
+                      child: Icon(Icons.cancel_rounded),
+                      onTap: () {
+                        context.read<CreateProfileBloc>().add(
+                              ProfileChanged(null),
+                            );
+                      },
+                    ),
+                  )
+                ],
+              ),
+              Text('Change image'),
+            ],
+          ),
+        );
+      },
     );
   }
 }

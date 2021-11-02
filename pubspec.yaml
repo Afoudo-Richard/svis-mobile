@@ -39,7 +39,7 @@ dependencies:
   flutter_map: ^0.14.0
   awesome_select: ^5.0.3
   multi_select_flutter: ^4.0.0
-  # latlong: ^0.6.1
+  file_picker: ^4.2.0
 
 #dependency_overrides:
 #  bloc:

@@ -3,6 +3,7 @@ part of 'create_profile_bloc.dart';
 class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
   final fz.FormzSubmission<String, Profile> _submission;
   // general info
+  final OptionalFile profile;
   final Name name;
   final Name description;
   final PhoneNumber phoneNumber;
@@ -20,6 +21,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
 
   const CreateProfileState({
     // general info
+    this.profile = const OptionalFile.pure(),
     this.name = const Name.pure(),
     this.description = const Name.pure(),
     this.phoneNumber = const PhoneNumber.pure(),
@@ -41,6 +43,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
 
   CreateProfileState copyWith({
     // general info
+    OptionalFile? profile,
     Name? name,
     Name? description,
     PhoneNumber? phoneNumber,
@@ -60,6 +63,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
   }) {
     return CreateProfileState(
       // general info
+      profile: profile ?? this.profile,
       name: name ?? this.name,
       description: description ?? this.description,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -83,6 +87,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
   List<Object> get props => [
         _submission,
         // general info
+        profile,
         name,
         description,
         phoneNumber,
@@ -102,6 +107,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
   @override
   List<fz.FormzInput> get inputs => [
         // general info
+        profile,
         name,
         description,
         phoneNumber,

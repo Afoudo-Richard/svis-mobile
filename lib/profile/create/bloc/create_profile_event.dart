@@ -4,7 +4,16 @@ abstract class CreateProfileEvent extends Equatable {
   const CreateProfileEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
+}
+
+class ProfileChanged extends CreateProfileEvent {
+  const ProfileChanged(this.value);
+
+  final File? value;
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class NameChanged extends CreateProfileEvent {

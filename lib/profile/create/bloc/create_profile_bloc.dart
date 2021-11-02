@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/commons/forms/forms.dart';
 import 'package:app/repository/base/api_response.dart';
@@ -18,6 +19,7 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
   final List<ProfileUserTypes>? profileUserTypes;
 
   CreateProfileBloc({this.profileUserTypes}) : super(CreateProfileState()) {
+    on<ProfileChanged>(_mapProfileChangedToState);
     on<NameChanged>(_mapNameChangedToState);
     on<DescriptionChanged>(_mapDescriptionChangedToState);
     on<PhoneNumberChanged>(_mapPhoneNumberChangedToState);
@@ -32,6 +34,17 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
     on<TaxIdChanged>(_mapTaxIdChangedToState);
     on<RegistrationIdChanged>(_mapRegistrationIdChangedToState);
     on<FormSubmitted>(_mapFormSubmittedToState);
+  }
+
+  Future<void> _mapProfileChangedToState(
+    ProfileChanged event,
+    Emitter<CreateProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        profile: OptionalFile.dirty(event.value),
+      ),
+    );
   }
 
   Future<void> _mapNameChangedToState(
@@ -204,6 +217,9 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
               ..state = state.state.value
               ..website = state.website.value
               ..taxId = state.taxId.value
+              ..profileImage = (state.profile.value != null)
+                  ? ParseFile(state.profile.value)
+                  : null
               ..registrationId = state.registrationId.value
               ..owner = await ParseUser.currentUser())
             .save());
