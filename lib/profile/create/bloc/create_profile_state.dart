@@ -1,7 +1,7 @@
 part of 'create_profile_bloc.dart';
 
-class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
-  final fz.FormzSubmission<String, Profile> _submission;
+class CreateProfileState extends Equatable with fz.FormzMixin<String, ProfileUser> {
+  final fz.FormzSubmission<String, ProfileUser> _submission;
   // general info
   final OptionalFile profile;
   final Name name;
@@ -37,7 +37,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
     this.website = const Name.pure(),
     this.taxId = const Name.pure(),
     this.registrationId = const Name.pure(),
-    fz.FormzSubmission<String, Profile> status =
+    fz.FormzSubmission<String, ProfileUser> status =
         const fz.FormzSubmission.pure(),
   }) : _submission = status;
 
@@ -59,7 +59,7 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
     Name? website,
     Name? taxId,
     Name? registrationId,
-    fz.FormzSubmission<String, Profile>? submission,
+    fz.FormzSubmission<String, ProfileUser>? submission,
   }) {
     return CreateProfileState(
       // general info
@@ -125,5 +125,5 @@ class CreateProfileState extends Equatable with fz.FormzMixin<String, Profile> {
       ];
 
   @override
-  fz.FormzSubmission<String, Profile> get submission => _submission;
+  fz.FormzSubmission<String, ProfileUser> get submission => _submission;
 }

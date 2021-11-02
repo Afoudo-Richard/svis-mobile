@@ -48,7 +48,7 @@ class CreateProfileForm extends StatelessWidget {
                 backgroundColor: kAppAccent.withOpacity(0.2),
               ),
             );
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(state.submission.success);
         }
       },
       child: Padding(

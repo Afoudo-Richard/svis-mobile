@@ -236,7 +236,7 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
             emit(
               state.copyWith(
                 submission: fz.FormzSubmission.success(
-                  success: response.result,
+                  success: profileUserResponse.result,
                 ),
               ),
             );

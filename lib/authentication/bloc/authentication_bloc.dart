@@ -21,6 +21,7 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationProfileChanged>(_onAuthenticationProfileChanged);
+    on<ProfileAdded>(_onProfileAdded);
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
@@ -91,6 +92,23 @@ class AuthenticationBloc
         ),
       );
     }
+  }
+
+  Future<void> _onProfileAdded(
+    ProfileAdded event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    var profileUsers = await _tryGetProfiles();
+    emit(
+      AuthenticationState.authenticated(
+        user: state.user,
+        profileUsers: profileUsers,
+        profile: profileUsers
+            .where((element) => element.objectId == event.profile.objectId)
+            .first,
+        profileUserTypes: state.profileUserTypes,
+      ),
+    );
   }
 
   void _onAuthenticationLogoutRequested(
