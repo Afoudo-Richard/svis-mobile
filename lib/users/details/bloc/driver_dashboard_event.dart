@@ -21,3 +21,15 @@ class FilterEventLog extends DriverDashboardEvent {
   List<Object> get props => [current];
 }
 
+
+class FilterByDateTime extends DriverDashboardEvent {
+  FilterByDateTime({required this.dateFrom, required this.dateTo, required this.timeFrom, required this.timeTo});
+  
+  final String dateFrom;
+  final String dateTo;
+  final String timeFrom;
+  final String timeTo;
+
+    @override
+  List<Object> get props => [dateFrom, dateTo, timeFrom, timeTo];
+}

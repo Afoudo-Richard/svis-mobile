@@ -39,9 +39,13 @@ class EventLog extends ParseObject implements ParseCloneable {
     return get('vehicle');
   }
 
-  set vehicle(Vehicle? value) {
-    set('vehicle', value);
-  }
+  // ParseRelation<Vehicle>? get vehicle {
+  //   return this.getRelation('vehicle');
+  // }
+
+  // set vehicle(Vehicle? value) {
+  //   set('vehicle', value);
+  // }
 
   DateTime? get createdAt {
     return get('createdAt');
