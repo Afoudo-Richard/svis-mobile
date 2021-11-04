@@ -8,6 +8,7 @@ import 'package:user_repository/user_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ void main() async {
         : await getApplicationDocumentsDirectory(),
   );
   await registerParseServer();
+  tz.initializeTimeZones();
   runApp(EasyLocalization(
     supportedLocales: [
       Locale('en', 'US'),

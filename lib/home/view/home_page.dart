@@ -95,23 +95,23 @@ class HomePage extends StatelessWidget {
                               context.read<AuthenticationBloc>().add(
                                     ProfileAdded(value),
                                   );
-                            }
-                            ScaffoldMessenger.of(context)
-                              ..hideCurrentSnackBar()
-                              ..showSnackBar(
-                                SnackBar(
-                                  duration: new Duration(minutes: 4),
-                                  elevation: 0,
-                                  content: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text('loading').tr(),
-                                      CircularProgressIndicator(),
-                                    ],
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(
+                                  SnackBar(
+                                    duration: new Duration(minutes: 4),
+                                    elevation: 0,
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text('loading').tr(),
+                                        CircularProgressIndicator(),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                            }
                           });
                         },
                       ),

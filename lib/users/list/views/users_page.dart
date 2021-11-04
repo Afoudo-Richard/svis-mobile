@@ -1,5 +1,6 @@
 import 'package:app/authentication/authentication.dart';
 import 'package:app/repository/models/profile_user.dart';
+import 'package:app/users/users.dart';
 import 'package:app/users/list/grou_items/view/assign_users.dart';
 import 'package:app/users/list/user_list.dart';
 import 'package:app/users/list/views/view.dart';
@@ -26,7 +27,9 @@ class UsersPage extends StatelessWidget {
         title: Text("Users"),
         actions: [
           IconButton(
-            onPressed: () => {},
+            onPressed: () async {
+              Navigator.of(context).push(AddUserPage.route());
+            },
             icon: Icon(Icons.add),
             iconSize: 35.0,
           ),
