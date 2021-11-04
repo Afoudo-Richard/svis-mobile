@@ -9,3 +9,6 @@ export 'datetime.dart';
 export 'current_email.dart';
 export 'items.dart';
 export 'optional_items.dart';
+export 'phone_number.dart';
+export 'optional_phone_number.dart';
+export 'optional_file.dart';

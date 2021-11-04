@@ -85,6 +85,14 @@ class Profile extends ParseObject
     this.set('addressLine2', value);
   }
 
+  String? get addressLine1 {
+    return this.get('addressLine1');
+  }
+
+  set addressLine1(String? value) {
+    this.set('addressLine1', value);
+  }
+
   String? get postalCode {
     return this.get('postalCode');
   }
@@ -125,6 +133,14 @@ class Profile extends ParseObject
     this.set('companyName', value);
   }
 
+  bool? get isCompanyProfile {
+    return this.get('IsCompanyProfile');
+  }
+
+  set isCompanyProfile(bool? value) {
+    this.set('IsCompanyProfile', value);
+  }
+
   String? get state {
     return this.get('state');
   }
@@ -147,6 +163,46 @@ class Profile extends ParseObject
 
   set username(String? value) {
     this.set('email', value);
+  }
+
+  String? get street {
+    return this.get('street');
+  }
+
+  set street(String? value) {
+    this.set('street', value);
+  }
+
+  String? get city {
+    return this.get('city');
+  }
+
+  set city(String? value) {
+    this.set('city', value);
+  }
+
+  String? get website {
+    return this.get('website');
+  }
+
+  set website(String? value) {
+    this.set('website', value);
+  }
+
+  String? get taxId {
+    return this.get('taxId');
+  }
+
+  set taxId(String? value) {
+    this.set('taxId', value);
+  }
+
+  String? get registrationId {
+    return this.get('registrationId');
+  }
+
+  set registrationId(String? value) {
+    this.set('registrationId', value);
   }
 
   @override

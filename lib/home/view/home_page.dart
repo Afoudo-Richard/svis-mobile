@@ -90,7 +90,29 @@ class HomePage extends StatelessWidget {
                             builder: (BuildContext context) {
                               return _ProfileSwitcher();
                             },
-                          );
+                          ).then((value) {
+                            if (value is ProfileUser) {
+                              context.read<AuthenticationBloc>().add(
+                                    ProfileAdded(value),
+                                  );
+                            }
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  duration: new Duration(minutes: 4),
+                                  elevation: 0,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('loading').tr(),
+                                      CircularProgressIndicator(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                          });
                         },
                       ),
                     ],
@@ -722,8 +744,10 @@ class _ProfileSwitcher extends StatelessWidget {
                 right: kDeviceSize.width * 0.2,
                 bottom: 30,
                 child: FloatingActionButton.extended(
-                  onPressed: () {
-                    Navigator.of(context).push(CreateProfilePage.route());
+                  onPressed: () async {
+                    var profileUser = await Navigator.of(context)
+                        .push(CreateProfilePage.route());
+                    Navigator.of(context).pop(profileUser);
                   },
                   icon: Icon(Icons.add),
                   label: Text('create profile'),
@@ -763,7 +787,7 @@ class _ProfileSwicheritem extends StatelessWidget {
         softWrap: false,
       ),
       subtitle: Text(
-        item?.profile?.address ?? 'n/a',
+        item?.profile?.description ?? 'n/a',
         overflow: TextOverflow.fade,
         maxLines: 1,
         softWrap: false,

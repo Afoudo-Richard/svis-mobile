@@ -25,4 +25,13 @@ class AuthenticationProfileChanged extends AuthenticationEvent {
   List<Object> get props => [profile];
 }
 
+class ProfileAdded extends AuthenticationEvent {
+  const ProfileAdded(this.profile);
+
+  final ProfileUser profile;
+
+  @override
+  List<Object> get props => [profile];
+}
+
 class AuthenticationLogoutRequested extends AuthenticationEvent {}

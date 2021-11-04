@@ -21,6 +21,7 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationProfileChanged>(_onAuthenticationProfileChanged);
+    on<ProfileAdded>(_onProfileAdded);
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
     on<AuthenticationLogoutRequested>(_onAuthenticationLogoutRequested);
     _authenticationStatusSubscription = _authenticationRepository.status.listen(
@@ -62,12 +63,14 @@ class AuthenticationBloc
       case AuthenticationStatus.authenticated:
         final user = await _tryGetUser();
         final profiles = await _tryGetProfiles();
+        final profileUserTypes = await _tryGetProfileUserType();
 
         return emit(user != null
             ? AuthenticationState.authenticated(
                 user: user,
                 profileUsers: profiles,
                 profile: profiles.first,
+                profileUserTypes: profileUserTypes,
               )
             : const AuthenticationState.unauthenticated());
       default:
@@ -85,9 +88,27 @@ class AuthenticationBloc
           user: state.user,
           profileUsers: state.profileUsers,
           profile: event.profile,
+          profileUserTypes: state.profileUserTypes,
         ),
       );
     }
+  }
+
+  Future<void> _onProfileAdded(
+    ProfileAdded event,
+    Emitter<AuthenticationState> emit,
+  ) async {
+    var profileUsers = await _tryGetProfiles();
+    emit(
+      AuthenticationState.authenticated(
+        user: state.user,
+        profileUsers: profileUsers,
+        profile: profileUsers
+            .where((element) => element.objectId == event.profile.objectId)
+            .first,
+        profileUserTypes: state.profileUserTypes,
+      ),
+    );
   }
 
   void _onAuthenticationLogoutRequested(
@@ -110,6 +131,12 @@ class AuthenticationBloc
     QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
     query.whereEqualTo('User', await ParseUser.currentUser());
     query.includeObject(['User', 'ProfileUserTypes', 'Profile']);
+    return query.find();
+  }
+
+  Future<List<ProfileUserTypes>> _tryGetProfileUserType() async {
+    QueryBuilder<ProfileUserTypes> query =
+        QueryBuilder<ProfileUserTypes>(ProfileUserTypes());
     return query.find();
   }
 
