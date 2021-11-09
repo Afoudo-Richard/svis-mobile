@@ -20,7 +20,7 @@ class DriverDashboardBloc
   void _onInit(DriverDashboardEvent event, Emitter emit) async {
     try {
       if (state.recentActionStatus == RecentActionStatus.loading) {
-        final recentActions = await _fetchRecentActions();
+        final recentActions = await _filter(DateTime.now().toString(), "last 24 hours");
         emit(state.copyWith(
             recentActionStatus: RecentActionStatus.success,
             recentActions: recentActions));
@@ -74,17 +74,16 @@ class DriverDashboardBloc
     final day = DateTime.now().day;
 
     final today = DateTime.parse("$year-$month-$day");
-    final yerstday = today.subtract(Duration(hours: 72));
+    final yersterday = today.subtract(Duration(hours: 72));
 
     print(today);
-    print(yerstday);
+    print(yersterday);
 
     QueryBuilder<EventLog> query = QueryBuilder<EventLog>(EventLog());
     query.whereEqualTo('driver', user!.user);
-    query.whereLessThanOrEqualTo('createAt', today);
-    query.whereGreaterThanOrEqualsTo('createdAt', yerstday);
+    query.whereLessThan('createdAt', today);
+    query.whereGreaterThanOrEqualsTo('createdAt', yersterday);
 
-    
     return (await query.find())
         .map((e) => EventLog().clone(e.toJson(full: true)))
         .toList();
@@ -100,8 +99,8 @@ class DriverDashboardBloc
         query.whereLessThan('createdAt', DateTime.parse(currentdate));
         query.whereGreaterThan('createdAt', search);
         return (await query.find())
-        .map((e) => EventLog().clone(e.toJson(full: true)))
-        .toList();
+            .map((e) => EventLog().clone(e.toJson(full: true)))
+            .toList();
       case "last week":
         final search = DateTime.parse(currentdate).subtract(Duration(days: 7));
         QueryBuilder<EventLog> query = QueryBuilder<EventLog>(EventLog());
@@ -109,8 +108,8 @@ class DriverDashboardBloc
         query.whereLessThan('createdAt', DateTime.parse(currentdate));
         query.whereGreaterThan('createdAt', search);
         return (await query.find())
-        .map((e) => EventLog().clone(e.toJson(full: true)))
-        .toList();
+            .map((e) => EventLog().clone(e.toJson(full: true)))
+            .toList();
       case "last month":
         final search = DateTime.parse(currentdate).subtract(Duration(days: 30));
         QueryBuilder<EventLog> query = QueryBuilder<EventLog>(EventLog());
@@ -118,31 +117,32 @@ class DriverDashboardBloc
         query.whereLessThan('createdAt', DateTime.parse(currentdate));
         query.whereGreaterThan('createdAt', search);
         return (await query.find())
-        .map((e) => EventLog().clone(e.toJson(full: true)))
-        .toList();
+            .map((e) => EventLog().clone(e.toJson(full: true)))
+            .toList();
       case "last year":
-        final search = DateTime.parse(currentdate).subtract(Duration(days: 365));
+        final search =
+            DateTime.parse(currentdate).subtract(Duration(days: 365));
         QueryBuilder<EventLog> query = QueryBuilder<EventLog>(EventLog());
         query.whereEqualTo('driver', user!.user);
         query.whereLessThan('createdAt', DateTime.parse(currentdate));
         query.whereGreaterThan('createdAt', search);
         return (await query.find())
-        .map((e) => EventLog().clone(e.toJson(full: true)))
-        .toList();
+            .map((e) => EventLog().clone(e.toJson(full: true)))
+            .toList();
       default:
         QueryBuilder<EventLog> query = QueryBuilder<EventLog>(EventLog());
         query.whereEqualTo('driver', user!.user);
         return (await query.find())
-        .map((e) => EventLog().clone(e.toJson(full: true)))
-        .toList();
+            .map((e) => EventLog().clone(e.toJson(full: true)))
+            .toList();
     }
   }
 
   Future<List<EventLog>> _dateTimeFilter(FilterByDateTime event) async {
     final dateTimeFrom =
         DateTime.parse('${event.dateFrom} ${event.timeFrom}'.trim()).toUtc();
-    final dateTimeTo = DateTime.parse('${event.dateTo} ${event.timeTo}'.trim()).toUtc();
-
+    final dateTimeTo =
+        DateTime.parse('${event.dateTo} ${event.timeTo}'.trim()).toUtc();
 
     print(dateTimeFrom);
     print(dateTimeTo);
@@ -151,13 +151,9 @@ class DriverDashboardBloc
     query.whereEqualTo('driver', user!.user);
     query.whereGreaterThanOrEqualsTo('createdAt', dateTimeFrom);
     query.whereLessThanOrEqualTo('createdAt', dateTimeTo);
-    
-
 
     return (await query.find())
         .map((e) => EventLog().clone(e.toJson(full: true)))
         .toList();
   }
-
-
 }
