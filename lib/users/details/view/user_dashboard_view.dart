@@ -201,7 +201,6 @@ class UserDashboardView extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  
                                 ],
                               ),
                             ],
@@ -384,41 +383,40 @@ class UserDashboardView extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.recentActions.length,
-                          itemBuilder: (context, item) {
-                            //print("${state.recentActions[item].vehicle}");
-                            print(state.recentActions);
-
-                            switch (state.recentActionStatus) {
-                              case RecentActionStatus.loading:
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              case RecentActionStatus.success:
-                                return state.recentActions.isEmpty
-                                    ? Center(
-                                        child: Text("No recent actions"),
-                                      )
-                                    : RecentActionItem(
-                                        header: state.recentActions[item]
-                                                .parameter ??
+                  Builder(builder: (context) {
+                    switch (state.recentActionStatus) {
+                      case RecentActionStatus.loading:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      case RecentActionStatus.success:
+                        return state.recentActions.isEmpty
+                            ? Center(
+                                child: Text("No recent actions"),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.recentActions.length,
+                                itemBuilder: (context, item) {
+                                  return RecentActionItem(
+                                    header:
+                                        state.recentActions[item].parameter ??
                                             "N/A",
-                                        // vehicleInfo: state.recentActions[item]
-                                        //         .vehicle!.modelYear ??
-                                        //     "N/A",
-                                        //vehicleInfo: state.recentActions[item].vehicle!.countryCode ?? "N/A",
-                                        vehicleInfo: "vehicle LTR 23455",
-                                        date:
-                                            "${state.recentActions[item].createdAt!.year.toString()} ${state.recentActions[item].createdAt!.month.toString()}, \n ${state.recentActions[item].createdAt!.day.toString()}",
-                                      );
-                              default:
-                                return Center(
-                                    child:
-                                        Text("Error loading recent Actions"));
-                            }
-                          }),
+                                    // vehicleInfo: state.recentActions[item]
+                                    //         .vehicle!.modelYear ??
+                                    //     "N/A",
+                                    //vehicleInfo: state.recentActions[item].vehicle!.countryCode ?? "N/A",
+                                    vehicleInfo: "vehicle LTR 23455",
+                                    date:
+                                        "${state.recentActions[item].createdAt!.year.toString()} ${state.recentActions[item].createdAt!.month.toString()}, \n ${state.recentActions[item].createdAt!.day.toString()}",
+                                  );
+                                });
+                      default:
+                        return Center(
+                            child: Text("Error loading recent Actions"));
+                    }
+                  }),
+
                   SizedBox(height: 20.0),
 
                   Column(
