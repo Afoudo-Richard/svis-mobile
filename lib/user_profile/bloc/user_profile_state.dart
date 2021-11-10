@@ -2,6 +2,7 @@ part of 'user_profile_bloc.dart';
 
 class UserProfileState extends Equatable with fz.FormzMixin<String, User> {
   final fz.FormzSubmission<String, User> _submission;
+  final OptionalFile profile;
   final Name firstName;
   final Name lastName;
   final IDateTime dateOfBirth;
@@ -18,6 +19,7 @@ class UserProfileState extends Equatable with fz.FormzMixin<String, User> {
   final bool editable;
 
   const UserProfileState({
+    this.profile = const OptionalFile.pure(),
     this.firstName = const Name.pure(),
     this.lastName = const Name.pure(),
     this.dateOfBirth = const IDateTime.pure(),
@@ -36,6 +38,7 @@ class UserProfileState extends Equatable with fz.FormzMixin<String, User> {
   }) : _submission = status;
 
   UserProfileState copyWith({
+    OptionalFile? profile,
     Name? firstName,
     Name? lastName,
     IDateTime? dateOfBirth,
@@ -53,6 +56,7 @@ class UserProfileState extends Equatable with fz.FormzMixin<String, User> {
     fz.FormzSubmission<String, User>? submission,
   }) {
     return UserProfileState(
+      profile: profile ?? this.profile,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
@@ -75,6 +79,7 @@ class UserProfileState extends Equatable with fz.FormzMixin<String, User> {
   @override
   List<Object> get props => [
         _submission,
+        profile,
         firstName,
         lastName,
         dateOfBirth,
