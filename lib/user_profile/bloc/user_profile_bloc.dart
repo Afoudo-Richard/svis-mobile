@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:app/commons/forms/forms.dart';
 import 'package:app/repository/base/api_response.dart';
+import 'package:app/repository/models/profile.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -13,6 +16,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   UserProfileBloc({User? user})
       : super(
           UserProfileState(
+            //profile: OptionalFile.dirty(user.profile.),
             firstName: Name.dirty(user?.firstName ?? ''),
             lastName: Name.dirty(user?.lastName ?? ''),
             dateOfBirth: IDateTime.dirty(user?.dateOfBirth),
@@ -28,9 +32,13 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
             // region: Name.dirty(user?.region ?? ''),
           ),
         ) {
+          //print(user!.profile!.file.toString());
     // on<UserProfileEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
+
+    on<ProfileChanged>(_mapProfileChangedToState);
+
     on<FirstNameChanged>((event, emit) {
       emit(_mapFirstNameChangedToState(event, state));
     });
@@ -215,6 +223,19 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     );
   }
 
+    Future<void> _mapProfileChangedToState(
+    ProfileChanged event,
+    Emitter<UserProfileState> emit,
+  ) async {
+    print(event.value.toString());
+    emit(
+      state.copyWith(
+        profile: OptionalFile.dirty(event.value),
+      ),
+    );
+  }
+
+
   _mapFormSubmittedToState(
     UserProfileEvent event,
     Emitter<UserProfileState> emit,
@@ -228,6 +249,10 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       );
 
       try {
+        print("Is trying to update");
+        ParseFile profileImage = ParseFile(state.profile.value);
+        //profileImage.save();
+        print(state.profile.value.toString());
         ApiResponse response =
             getApiResponse<User>(await ((await ParseUser.currentUser() as User)
                   ..firstName = state.firstName.value
@@ -241,6 +266,7 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
                   ..city = state.city.value
                   ..state = state.state.value
                   ..country = state.countryOfRegistration.value
+                  ..profile = profileImage
                   /* ..region = state.region.value */)
                 .save());
         if (response.success) {

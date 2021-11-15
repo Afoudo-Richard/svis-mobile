@@ -1,22 +1,34 @@
+import 'package:app/commons/colors.dart';
+import 'package:app/commons/time_item.dart';
+import 'package:app/repository/models/models.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/users/details/view/user_dashboard_view.dart';
 import 'package:app/users/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_repository/user_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
+import '../details.dart';
+
 
 class DriverDashboardPage extends StatelessWidget {
-  const DriverDashboardPage({Key? key, required this.user}) : super(key: key);
+  DriverDashboardPage({Key? key, required this.user}) : super(key: key);
   final ProfileUser? user;
+
+  late DriverDashboardBloc driverDashboardBloc;
+
 
   static Route route(ProfileUser? user) {
     return MaterialPageRoute<void>(
         builder: (_) => DriverDashboardPage(user: user));
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DriverDashboardBloc(user: user as ProfileUser),
+      create: (context) => DriverDashboardBloc(user: user)..add(DriverDashboardInit(user: user)),
       child: UserDashboardView(),
     );
   }

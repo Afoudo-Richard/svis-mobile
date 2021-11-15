@@ -123,7 +123,8 @@ class Bar extends StatelessWidget {
           SizedBox(height: 6.0),
           Text(
             date,
-            style: TextStyle(fontSize: 7.0, fontWeight: FontWeight.w600),
+            softWrap: false,
+            style: TextStyle(fontSize: 6.0, fontWeight: FontWeight.w600),
           ),
         ],
       ),

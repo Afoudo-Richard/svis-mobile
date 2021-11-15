@@ -4,7 +4,7 @@ abstract class UserProfileEvent extends Equatable {
   const UserProfileEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class FirstNameChanged extends UserProfileEvent {
@@ -136,6 +136,16 @@ class StatusChanged extends UserProfileEvent {
 class EditChanged extends UserProfileEvent {
   const EditChanged();
 }
+
+class ProfileChanged extends UserProfileEvent {
+  const ProfileChanged(this.value);
+
+  final File? value;
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class FormSubmitted extends UserProfileEvent {
   const FormSubmitted();
 }

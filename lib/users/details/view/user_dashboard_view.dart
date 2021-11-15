@@ -1,3 +1,4 @@
+import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/time_item.dart';
 import 'package:app/group/view/view.dart';
@@ -5,6 +6,7 @@ import 'package:app/permission/permission.dart';
 import 'package:app/repository/models/svis_role.dart';
 import 'package:app/role/role.dart';
 import 'package:app/users/users.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -199,7 +201,6 @@ class UserDashboardView extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Text(state.user.objectId.toString()),
                                 ],
                               ),
                             ],
@@ -295,19 +296,44 @@ class UserDashboardView extends StatelessWidget {
                     children: [
                       TimeItem(
                         label: "Last 24 hours",
-                        onTap: () {},
+                        onTap: () {
+                          context.read<DriverDashboardBloc>().add(
+                              FilterEventLog(
+                                  DateTime.now().toString(), "last 24 hours"));
+                        },
                       ),
                       TimeItem(
-                        label: "Last Weak",
-                        onTap: () {},
+                        label: "Last Week",
+                        onTap: () {
+                          context.read<DriverDashboardBloc>().add(
+                              FilterEventLog(
+                                  DateTime.now().toString(), "last week"));
+                        },
                       ),
                       TimeItem(
                         label: "Last Month",
-                        onTap: () {},
+                        onTap: () {
+                          print("Last Month herer");
+                          context.read<DriverDashboardBloc>().add(
+                              FilterEventLog(
+                                  DateTime.now().toString(), "last month"));
+                        },
                       ),
                       Container(
                         child: IconButton(
-                          onPressed: () => {},
+                          onPressed: () => {
+                            showDialog(
+                              context: context,
+                              // builder: (BuildContext context) {
+                              //   return FilterAction();
+                              // }),
+                              builder: (ctx) =>
+                                  BlocProvider<DriverDashboardBloc>.value(
+                                value: context.read<DriverDashboardBloc>(),
+                                child: FilterAction(),
+                              ),
+                            ),
+                          },
                           icon: Icon(Icons.filter_alt),
                           color: Colors.white,
                           iconSize: 30.0,
@@ -357,20 +383,40 @@ class UserDashboardView extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  Column(
-                    children: [
-                      RecentActionItem(
-                        header: "Updated track setup",
-                        vehicleInfo: "vehicle LTR 23214",
-                        date: "Jan 03, \n 2021",
-                      ),
-                      RecentActionItem(
-                        header: "Updated track setup #10",
-                        vehicleInfo: "vehicle LTR 23214",
-                        date: "Jan 03, \n 2021",
-                      ),
-                    ],
-                  ),
+                  Builder(builder: (context) {
+                    switch (state.recentActionStatus) {
+                      case RecentActionStatus.loading:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      case RecentActionStatus.success:
+                        return state.recentActions.isEmpty
+                            ? Center(
+                                child: Text("No recent actions"),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.recentActions.length,
+                                itemBuilder: (context, item) {
+                                  return RecentActionItem(
+                                    header:
+                                        state.recentActions[item].parameter ??
+                                            "N/A",
+                                    // vehicleInfo: state.recentActions[item]
+                                    //         .vehicle!.modelYear ??
+                                    //     "N/A",
+                                    //vehicleInfo: state.recentActions[item].vehicle!.countryCode ?? "N/A",
+                                    vehicleInfo: "vehicle LTR 23455",
+                                    date:
+                                        "${state.recentActions[item].createdAt!.year.toString()} ${state.recentActions[item].createdAt!.month.toString()}, \n ${state.recentActions[item].createdAt!.day.toString()}",
+                                  );
+                                });
+                      default:
+                        return Center(
+                            child: Text("Error loading recent Actions"));
+                    }
+                  }),
+
                   SizedBox(height: 20.0),
 
                   Column(
@@ -454,6 +500,410 @@ class UserDashboardView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class FilterAction extends StatefulWidget {
+  const FilterAction({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _FilterActionState createState() => _FilterActionState();
+}
+
+class _FilterActionState extends State<FilterAction> {
+  late TextEditingController _dateFromController;
+  late TextEditingController _dateToController;
+  late TextEditingController _timeFromController;
+  late TextEditingController _timeToController;
+
+  @override
+  void initState() {
+    super.initState();
+    _dateFromController =
+        TextEditingController(text: DateTime.now().toString().split(" ")[0]);
+    _dateToController =
+        TextEditingController(text: DateTime.now().toString().split(" ")[0]);
+    _timeFromController = TextEditingController(text: "00:00");
+    _timeToController = TextEditingController(text: "00:00");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DriverDashboardBloc _DriverDashboardBloc =
+        BlocProvider.of<DriverDashboardBloc>(context);
+
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Date | Time",
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size.zero),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                    SizedBox(width: 10.0),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Region",
+                        style: TextStyle(fontSize: 10),
+                      ),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size.zero),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                  ],
+                ),
+                PopupMenuButton(
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Icon(
+                      Icons.more_vert,
+                      size: 15.0,
+                    ),
+                  ),
+                  offset: Offset(20, 20),
+                  padding: EdgeInsets.all(2),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      height: 15,
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(
+                        'View vehicles',
+                        style: TextStyle(fontSize: 10.0),
+                      ),
+                      value: 1,
+                    ),
+                    PopupMenuItem(
+                      height: 15,
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(
+                        'View Drivers',
+                        style: TextStyle(fontSize: 10.0),
+                      ),
+                      value: 1,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Date"),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 15.0,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    controller: _dateFromController,
+                    type: DateTimePickerType.date,
+                    //initialValue: dateFrom,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    dateLabelText: 'From',
+                    onChanged: (val) => _dateFromController.text = val,
+                    validator: (val) {},
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: DateTimePicker(
+                    type: DateTimePickerType.date,
+                    controller: _dateToController,
+                    //initialValue: dateTo,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    dateLabelText: 'To',
+                    onChanged: (val) => _dateToController.text = val,
+                    validator: (val) {
+                      print(val);
+                      return null;
+                    },
+                    onSaved: (val) => print(val),
+                  ),
+                ),
+              ],
+            ),
+            Divider(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Time"),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Icon(
+                      Icons.access_time_filled,
+                      size: 15.0,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DateTimePicker(
+                              type: DateTimePickerType.time,
+                              controller: _timeFromController,
+                              //initialValue: timeFrom,
+                              timeLabelText: 'From',
+                              onChanged: (val) =>
+                                  _timeFromController.text = val,
+                              validator: (val) {
+                                print(val);
+                                return null;
+                              },
+                              onSaved: (val) => print(val),
+                            ),
+                          ),
+                          SizedBox(width: 10.0),
+                          Expanded(
+                            child: DateTimePicker(
+                              type: DateTimePickerType.time,
+                              controller: _timeToController,
+                              //initialValue: timeTo,
+                              timeLabelText: 'To',
+                              onChanged: (val) => _timeToController.text = val,
+                              validator: (val) {
+                                print(val);
+                                return null;
+                              },
+                              onSaved: (val) => print(val),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: kDeviceSize.height * 0.02,
+                      ),
+                      Wrap(
+                        children: [
+                          DateTimeItem(
+                              label: "Last 24 hours",
+                              onTap: () {
+                                setState(() {
+                                  final now = DateTime.now();
+                                  final last24h =
+                                      now.subtract(Duration(hours: 24));
+
+                                  _dateFromController.text =
+                                      last24h.toString().split(" ")[0];
+                                  _dateToController.text =
+                                      now.toString().split(" ")[0];
+
+                                  _timeFromController.text = last24h
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                  _timeToController.text = now
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                });
+                              }),
+                          DateTimeItem(
+                              label: "Last 7 days",
+                              onTap: () {
+                                setState(() {
+                                  final now = DateTime.now();
+                                  final last7d =
+                                      now.subtract(Duration(days: 7));
+
+                                  _dateFromController.text =
+                                      last7d.toString().split(" ")[0];
+                                  _dateToController.text =
+                                      now.toString().split(" ")[0];
+                                  _timeFromController.text = last7d
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                  _timeToController.text = now
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                });
+                              }),
+                          DateTimeItem(
+                              label: "Last 30 days",
+                              onTap: () {
+                                setState(() {
+                                  final now = DateTime.now();
+                                  final last30d =
+                                      now.subtract(Duration(days: 30));
+
+                                  _dateFromController.text =
+                                      last30d.toString().split(" ")[0];
+                                  _dateToController.text =
+                                      now.toString().split(" ")[0];
+                                  _timeFromController.text = last30d
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                  _timeToController.text = now
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                });
+                              }),
+                          DateTimeItem(
+                              label: "Last year",
+                              onTap: () {
+                                setState(() {
+                                  final now = DateTime.now();
+                                  final lastYear =
+                                      now.subtract(Duration(days: 365));
+
+                                  _dateFromController.text =
+                                      lastYear.toString().split(" ")[0];
+                                  _dateToController.text =
+                                      now.toString().split(" ")[0];
+                                  _timeFromController.text = lastYear
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                  _timeToController.text = now
+                                      .toString()
+                                      .split(" ")[1]
+                                      .split(".")[0];
+                                });
+                              }),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: kDeviceSize.height * 0.02,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(fontSize: 10, color: kAppPrimaryColor),
+                  ),
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.all(
+                        BorderSide(color: kAppPrimaryColor)),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    minimumSize: MaterialStateProperty.all(Size.zero),
+                    padding: MaterialStateProperty.all(
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+                    ),
+                    elevation: MaterialStateProperty.all(0),
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<DriverDashboardBloc>().add(FilterByDateTime(
+                        dateFrom: _dateFromController.text,
+                        dateTo: _dateToController.text,
+                        timeFrom: _timeFromController.text,
+                        timeTo: _timeToController.text));
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Apply",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                  style: ButtonStyle(
+                    minimumSize: MaterialStateProperty.all(Size.zero),
+                    padding: MaterialStateProperty.all(
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+                    ),
+                    elevation: MaterialStateProperty.all(0),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DateTimeItem extends StatelessWidget {
+  const DateTimeItem({Key? key, required this.label, required this.onTap})
+      : super(key: key);
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+        padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Text(
+          label,
+          style: TextStyle(color: Colors.blue[800], fontSize: 10.0),
+        ),
+      ),
     );
   }
 }

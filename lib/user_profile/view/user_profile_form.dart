@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:app/app.dart';
 import 'package:app/authentication/authentication.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/password_update/view/view.dart';
 import 'package:app/terminate_account/view/view.dart';
 import 'package:app/user_profile/user_profile.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -25,40 +28,7 @@ class UserProfileForm extends StatelessWidget {
             return BlocBuilder<UserProfileBloc, UserProfileState>(
               builder: (context, upState) {
                 if (upState.editable) {
-                  return Column(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            child: state.user?.profile != null
-                                ? CircleAvatar(
-                                    backgroundColor: kAppAccent,
-                                    radius: 38,
-                                    backgroundImage: NetworkImage(
-                                        state.user?.profile?.url ?? ''),
-                                  )
-                                : CircleAvatar(
-                                    backgroundColor: kAppAccent,
-                                    radius: 38,
-                                  ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: IconButton(
-                              alignment: Alignment.topRight,
-                              padding: EdgeInsets.zero,
-                              icon: Icon(Icons.cancel_rounded),
-                              onPressed: () {},
-                            ),
-                          )
-                        ],
-                      ),
-                      Text('Change image'),
-                      SizedBox(height: kDeviceSize.height * 0.02),
-                    ],
-                  );
+                  return _ProfileImagePicker();
                 } else {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -68,6 +38,8 @@ class UserProfileForm extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: kAppAccent,
                           radius: 38,
+                          backgroundImage:
+                              NetworkImage(state.user?.profile?.url ?? ''),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -185,6 +157,69 @@ class UserProfileForm extends StatelessWidget {
         ),
         SizedBox(height: kDeviceSize.height * 0.03),
       ],
+    );
+  }
+}
+
+class _ProfileImagePicker extends StatelessWidget {
+  const _ProfileImagePicker({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserProfileBloc, UserProfileState>(
+      builder: (context, state) {
+        return Align(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(type: FileType.image);
+
+                      if (result != null) {
+                        File file = File(result.files.single.path ?? '');
+                        context.read<UserProfileBloc>().add(
+                              ProfileChanged(file),
+                            );
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      child: CircleAvatar(
+                        backgroundColor: kAppAccent,
+                        backgroundImage: (state.profile.value != null)
+                            ? FileImage(state.profile.value as File)
+                            : null,
+                        radius: 38,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: InkWell(
+                      child: Icon(Icons.cancel_rounded),
+                      onTap: () {
+                        context.read<UserProfileBloc>().add(
+                              ProfileChanged(null),
+                            );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Text('Change image'),
+            ],
+          ),
+        );
+      },
     );
   }
 }

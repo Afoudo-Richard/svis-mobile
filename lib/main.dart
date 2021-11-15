@@ -1,4 +1,5 @@
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/trouble_code.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:app/app.dart';
@@ -56,4 +57,8 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kProfileUserTypes, () => ProfileUserTypes());
   ParseCoreData().registerSubClass(kSVISRole, () => SvisRole());
   ParseCoreData().registerSubClass(kProfileUserGroup, () => ProfileUserGroup());
+  ParseCoreData().registerSubClass(kEventLog, () => EventLog());
+  ParseCoreData().registerSubClass(kVehicle, () => Vehicle());
+  ParseCoreData().registerSubClass(kTroubleCode, () => TroubleCode());
+
 }
