@@ -140,7 +140,10 @@ class AppDrawer extends StatelessWidget {
                       title: Text(
                         'vehicles',
                       ).tr(),
-                      onTap: () => {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(VehiclePage.route());
+                      },
                     ),
                     ListTile(
                       leading: Icon(

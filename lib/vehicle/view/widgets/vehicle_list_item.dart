@@ -1,32 +1,35 @@
-part of 'drivers_list.dart';
+part of '../vehicle_list.dart';
 
-enum UserListItemOptions {
-  view,
-  assign,
+enum DriverListItemOptions {
+  assignDriver, 
+  viewProfile,
+  edit,
+  deassociateDevice,
+  archive,
   delete,
 }
 
-class UserListItem extends StatefulWidget {
-  const UserListItem(
+class DriverListItem extends StatefulWidget {
+  const DriverListItem(
       {Key? key,
-      required this.user,
+      required this.vehicle,
       required this.isSelecting,
       required this.isSelected,
       required this.onTap,
       required this.onSelected})
       : super(key: key);
 
-  final ProfileUser? user;
+  final Vehicle? vehicle;
   final bool isSelecting;
   final VoidCallback onSelected;
   final bool isSelected;
   final VoidCallback onTap;
 
   @override
-  _UserListItemState createState() => _UserListItemState();
+  _DriverListItemState createState() => _DriverListItemState();
 }
 
-class _UserListItemState extends State<UserListItem> {
+class _DriverListItemState extends State<DriverListItem> {
   bool isSelected = false;
   @override
   Widget build(BuildContext context) {
@@ -39,130 +42,127 @@ class _UserListItemState extends State<UserListItem> {
             onTap: widget.onTap,
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10.0),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: 0.5, color: Colors.grey),
-                ),
-              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/user.png"),
-                            backgroundColor: kAppPrimaryColor,
-                            radius: 25.0,
-                          ),
-                          widget.isSelected
-                              ? CircleAvatar(
-                                  backgroundColor:
-                                      kAppPrimaryColor.withOpacity(0.5),
-                                  radius: 25.0,
-                                  child: Icon(Icons.check_sharp),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.user?.user?.fullName ?? "",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/images/user.png"),
+                              backgroundColor: kAppPrimaryColor,
+                              radius: 25.0,
                             ),
-                          ),
-                          Row(
+                            widget.isSelected
+                                ? CircleAvatar(
+                                    backgroundColor:
+                                        kAppPrimaryColor.withOpacity(0.5),
+                                    radius: 25.0,
+                                    child: Icon(Icons.check_sharp),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 4.0, right: 2.0),
-                                height: 7.0,
-                                width: 7.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: true ? Colors.blue : Colors.red,
+                              Text(
+                                widget.vehicle!.name ?? "",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              Column(
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    true ? "Active" : "Inactive",
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                  Container(
+                                    margin: EdgeInsets.only(top: 4.0, right: 2.0),
+                                    height: 7.0,
+                                    width: 7.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: true ? Colors.blue : Colors.red,
                                     ),
                                   ),
-                                  Text(
-                                    "Role:Admin | Group:Operations",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                    ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        true ? "Active" : "Inactive",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Craig assigned",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "84%",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Icon(
-                            true ? Icons.expand_less : Icons.expand_more,
-                            color: true ? Colors.green : Colors.red,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "Last 24hrs",
-                        style: TextStyle(
-                          fontSize: 10,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  PopupMenuButton<UserListItemOptions>(
+                  Container(
+                    margin: EdgeInsets.only(right: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "84%",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Icon(
+                              true ? Icons.expand_less : Icons.expand_more,
+                              color: true ? Colors.green : Colors.red,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Last 24hrs",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuButton<DriverListItemOptions>(
                     padding: EdgeInsets.all(0.0),
                     child: Icon(Icons.more_vert),
-                    onSelected: (UserListItemOptions item) async {
+                    onSelected: (DriverListItemOptions item) async {
                       switch (item) {
-                        case UserListItemOptions.view:
-                          Navigator.of(context)
-                              .push(DriverDashboardPage.route(widget.user));
-                          break;
-                        case UserListItemOptions.assign:
-                          await asignUsers(context, [widget.user]);
-                          break;
-                        case UserListItemOptions.delete:
+                        
+                        case DriverListItemOptions.delete:
                           break;
                         default:
                       }
                     },
                     itemBuilder: (context) {
-                      return UserListItemOptions.values.map((item) {
+                      return DriverListItemOptions.values.map((item) {
                         return PopupMenuItem(
                           child: Text(item.toString().split('.').last).tr(),
                           value: item,

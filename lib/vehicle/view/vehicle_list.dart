@@ -3,54 +3,46 @@ import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
-import 'package:app/repository/models/profile_user.dart';
-import 'package:app/repository/models/profile_user_types.dart';
-import 'package:app/users/list/grou_items/user_group_items.dart';
-import 'package:app/users/list/grou_items/view/widgets/assign_users.dart';
-import 'package:app/users/users.dart';
+import 'package:app/vehicle/add/view/add_vehicle_page.dart';
+import 'package:app/vehicle/bloc/vehicle_listing_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-part 'widgets/user_list_item.dart';
+part 'widgets/vehicle_list_item.dart';
 
-enum UserListOptions {
+enum VehicleListOptions {
   add,
-  assign,
   select,
   archived,
   delete,
 }
 
-class DriversList extends StatefulWidget {
-  final ProfileUserTypes type;
-
-  const DriversList({Key? key, required this.type}) : super(key: key);
+class VehicleList extends StatefulWidget {
+  const VehicleList({Key? key}) : super(key: key);
 
   @override
-  _DriversListState createState() => _DriversListState();
+  _VehicleListState createState() => _VehicleListState();
 }
 
-class _DriversListState extends State<DriversList> {
-  late DriversBloc driversBloc;
+class _VehicleListState extends State<VehicleList> {
+  late VehicleListingBloc driversBloc;
   MultiSelectController controller = new MultiSelectController();
   @override
   void initState() {
     super.initState();
-    driversBloc = context.read<DriversBloc>();
-    controller.disableEditingWhenNoneSelected = true;
-    controller.set(driversBloc.state.drivers.length);
-
+    driversBloc = context.read<VehicleListingBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    //final driversBloc = BlocProvider.of<DriversBloc>(context);
+    //final driversBloc = BlocProvider.of<VehicleListingBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.type.name ?? 'users').tr(),
+        title: Text('vehicle').tr(),
         actions: [
-          BlocBuilder<DriversBloc, DriversState>(builder: (context, state) {
+          BlocBuilder<VehicleListingBloc, VehicleListingState>(
+              builder: (context, state) {
             print(state.isSelectingController.isSelecting);
             return Row(
               children: [
@@ -66,21 +58,27 @@ class _DriversListState extends State<DriversList> {
                     onPressed: () {},
                   ),
                 ],
-                Text(state.isSelectingController.isSelecting.toString()),
-                PopupMenuButton<UserListOptions>(
+                IconButton(
+                  onPressed: () async {
+                    Navigator.of(context).push(AddVehiclePage.route());
+                  },
+                  icon: Icon(Icons.add),
                   iconSize: 35.0,
-                  onSelected: (UserListOptions item) async {
+                ),
+                PopupMenuButton<VehicleListOptions>(
+                  iconSize: 35.0,
+                  onSelected: (VehicleListOptions item) async {
                     switch (item) {
-                      case UserListOptions.assign:
-                        await asignUsers(context, []);
-                        break;
-                      case UserListOptions.delete:
+                      // case VehicleListOptions.assign:
+                      //   await asignUsers(context, []);
+                      //   break;
+                      case VehicleListOptions.delete:
                         break;
                       default:
                     }
                   },
                   itemBuilder: (context) {
-                    return UserListOptions.values.map((item) {
+                    return VehicleListOptions.values.map((item) {
                       return PopupMenuItem(
                         child: Text(item.toString().split('.').last).tr(),
                         value: item,
@@ -134,9 +132,8 @@ class _DriversListState extends State<DriversList> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-
             _SearchBar(),
-            DriverListingView(),
+            VehicleListingView(),
           ],
         ),
       ),
@@ -324,12 +321,12 @@ class _SearchBar extends StatefulWidget {
 
 class __SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  late DriversBloc _driversBloc;
+  late VehicleListingBloc _vehiclesBloc;
 
   @override
   void initState() {
     super.initState();
-    _driversBloc = context.read<DriversBloc>();
+    _vehiclesBloc = context.read<VehicleListingBloc>();
   }
 
   @override
@@ -340,14 +337,14 @@ class __SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _driversBloc.add(const TextChanged(text: ''));
+    _vehiclesBloc.add(const TextChanged(text: ''));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DriversBloc, DriversState>(
+    return BlocBuilder<VehicleListingBloc, VehicleListingState>(
       builder: (context, state) {
-        if (state.status == DriversStatus.succes) {
+        if (state.status == VehicleListStatus.success) {
           return Column(
             children: [
               Row(
@@ -357,7 +354,7 @@ class __SearchBarState extends State<_SearchBar> {
                       controller: _textController,
                       autocorrect: false,
                       onChanged: (text) {
-                        _driversBloc.add(
+                        _vehiclesBloc.add(
                           TextChanged(text: text),
                         );
                       },
@@ -414,28 +411,29 @@ class __SearchBarState extends State<_SearchBar> {
   }
 }
 
-class DriverListingView extends StatefulWidget {
-  const DriverListingView({Key? key}) : super(key: key);
+class VehicleListingView extends StatefulWidget {
+  const VehicleListingView({Key? key}) : super(key: key);
 
   @override
-  _DriverListingViewState createState() => _DriverListingViewState();
+  _VehicleListingViewState createState() => _VehicleListingViewState();
 }
 
-class _DriverListingViewState extends State<DriverListingView> {
+class _VehicleListingViewState extends State<VehicleListingView> {
   final _scrollController = ScrollController();
-  late DriversBloc driversBloc;
+  late VehicleListingBloc driversBloc;
   @override
   void initState() {
     super.initState();
-    driversBloc = context.read<DriversBloc>();
-    driversBloc.add(DriversFetch());
+    driversBloc = context.read<VehicleListingBloc>();
+    driversBloc.add(VehicleListFetched());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DriversBloc, DriversState>(builder: (context, state) {
+    return BlocBuilder<VehicleListingBloc, VehicleListingState>(
+        builder: (context, state) {
       switch (state.status) {
-        case DriversStatus.failure:
+        case VehicleListStatus.failure:
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -449,57 +447,52 @@ class _DriverListingViewState extends State<DriverListingView> {
                 ),
                 TextButton(
                   onPressed: () {
-                    context.read<DriversBloc>().add(DriversFetch());
+                    context
+                        .read<VehicleListingBloc>()
+                        .add(VehicleListFetched());
                   },
                   child: Text("reload").tr(),
                 ),
               ],
             ),
           );
-        case DriversStatus.succes:
-          if (state.drivers.isEmpty) {
+        case VehicleListStatus.success:
+          if (state.vehicles.isEmpty) {
             return Center(
-              child: Text("noDrivers").tr(),
+              child: Text("noVehicles").tr(),
             );
           }
 
           return Expanded(
             child: ListView.separated(
                 itemCount: state.hasReachedMax
-                    ? state.drivers.length
-                    : state.drivers.length + 1,
+                    ? state.vehicles.length
+                    : state.vehicles.length + 1,
                 controller: _scrollController,
                 separatorBuilder: (context, index) {
                   return Divider(color: Colors.grey);
                 },
                 itemBuilder: (context, int index) {
-                  print(state.isSelectingController);
-                  return index >= state.drivers.length && !state.hasReachedMax
+                  return index >= state.vehicles.length && !state.hasReachedMax
                       ? BottomLoader()
-                      : UserListItem(
+                      : DriverListItem(
                           isSelecting: state.isSelectingController.isSelecting,
-                          user: state.drivers[index],
+                          vehicle: state.vehicles[index],
                           onSelected: () {
                             driversBloc.add(ItemSelected(index: index));
                             print("Selected $index");
                             print(state.status);
                             print(state.isSelectingController.selectedIndexes);
-
-                            
                           },
                           onTap: () {
                             if (!state.isSelectingController.isSelecting) {
-                              Navigator.of(context).push(
-                                  DriverDashboardPage.route(
-                                      state.drivers[index]));
                             } else {
-                            driversBloc.add(ItemSelected(index: index));
+                              driversBloc.add(ItemSelected(index: index));
                               //state.isSelectingController.toggle(index);
                             }
                           },
                           isSelected:
-                              state.isSelectingController.isSelected(index)
-                        );
+                              state.isSelectingController.isSelected(index));
                 }),
           );
         default:
@@ -522,7 +515,7 @@ class _DriverListingViewState extends State<DriverListingView> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<DriversBloc>().add(DriversFetch());
+    if (_isBottom) context.read<VehicleListingBloc>().add(VehicleListFetched());
   }
 
   bool get _isBottom {

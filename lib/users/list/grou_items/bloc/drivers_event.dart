@@ -13,3 +13,20 @@ class DriversFetch extends DriversEvent {
 }
 
 
+class DeleteSelected extends DriversEvent{}
+
+class TextChanged extends DriversEvent {
+  const TextChanged({required this.text});
+  final String text;
+
+  @override
+  List<Object> get props => [text];
+}
+
+class ItemSelected extends DriversEvent {
+  const ItemSelected({required this.index});
+  final int index;
+
+  @override
+  List<Object> get props => [index];
+}

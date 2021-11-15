@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-class MultiSelectController {
+class MultiSelectController extends Equatable {
   List<int> selectedIndexes = [];
   bool isSelecting = false;
   bool disableEditingWhenNoneSelected = true;
@@ -78,6 +79,10 @@ class MultiSelectController {
       isSelecting = true;
     }
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [selectedIndexes,isSelecting,disableEditingWhenNoneSelected, listLength ];
 }
 
 class MultiSelectItem extends StatefulWidget {

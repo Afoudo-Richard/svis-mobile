@@ -1,7 +1,7 @@
 import 'package:app/authentication/authentication.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/users/users.dart';
-import 'package:app/users/list/grou_items/view/assign_users.dart';
+import 'package:app/users/list/grou_items/view/widgets/assign_users.dart';
 import 'package:app/users/list/user_list.dart';
 import 'package:app/users/list/views/view.dart';
 import 'package:flutter/material.dart';
