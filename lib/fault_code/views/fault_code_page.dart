@@ -161,7 +161,6 @@ class __SearchBarState extends State<_SearchBar> {
         if (state.status == FaultCodeListStatus.success) {
           return Column(
             children: [
-              Text(state.searchText),
               Row(
                 children: [
                   Expanded(

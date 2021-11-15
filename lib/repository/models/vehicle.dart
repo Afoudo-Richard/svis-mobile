@@ -1,4 +1,6 @@
+import 'package:app/repository/models/profile.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 
 const String kVehicle = 'Vehicle';
 
@@ -49,6 +51,42 @@ class Vehicle extends ParseObject implements ParseCloneable {
     set('modelYear', value);
   }
 
+  bool? get updating {
+    return get('updating');
+  }
+
+  set updating(bool? value) {
+    set('name', value);
+  }
+
+  int? get purchasedPrice {
+    return get('PurchasedPrice');
+  }
+
+  set purchasedPrice(int? value) {
+    set('PurchasedPrice', value);
+  }
+
+  ParseRelation<Profile>? get profile {
+    return this.getRelation('Profile');
+  }
+
+  String? get model {
+    return get('model');
+  }
+
+  set model(String? value) {
+    set('model', value);
+  }
+
+  int? get mileage {
+    return get('Mileage');
+  }
+
+  set mileage(int? value) {
+    set('Mileage', value);
+  }
+
   String? get name {
     return get('name');
   }
@@ -56,4 +94,25 @@ class Vehicle extends ParseObject implements ParseCloneable {
   set name(String? value) {
     set('name', value);
   }
+
+  ParseRelation<User>? get user {
+    return this.getRelation('User');
+  }
+
+  String? get trackDisplayColor {
+    return get('trackDisplayColor');
+  }
+
+  set trackDisplayColor(String? value) {
+    set('trackDisplayColor', value);
+  }
+
+  String? get bearerName {
+    return get('bearerName');
+  }
+
+  set bearerName(String? value) {
+    set('bearerName', value);
+  }
+  
 }

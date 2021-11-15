@@ -8,6 +8,7 @@ import 'package:app/profile/profile.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
 import 'package:app/users/users.dart';
+import 'package:app/vehicle/view/vehicle_page.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
