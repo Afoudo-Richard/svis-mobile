@@ -366,7 +366,7 @@ class _AddressLine2Input extends StatelessWidget {
                   context.read<AddUserBloc>().add(AddressLine2Changed(value)),
               decoration: InputDecoration(
                 hintText: 'forms.addressLine2'.tr(),
-                errorText: state.editable && state.firstName.invalid
+                errorText: state.editable && state.addressLine2.invalid
                     ? 'invalid address line 2'
                     : null,
               ),

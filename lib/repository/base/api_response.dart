@@ -16,8 +16,8 @@ class ApiResponse {
 }
 
 ApiResponse getApiResponse<T extends ParseObject>(ParseResponse response) {
-  return ApiResponse(response.success, response.statusCode, response.results,
-      getApiError(response.error));
+  return ApiResponse(response.success, response.statusCode,
+      response.results ?? [response.result], getApiError(response.error));
 }
 
 ApiError? getApiError(ParseError? response) {

@@ -62,6 +62,9 @@ class _DriversListState extends State<DriversList> {
             iconSize: 35.0,
             onSelected: (UserListOptions item) async {
               switch (item) {
+                case UserListOptions.add:
+                  Navigator.of(context).push(AddUserPage.route());
+                  break;
                 case UserListOptions.assign:
                   await asignUsers(context, []);
                   break;

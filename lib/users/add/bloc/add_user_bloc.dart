@@ -227,13 +227,24 @@ class AddUserBloc extends Bloc<AddUserEvent, AddUserState> {
 
       try {
         final ParseCloudFunction function = ParseCloudFunction('register');
-        final Map<String, String?> params = <String, String?>{
+        var profileImage = getApiResponse<ParseFile>(
+            await ParseFile(state.profile.value).save());
+        final Map<String, dynamic> params = <String, dynamic>{
           'email': state.email.value,
           'username': state.email.value,
           'password': 'Pen!@123${Uuid().v4().toString()}',
           'firstName': state.firstName.value,
           'lastName': state.lastName.value,
           'profileID': profile?.profile?.objectId,
+          'phoneNumber': state.phoneNumber.value,
+          'addressLine1': state.addressLine1.value,
+          'addressLine2': state.addressLine2.value,
+          'city': state.city.value,
+          'state': state.state.value,
+          'country': state.countryOfRegistration.value,
+          'gender': state.gender.value,
+          'dateOfBirth': state.dateOfBirth.value.toString(),
+          'parseFile': profileImage.result,
         };
         ApiResponse response =
             getApiResponse<User>(await function.execute(parameters: params));
@@ -241,18 +252,13 @@ class AddUserBloc extends Bloc<AddUserEvent, AddUserState> {
           emit(
             state.copyWith(
               submission: fz.FormzSubmission.success(
-                success: response.result,
+                success: User(null, null, null).fromJson(response.result),
               ),
               editable: false,
             ),
           );
         } else {
-          emit(
-            state.copyWith(
-              submission: fz.FormzSubmission.failure(
-                  response.error?.message ?? 'unable to save'),
-            ),
-          );
+          throw response.error ?? 'unable to save';
         }
       } catch (error) {
         emit(
