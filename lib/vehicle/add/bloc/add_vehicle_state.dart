@@ -1,8 +1,14 @@
 part of 'add_vehicle_bloc.dart';
 
-enum SwitchPageStatus {initial, changeEmailOrPhone}
-class AddVehicleState extends Equatable {
+enum SwitchPageStatus {
+  initial,
+  changeEmailOrPhone,
+  deviceVerification,
+  vehicleInformation,
+  registrationInformation,
+}
 
+class AddVehicleState extends Equatable {
   //final Name deviceSerialNumber;
   final SwitchPageStatus pagestatus;
 
@@ -10,13 +16,10 @@ class AddVehicleState extends Equatable {
     this.pagestatus = SwitchPageStatus.initial,
   });
 
-  AddVehicleState copyWith({
-    SwitchPageStatus? pagestatus
-  }){
+  AddVehicleState copyWith({SwitchPageStatus? pagestatus}) {
     return AddVehicleState(pagestatus: pagestatus ?? this.pagestatus);
   }
-  
+
   @override
   List<Object> get props => [pagestatus];
 }
-

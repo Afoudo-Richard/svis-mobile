@@ -7,4 +7,16 @@ abstract class AddVehicleEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ChangeEmailorPhone extends AddVehicleEvent{}
+class ChangeEmailorPhone extends AddVehicleEvent {}
+
+class AssociateDeviceLater extends AddVehicleEvent {}
+
+class ChangeSubmitedEmailOrPhone extends AddVehicleEvent {}
+
+class SubmitDeviceAssociation extends AddVehicleEvent {}
+
+class SkipDeviceAssociation extends AddVehicleEvent {}
+
+class SubmitVerificationCode extends AddVehicleEvent {}
+
+class SubmitVehicleInformation extends AddVehicleEvent {}

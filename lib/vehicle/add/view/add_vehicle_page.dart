@@ -1,8 +1,5 @@
 import 'package:app/authentication/authentication.dart';
-import 'package:app/users/add/view/add_user_form.dart';
-import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
-import 'package:app/vehicle/add/view/pages/change_email_or_phone.dart';
-import 'package:app/vehicle/add/view/pages/device_association.dart';
+import 'package:app/vehicle/add/add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -30,6 +27,14 @@ class AddVehiclePage extends StatelessWidget {
                   switch (pagestate.pagestatus) {
                     case SwitchPageStatus.changeEmailOrPhone:
                       return ChangeEmailOrPhone();
+                    case SwitchPageStatus.deviceVerification:
+                      return DeviceVerification();
+                    case SwitchPageStatus.vehicleInformation:
+                      return VehicleInformation();
+                    case SwitchPageStatus.registrationInformation:
+                      return RegistrationInformation();
+                    case SwitchPageStatus.initial:
+                      return DeviceAssociation();
                     default:
                       return DeviceAssociation();
                   }
