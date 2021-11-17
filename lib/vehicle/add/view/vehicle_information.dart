@@ -34,16 +34,23 @@ class VehicleInformation extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('registrationInformation').tr(),
-                ),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.transparent,
-                      width: 3,
+              child: InkWell(
+                onTap: () {
+                  context
+                      .read<AddVehicleBloc>()
+                      .add(SubmitVehicleInformation());
+                },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('registrationInformation').tr(),
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.transparent,
+                        width: 3,
+                      ),
                     ),
                   ),
                 ),
@@ -110,8 +117,9 @@ class VehicleInformation extends StatelessWidget {
         ),
         SizedBox(height: kDeviceSize.height * 0.015),
         _ImageUploadInput(),
-        SizedBox(height: kDeviceSize.height * 0.15),
+        SizedBox(height: kDeviceSize.height * 0.1),
         _SubmitButton(),
+        SizedBox(height: kDeviceSize.height * 0.1),
       ],
     );
   }
@@ -121,7 +129,7 @@ class _VehicleNameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.name != current.name,
+      buildWhen: (previous, current) => previous.name != current.name,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,11 +141,14 @@ class _VehicleNameInput extends StatelessWidget {
             TextField(
               key: const Key('loginForm_usernameInput_textField'),
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(VehicleNameChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(VehicleNameChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.vehicleName'.tr(),
-                // errorText: state.name.invalid ? 'invalid name' : null,
+                errorText: state.name.invalid ? 'invalid name' : null,
               ),
             ),
           ],
@@ -151,7 +162,7 @@ class _IdentificationInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.vin != current.vin,
+      buildWhen: (previous, current) => previous.vin != current.vin,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,11 +173,12 @@ class _IdentificationInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(VinChanged(value));
+                return context.read<AddVehicleBloc>().add(VinChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.vin'.tr(),
-                // errorText: state.name.invalid ? 'invalid name' : null,
+                errorText: state.vin.invalid ? 'invalid name' : null,
               ),
             ),
           ],
@@ -180,7 +192,7 @@ class _MakeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.make != current.make,
+      buildWhen: (previous, current) => previous.make != current.make,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,11 +203,12 @@ class _MakeInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(MakeChanged(value));
+                return context.read<AddVehicleBloc>().add(MakeChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.make'.tr(),
-                // errorText: state.name.invalid ? 'invalid name' : null,
+                errorText: state.make.invalid ? 'invalid name' : null,
               ),
             ),
           ],
@@ -209,7 +222,7 @@ class _ModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.model != current.model,
+      buildWhen: (previous, current) => previous.model != current.model,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,11 +233,12 @@ class _ModelInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(ModelChanged(value));
+                return context.read<AddVehicleBloc>().add(ModelChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.model'.tr(),
-                // errorText: state.model.invalid ? 'invalid model' : null,
+                errorText: state.model.invalid ? 'invalid model' : null,
               ),
             ),
           ],
@@ -238,7 +252,7 @@ class _BodyTypeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.bodyType != current.bodyType,
+      buildWhen: (previous, current) => previous.bodyType != current.bodyType,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,11 +263,14 @@ class _BodyTypeInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(BodyTypeChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(BodyTypeChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.bodyType'.tr(),
-                // errorText: state.bodyType.invalid ? 'invalid body type' : null,
+                errorText: state.bodyType.invalid ? 'invalid body type' : null,
               ),
             ),
           ],
@@ -267,7 +284,7 @@ class _YearInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.year != current.year,
+      buildWhen: (previous, current) => previous.year != current.year,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,11 +295,12 @@ class _YearInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(YearChanged(value));
+                return context.read<AddVehicleBloc>().add(YearChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.year'.tr(),
-                // errorText: state.year.invalid ? 'invalid year' : null,
+                errorText: state.year.invalid ? 'invalid year' : null,
               ),
             ),
           ],
@@ -296,7 +314,8 @@ class _TransmissionInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.transmission != current.transmission,
+      buildWhen: (previous, current) =>
+          previous.transmission != current.transmission,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,11 +326,15 @@ class _TransmissionInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(TransmissionChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(TransmissionChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.transmission'.tr(),
-                // errorText: state.transmission.invalid ? 'invalid transmission' : null,
+                errorText:
+                    state.transmission.invalid ? 'invalid transmission' : null,
               ),
             ),
           ],
@@ -325,7 +348,7 @@ class _FuelTypeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.fuelType != current.fuelType,
+      buildWhen: (previous, current) => previous.fuelType != current.fuelType,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,11 +359,14 @@ class _FuelTypeInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(FuelTypeChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(FuelTypeChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.fuelType'.tr(),
-                // errorText: state.fuelType.invalid ? 'invalid fuelType' : null,
+                errorText: state.fuelType.invalid ? 'invalid fuelType' : null,
               ),
             ),
           ],
@@ -354,7 +380,8 @@ class _VehicleGroupInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.vehicleGroup != current.vehicleGroup,
+      buildWhen: (previous, current) =>
+          previous.vehicleGroup != current.vehicleGroup,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,11 +392,15 @@ class _VehicleGroupInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(VehicleGroupChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(VehicleGroupChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.vehicleGroup'.tr(),
-                // errorText: state.vehicleGroup.invalid ? 'invalid vehicle Group' : null,
+                errorText:
+                    state.vehicleGroup.invalid ? 'invalid vehicle Group' : null,
               ),
             ),
           ],
@@ -383,7 +414,7 @@ class _MileageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.mileage != current.mileage,
+      buildWhen: (previous, current) => previous.mileage != current.mileage,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,11 +425,14 @@ class _MileageInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(MileageChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(MileageChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.mileage'.tr(),
-                // errorText: state.mileage.invalid ? 'invalid mileage' : null,
+                errorText: state.mileage.invalid ? 'invalid mileage' : null,
               ),
             ),
           ],
@@ -412,7 +446,7 @@ class _ImageUploadInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      // buildWhen: (previous, current) => previous.imageUpload != current.imageUpload,
+      buildWhen: (previous, current) => previous.image != current.image,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,11 +457,14 @@ class _ImageUploadInput extends StatelessWidget {
             ).tr(),
             TextField(
               onChanged: (value) {
-                // return context.read<AddVehicleBloc>().add(ImageUploadChanged(value));
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(ImageUploadChanged(value));
               },
               decoration: InputDecoration(
+                enabled: state.editable,
                 hintText: 'forms.imageUpload'.tr(),
-                // errorText: state.imageUpload.invalid ? 'invalid imageUpload' : null,
+                errorText: state.image.invalid ? 'invalid imageUpload' : null,
               ),
             ),
           ],
@@ -444,26 +481,30 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all(0),
-        ),
-        onPressed: () {
-          context.read<AddVehicleBloc>().add(SubmitVehicleInformation());
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('registrationInformation').tr(),
-            SizedBox(
-              width: kDeviceSize.width * 0.05,
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
+          child: ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
             ),
-            Icon(Icons.arrow_forward)
-          ],
-        ),
-      ),
+            onPressed: () {
+              context.read<AddVehicleBloc>().add(SubmitVehicleInformation());
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('registrationInformation').tr(),
+                SizedBox(
+                  width: kDeviceSize.width * 0.05,
+                ),
+                Icon(Icons.arrow_forward)
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

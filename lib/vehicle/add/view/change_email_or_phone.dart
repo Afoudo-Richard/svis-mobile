@@ -49,22 +49,27 @@ class _EmailOrPhoneInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Email/Phone number*",
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        TextField(
-          decoration: InputDecoration(
-            hintText: "Enter email or phone number*",
-          ),
-        ),
-      ],
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Email/Phone number*",
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                enabled: state.editable,
+                hintText: "Enter email or phone number*",
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

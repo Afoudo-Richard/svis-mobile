@@ -22,18 +22,7 @@ class DeviceAssociation extends StatelessWidget {
                 .headline6!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(
-            "Device SerialNumber",
-            style: Theme.of(context)
-                .textTheme
-                .subtitle2
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Enter device serial number",
-            ),
-          ),
+          _SerialNumberInput(),
           SizedBox(
             height: 10.0,
           ),
@@ -86,6 +75,39 @@ class DeviceAssociation extends StatelessWidget {
     BuildContext context,
     AddVehicleState state,
   ) {}
+}
+
+class _SerialNumberInput extends StatelessWidget {
+  const _SerialNumberInput({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Device SerialNumber",
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                enabled: state.editable,
+                hintText: "Enter device serial number",
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _SkipDeviceAssociation extends StatelessWidget {
