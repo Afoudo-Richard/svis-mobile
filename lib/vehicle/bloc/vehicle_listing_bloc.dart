@@ -23,6 +23,7 @@ class VehicleListingBloc
     try {
       if (state.status == VehicleListStatus.initial) {
         final items = await _fetchItems();
+        print(items);
         return emit(state.copyWith(
           status: VehicleListStatus.success,
           vehicles: items,
@@ -31,6 +32,7 @@ class VehicleListingBloc
       }
 
       final items = await _fetchItems(state.vehicles.length);
+        print(items);
       emit(items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -38,7 +40,8 @@ class VehicleListingBloc
               vehicles: List.of(state.vehicles)..addAll(items),
               hasReachedMax: false,
             ));
-    } catch (_) {
+    } catch (e) {
+      print(e.toString());
       emit(state.copyWith(status: VehicleListStatus.failure));
     }
   }
@@ -47,7 +50,7 @@ class VehicleListingBloc
     QueryBuilder<Vehicle> query = QueryBuilder<Vehicle>(Vehicle());
     query.setAmountToSkip(startIndex);
     query.whereEqualTo('user', user);
-    query.includeObject(['profile']);
+    query.includeObject(['profile', 'user']);
     query.setLimit(20);
     return query.find();
   }

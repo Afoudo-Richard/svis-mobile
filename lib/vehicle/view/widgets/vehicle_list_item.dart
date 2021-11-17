@@ -1,6 +1,6 @@
 part of '../vehicle_list.dart';
 
-enum DriverListItemOptions {
+enum VehicleListItemOptions {
   assignDriver, 
   viewProfile,
   edit,
@@ -9,8 +9,8 @@ enum DriverListItemOptions {
   delete,
 }
 
-class DriverListItem extends StatefulWidget {
-  const DriverListItem(
+class VehicleListItem extends StatefulWidget {
+  const VehicleListItem(
       {Key? key,
       required this.vehicle,
       required this.isSelecting,
@@ -26,10 +26,10 @@ class DriverListItem extends StatefulWidget {
   final VoidCallback onTap;
 
   @override
-  _DriverListItemState createState() => _DriverListItemState();
+  _VehicleListItemState createState() => _VehicleListItemState();
 }
 
-class _DriverListItemState extends State<DriverListItem> {
+class _VehicleListItemState extends State<VehicleListItem> {
   bool isSelected = false;
   @override
   Widget build(BuildContext context) {
@@ -150,19 +150,19 @@ class _DriverListItemState extends State<DriverListItem> {
                       ],
                     ),
                   ),
-                  PopupMenuButton<DriverListItemOptions>(
+                  PopupMenuButton<VehicleListItemOptions>(
                     padding: EdgeInsets.all(0.0),
                     child: Icon(Icons.more_vert),
-                    onSelected: (DriverListItemOptions item) async {
+                    onSelected: (VehicleListItemOptions item) async {
                       switch (item) {
                         
-                        case DriverListItemOptions.delete:
+                        case VehicleListItemOptions.delete:
                           break;
                         default:
                       }
                     },
                     itemBuilder: (context) {
-                      return DriverListItemOptions.values.map((item) {
+                      return VehicleListItemOptions.values.map((item) {
                         return PopupMenuItem(
                           child: Text(item.toString().split('.').last).tr(),
                           value: item,

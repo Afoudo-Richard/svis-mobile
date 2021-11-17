@@ -60,5 +60,6 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kEventLog, () => EventLog());
   ParseCoreData().registerSubClass(kVehicle, () => Vehicle());
   ParseCoreData().registerSubClass(kTroubleCode, () => TroubleCode());
+  ParseCoreData().registerSubClass(kVehicleGroup, () => VehicleGroup());
 
 }

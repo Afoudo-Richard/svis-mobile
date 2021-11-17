@@ -5,6 +5,7 @@ import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
 import 'package:app/vehicle/bloc/vehicle_listing_bloc.dart';
+import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -439,7 +440,7 @@ class _VehicleListingViewState extends State<VehicleListingView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "failedToFetchDrivers",
+                  "failedToFetchVehicles",
                   style: TextStyle(fontSize: 18.0),
                 ).tr(),
                 SizedBox(
@@ -475,7 +476,7 @@ class _VehicleListingViewState extends State<VehicleListingView> {
                 itemBuilder: (context, int index) {
                   return index >= state.vehicles.length && !state.hasReachedMax
                       ? BottomLoader()
-                      : DriverListItem(
+                      : VehicleListItem(
                           isSelecting: state.isSelectingController.isSelecting,
                           vehicle: state.vehicles[index],
                           onSelected: () {
@@ -486,6 +487,9 @@ class _VehicleListingViewState extends State<VehicleListingView> {
                           },
                           onTap: () {
                             if (!state.isSelectingController.isSelecting) {
+                              Navigator.of(context).push(
+                                  UserProfilePage.route(
+                                      state.vehicles[index]));
                             } else {
                               driversBloc.add(ItemSelected(index: index));
                               //state.isSelectingController.toggle(index);

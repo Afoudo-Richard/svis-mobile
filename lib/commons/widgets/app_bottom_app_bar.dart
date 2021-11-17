@@ -1,6 +1,7 @@
 import 'package:app/commons/colors.dart';
 // import 'package:app/drivers/view/drivers_page.dart';
 import 'package:app/home/home.dart';
+import 'package:app/vehicle/view/vehicle_page.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -31,6 +32,10 @@ class AppBottomAppBar extends StatelessWidget {
                 label: 'control pannel',
               ),
               _BottomBarItem(
+                onTap: (){
+                  // Navigator.pop(context);
+                  //       Navigator.of(context).push(VehiclePage.route());
+                },
                 icon: Image.asset(
                   'assets/icons/vehicles.png',
                   height: 28,
