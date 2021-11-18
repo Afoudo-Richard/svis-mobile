@@ -96,6 +96,19 @@
   "registrationInformation": "Registration Information",
   "assigned": "Assigned",
   "registrationDocuments": "Registration Documents",
-  "svisCapabilityService": "SVIS Capability Service"
+  "svisCapabilityService": "SVIS Capability Service",
+  "driverAssigned": "Driver Assigned",
+  "faultCodes": "Fault codes {}",
+  "configuration": {
+    "one":"Configuration",
+    "many": "Configurations"
+  },
+  "reminder": {
+    "one":"Reminder",
+    "other": "Reminders {}"
+  },
+  "assignDrivers": "Assign Drivers",
+  "controlPanel": "Control Panel",
+  "reset": "Reset"
   
 }

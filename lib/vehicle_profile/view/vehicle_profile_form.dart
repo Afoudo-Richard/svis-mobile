@@ -82,8 +82,9 @@ class VehicleProfileForm extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .push(VehicleDashboardPage.route(state.vehicle));
+                                    Navigator.of(context).push(
+                                        VehicleDashboardPage.route(
+                                            state.vehicle));
                                   },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -152,6 +153,7 @@ class VehicleProfileForm extends StatelessWidget {
             } else {
               return Column(children: <Widget>[
                 ListTile(
+                  contentPadding: EdgeInsets.zero,
                   title: Text(
                     "assigned",
                   ).tr(),
@@ -162,6 +164,7 @@ class VehicleProfileForm extends StatelessWidget {
                 ),
                 Divider(),
                 ListTile(
+                  contentPadding: EdgeInsets.zero,
                   title: Text("registrationDocuments").tr(),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
@@ -170,6 +173,7 @@ class VehicleProfileForm extends StatelessWidget {
                 ),
                 Divider(),
                 ListTile(
+                  contentPadding: EdgeInsets.zero,
                   title: Text("svisCapabilityService").tr(),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
