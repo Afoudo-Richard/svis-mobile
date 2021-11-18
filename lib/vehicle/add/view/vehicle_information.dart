@@ -1,9 +1,12 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
+import 'package:app/repository/models/make.dart';
+import 'package:app/repository/models/model_year.dart';
 import 'package:app/vehicle/add/add.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:collection/collection.dart';
 
 class VehicleInformation extends StatelessWidget {
   VehicleInformation({Key? key}) : super(key: key);
@@ -138,7 +141,8 @@ class _VehicleNameInput extends StatelessWidget {
               'forms.vehicleName',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.name.value,
               key: const Key('loginForm_usernameInput_textField'),
               onChanged: (value) {
                 return context
@@ -171,7 +175,8 @@ class _IdentificationInput extends StatelessWidget {
               'forms.vin',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.vin.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(VinChanged(value));
               },
@@ -201,7 +206,49 @@ class _MakeInput extends StatelessWidget {
               'forms.make',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            Autocomplete<Manufacturer>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                return manufacturers.where((Manufacturer option) {
+                  return option.manufacturer
+                          ?.toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase()) ??
+                      false;
+                });
+              },
+              initialValue: TextEditingValue(text: state.bodyType.value),
+              onSelected: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(MakeChanged(value.manufacturer ?? ''));
+              },
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(MakeChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.make'.tr(),
+                    errorText: state.bodyType.invalid ? 'invalid make' : null,
+                  ),
+                );
+              },
+            ),
+
+            /* TextFormField(
+              initialValue: state.make.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(MakeChanged(value));
               },
@@ -210,7 +257,7 @@ class _MakeInput extends StatelessWidget {
                 hintText: 'forms.make'.tr(),
                 errorText: state.make.invalid ? 'invalid name' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -222,7 +269,7 @@ class _ModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      buildWhen: (previous, current) => previous.model != current.model,
+      // buildWhen: (previous, current) => previous.model != current.model,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +278,49 @@ class _ModelInput extends StatelessWidget {
               'forms.model',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                var make = manufacturers.firstWhereOrNull(
+                    (element) => element.manufacturer == state.make.value);
+                return make?.model?.where((String option) {
+                      return option
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase());
+                    }) ??
+                    [];
+              },
+              initialValue: TextEditingValue(text: state.bodyType.value),
+              onSelected: (value) {
+                return context.read<AddVehicleBloc>().add(ModelChanged(value));
+              },
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(ModelChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.model'.tr(),
+                    errorText: state.model.invalid ? 'invalid model' : null,
+                  ),
+                );
+              },
+            ),
+
+            /* TextFormField(
+              initialValue: state.model.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(ModelChanged(value));
               },
@@ -240,7 +329,7 @@ class _ModelInput extends StatelessWidget {
                 hintText: 'forms.model'.tr(),
                 errorText: state.model.invalid ? 'invalid model' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -249,6 +338,16 @@ class _ModelInput extends StatelessWidget {
 }
 
 class _BodyTypeInput extends StatelessWidget {
+  static const List<String> _kOptions = <String>[
+    'Hatchback',
+    'Sedan',
+    'MUV/SUV',
+    'Coupe',
+    'Convertible',
+    'Wagon',
+    'Van',
+    'Jeep'
+  ];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
@@ -261,7 +360,49 @@ class _BodyTypeInput extends StatelessWidget {
               'forms.bodyType',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                return _kOptions.where((String option) {
+                  return option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
+                });
+              },
+              initialValue: TextEditingValue(text: state.bodyType.value),
+              onSelected: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(BodyTypeChanged(value));
+              },
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(BodyTypeChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.bodyType'.tr(),
+                    errorText:
+                        state.bodyType.invalid ? 'invalid body type' : null,
+                  ),
+                );
+              },
+            ),
+
+            /* TextFormField(
+              initialValue: state.bodyType.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -272,7 +413,7 @@ class _BodyTypeInput extends StatelessWidget {
                 hintText: 'forms.bodyType'.tr(),
                 errorText: state.bodyType.invalid ? 'invalid body type' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -284,7 +425,7 @@ class _YearInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
-      buildWhen: (previous, current) => previous.year != current.year,
+      // buildWhen: (previous, current) => previous.year != current.year,
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +434,47 @@ class _YearInput extends StatelessWidget {
               'forms.year',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            Autocomplete<ModelYear>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                return modelYear
+                    .where((element) => element.model == state.model.value)
+                    .where((ModelYear option) {
+                  return option.year
+                          ?.contains(textEditingValue.text.toLowerCase()) ??
+                      false;
+                });
+              },
+              initialValue: TextEditingValue(text: state.transmission.value),
+              onSelected: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(YearChanged(value.year ?? ''));
+              },
+              fieldViewBuilder: (BuildContext context,
+                  TextEditingController textEditingController,
+                  FocusNode focusNode,
+                  VoidCallback onFieldSubmitted) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(YearChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.year'.tr(),
+                    errorText: state.year.invalid ? 'invalid year' : null,
+                  ),
+                );
+              },
+            ),
+            /* TextFormField(
+              initialValue: state.year.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(YearChanged(value));
               },
@@ -302,7 +483,7 @@ class _YearInput extends StatelessWidget {
                 hintText: 'forms.year'.tr(),
                 errorText: state.year.invalid ? 'invalid year' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -311,6 +492,14 @@ class _YearInput extends StatelessWidget {
 }
 
 class _TransmissionInput extends StatelessWidget {
+  static const List<String> _kOptions = <String>[
+    'Traditional Automatic Transmission',
+    'Automated-Manual Transmission',
+    'Continuously Variable Transmission (CVT)',
+    'Dual-Clutch Transmission (DCT)',
+    'DSG (Direct Shift Gearbox)',
+    'Tiptronic Transmission'
+  ];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
@@ -324,7 +513,45 @@ class _TransmissionInput extends StatelessWidget {
               'forms.transmission',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                return _kOptions.where((String option) {
+                  return option.contains(textEditingValue.text.toLowerCase());
+                });
+              },
+              initialValue: TextEditingValue(text: state.transmission.value),
+              onSelected: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(TransmissionChanged(value));
+              },
+              fieldViewBuilder: (BuildContext context,
+                  TextEditingController textEditingController,
+                  FocusNode focusNode,
+                  VoidCallback onFieldSubmitted) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(TransmissionChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.transmission'.tr(),
+                    errorText: state.transmission.invalid
+                        ? 'invalid transmission'
+                        : null,
+                  ),
+                );
+              },
+            ),
+            /*  TextFormField(
+              initialValue: state.transmission.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -336,7 +563,7 @@ class _TransmissionInput extends StatelessWidget {
                 errorText:
                     state.transmission.invalid ? 'invalid transmission' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -345,6 +572,13 @@ class _TransmissionInput extends StatelessWidget {
 }
 
 class _FuelTypeInput extends StatelessWidget {
+  static const List<String> _kOptions = <String>[
+    'Electric',
+    'Hybrid',
+    'Petrol',
+    'Gas',
+    'Diesel'
+  ];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
@@ -357,17 +591,39 @@ class _FuelTypeInput extends StatelessWidget {
               'forms.fuelType',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
-              onChanged: (value) {
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                return _kOptions.where((String option) {
+                  return option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
+                });
+              },
+              initialValue: TextEditingValue(text: state.fuelType.value),
+              onSelected: (value) {
                 return context
                     .read<AddVehicleBloc>()
                     .add(FuelTypeChanged(value));
               },
-              decoration: InputDecoration(
-                enabled: state.editable,
-                hintText: 'forms.fuelType'.tr(),
-                errorText: state.fuelType.invalid ? 'invalid fuelType' : null,
-              ),
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController textEditingController,
+                FocusNode focusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextFormField(
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(FuelTypeChanged(value));
+                  },
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    onFieldSubmitted();
+                  },
+                );
+              },
             ),
           ],
         );
@@ -390,7 +646,8 @@ class _VehicleGroupInput extends StatelessWidget {
               'forms.vehicleGroup',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.vehicleGroup.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -423,7 +680,8 @@ class _MileageInput extends StatelessWidget {
               'forms.mileage',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.mileage.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -455,7 +713,8 @@ class _ImageUploadInput extends StatelessWidget {
               'forms.imageUpload',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.image.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()

@@ -1,6 +1,6 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
-import 'package:app/users/add/bloc/add_user_bloc.dart';
+import 'package:app/commons/formz.dart';
 import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,9 +35,13 @@ class DeviceAssociation extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                "afoudorich@gmail.com",
-                style: TextStyle(color: Colors.blue, fontSize: 13.0),
+              BlocBuilder<AddVehicleBloc, AddVehicleState>(
+                builder: (context, state) {
+                  return Text(
+                    state.verificationEmail.value,
+                    style: TextStyle(color: Colors.blue, fontSize: 13.0),
+                  );
+                },
               ),
               SizedBox(
                 width: 10.0,
@@ -97,7 +101,13 @@ class _SerialNumberInput extends StatelessWidget {
                   .subtitle2
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            TextField(
+            TextFormField(
+              initialValue: state.deviceSerialNumber.value,
+              onChanged: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(SerialNumberChanged(value));
+              },
               decoration: InputDecoration(
                 enabled: state.editable,
                 hintText: "Enter device serial number",
@@ -157,26 +167,34 @@ class _SubmitDeviceAssociation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all(0),
-        ),
-        onPressed: () {
-          context.read<AddVehicleBloc>().add(SubmitDeviceAssociation());
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Submit'),
-            SizedBox(
-              width: kDeviceSize.width * 0.05,
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
+          child: ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
             ),
-            Icon(Icons.arrow_forward)
-          ],
-        ),
-      ),
+            onPressed: state.serialInputForm.isValid
+                ? () {
+                    context
+                        .read<AddVehicleBloc>()
+                        .add(SubmitDeviceAssociation());
+                  }
+                : null,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Submit'),
+                SizedBox(
+                  width: kDeviceSize.width * 0.05,
+                ),
+                Icon(Icons.arrow_forward)
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

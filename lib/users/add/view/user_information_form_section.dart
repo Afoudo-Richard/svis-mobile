@@ -445,58 +445,6 @@ class _StateInput extends StatelessWidget {
 }
 
 class _CountryOfRegistrationInput extends StatelessWidget {
-  Widget _customSelectedItem(BuildContext context, Country? item) {
-    return Container(
-      child: (item == null)
-          ? ListTile(
-              contentPadding: EdgeInsets.all(0),
-              title: Text("No item selected"),
-            )
-          : ListTile(
-              contentPadding: EdgeInsets.all(0),
-              leading: Image.asset(
-                'assets/countries/flags/${item.isoCode.toLowerCase()}.png',
-                width: 40,
-                height: 40,
-              ),
-              title: Text(item.name),
-              subtitle: Text(item.phoneCode),
-            ),
-    );
-  }
-
-  Widget _customPopupItemBuilder(
-      BuildContext context, Country? item, bool isSelected) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
-      decoration: !isSelected
-          ? null
-          : BoxDecoration(
-              border: Border.all(color: Theme.of(context).primaryColor),
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
-            ),
-      child: ListTile(
-        selected: isSelected,
-        title: Text(item?.name ?? ''),
-        subtitle: Text(item?.phoneCode ?? ''),
-        leading: Image.asset(
-          'assets/countries/flags/${item?.isoCode.toLowerCase()}.png',
-          width: 40,
-          height: 40,
-        ),
-      ),
-    );
-  }
-
-  Future<List<Country>> filterData(String? filter) async {
-    return filter != null
-        ? countryList.where((element) {
-            return element.name.toLowerCase().contains(filter.toLowerCase());
-          }).toList()
-        : countryList;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddUserBloc, AddUserState>(
@@ -523,8 +471,8 @@ class _CountryOfRegistrationInput extends StatelessWidget {
           onChanged: (value) => context
               .read<AddUserBloc>()
               .add(CountryOfRegistrationChanged(value?.name)),
-          dropdownBuilder: _customSelectedItem,
-          popupItemBuilder: _customPopupItemBuilder,
+          dropdownBuilder: customSelectedItem,
+          popupItemBuilder: customPopupItemBuilder,
           clearButtonSplashRadius: 20,
           selectedItem: countryList.firstWhereOrNull(
             (element) => element.name == state.countryOfRegistration.value,

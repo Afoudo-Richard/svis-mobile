@@ -21,7 +21,10 @@ class AddVehiclePage extends StatelessWidget {
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
               return BlocProvider(
-                create: (context) => AddVehicleBloc(profile: state.profile),
+                create: (context) => AddVehicleBloc(
+                  profile: state.profile,
+                  email: state.user?.email,
+                ),
                 child: BlocBuilder<AddVehicleBloc, AddVehicleState>(
                     builder: (context, pagestate) {
                   switch (pagestate.pagestatus) {

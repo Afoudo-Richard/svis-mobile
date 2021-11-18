@@ -32,6 +32,15 @@ class CountryChanged extends AddVehicleEvent {
   List<Object> get props => [value];
 }
 
+class SerialNumberChanged extends AddVehicleEvent {
+  const SerialNumberChanged(this.value);
+
+  final String value;
+
+  @override
+  List<Object> get props => [value];
+}
+
 class RegionChanged extends AddVehicleEvent {
   const RegionChanged(this.value);
 
@@ -62,7 +71,7 @@ class LicenceNumberChanged extends AddVehicleEvent {
 class RegistrationDateChanged extends AddVehicleEvent {
   const RegistrationDateChanged(this.value);
 
-  final String value;
+  final DateTime value;
 
   @override
   List<Object> get props => [value];
@@ -71,7 +80,7 @@ class RegistrationDateChanged extends AddVehicleEvent {
 class ExpiryDateChanged extends AddVehicleEvent {
   const ExpiryDateChanged(this.value);
 
-  final String value;
+  final DateTime value;
 
   @override
   List<Object> get props => [value];
@@ -97,6 +106,15 @@ class PhoneNumberChanged extends AddVehicleEvent {
 
 class EmailChanged extends AddVehicleEvent {
   const EmailChanged(this.value);
+
+  final String value;
+
+  @override
+  List<Object> get props => [value];
+}
+
+class VerificationEmailChanged extends AddVehicleEvent {
+  const VerificationEmailChanged(this.value);
 
   final String value;
 

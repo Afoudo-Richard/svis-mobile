@@ -1,10 +1,15 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
+import 'package:app/commons/country/countries.dart';
+import 'package:app/commons/country/country.dart';
 import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:collection/collection.dart';
 
 class RegistrationInformation extends StatelessWidget {
   RegistrationInformation({Key? key}) : super(key: key);
@@ -137,7 +142,35 @@ class _CountryInput extends StatelessWidget {
               'forms.coutry',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            DropdownSearch<Country>(
+              mode: Mode.BOTTOM_SHEET,
+              items: countryList,
+              dropdownSearchDecoration: InputDecoration(),
+              popupTitle: Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  top: 8.0,
+                ),
+                child: Text(
+                  'Select a Country',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              maxHeight: kDeviceSize.height * 0.8,
+              compareFn: (i, s) => i?.isoCode == s?.isoCode,
+              onChanged: (value) => context
+                  .read<AddVehicleBloc>()
+                  .add(CountryChanged(value?.name ?? 'n/a')),
+              dropdownBuilder: customSelectedItem,
+              popupItemBuilder: customPopupItemBuilder,
+              clearButtonSplashRadius: 20,
+              selectedItem: countryList.firstWhereOrNull(
+                (element) => element.name == state.country.value,
+              ),
+            ),
+            /* TextFormField(
+              initialValue: state.country.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -148,7 +181,7 @@ class _CountryInput extends StatelessWidget {
                 hintText: 'forms.coutry'.tr(),
                 errorText: state.country.invalid ? 'invalid coutry' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -169,7 +202,8 @@ class _RegionInput extends StatelessWidget {
               'forms.region',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.region.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(RegionChanged(value));
               },
@@ -200,7 +234,8 @@ class _RegistrationIdInput extends StatelessWidget {
               'forms.registrationId',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.registrationId.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -235,7 +270,8 @@ class _LicenceNumberInput extends StatelessWidget {
               'forms.licenceNumber',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.licenceNumber.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -270,7 +306,29 @@ class _RegistrationDateInput extends StatelessWidget {
               'forms.registrationDate',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            DateTimePicker(
+              type: DateTimePickerType.date,
+              initialValue: state.registrationDate.value?.toIso8601String(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              enabled: state.editable,
+              onChanged: (value) {
+                context.read<AddVehicleBloc>().add(
+                      RegistrationDateChanged(
+                        DateFormat('yyyy-MM-dd').parse(value),
+                      ),
+                    );
+              },
+              decoration: InputDecoration(
+                enabled: state.editable,
+                hintText: 'forms.registrationDate'.tr(),
+                errorText: state.editable && state.registrationDate.invalid
+                    ? 'invalid registration date'
+                    : null,
+              ),
+            ),
+            /* TextFormField(
+              initialValue: state.registrationDate.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -283,7 +341,7 @@ class _RegistrationDateInput extends StatelessWidget {
                     ? 'invalid registration date'
                     : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -305,7 +363,29 @@ class _ExpiryDateInput extends StatelessWidget {
               'forms.expiryDate',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            DateTimePicker(
+              type: DateTimePickerType.date,
+              initialValue: state.expiryDate.value?.toIso8601String(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              enabled: state.editable,
+              onChanged: (value) {
+                context.read<AddVehicleBloc>().add(
+                      ExpiryDateChanged(
+                        DateFormat('yyyy-MM-dd').parse(value),
+                      ),
+                    );
+              },
+              decoration: InputDecoration(
+                enabled: state.editable,
+                hintText: 'forms.expiryDate'.tr(),
+                errorText: state.editable && state.expiryDate.invalid
+                    ? 'invalid expiry date'
+                    : null,
+              ),
+            ),
+            /* TextFormField(
+              initialValue: state.expiryDate.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -317,7 +397,7 @@ class _ExpiryDateInput extends StatelessWidget {
                 errorText:
                     state.expiryDate.invalid ? 'invalid expiry date' : null,
               ),
-            ),
+            ), */
           ],
         );
       },
@@ -339,7 +419,8 @@ class _BearerNameInput extends StatelessWidget {
               'forms.bearerName',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.bearerName.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -373,7 +454,8 @@ class _PhoneNumberInput extends StatelessWidget {
               'forms.phoneNumber',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.phoneNumber.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -406,7 +488,8 @@ class _EmailAddressInput extends StatelessWidget {
               'forms.email',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.email.value,
               onChanged: (value) {
                 return context.read<AddVehicleBloc>().add(EmailChanged(value));
               },
@@ -437,7 +520,8 @@ class _AddressLine1Input extends StatelessWidget {
               'forms.addressLine1',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.addressLine1.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()
@@ -472,7 +556,8 @@ class _AddressLine2Input extends StatelessWidget {
               'forms.addressLine2',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextField(
+            TextFormField(
+              initialValue: state.addressLine2.value,
               onChanged: (value) {
                 return context
                     .read<AddVehicleBloc>()

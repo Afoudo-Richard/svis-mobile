@@ -3,6 +3,7 @@ import 'package:app/commons/colors.dart';
 import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChangeEmailOrPhone extends StatelessWidget {
   const ChangeEmailOrPhone({Key? key}) : super(key: key);
@@ -61,7 +62,13 @@ class _EmailOrPhoneInput extends StatelessWidget {
                   .subtitle2
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            TextField(
+            TextFormField(
+              initialValue: state.verificationEmail.value,
+              onChanged: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(VerificationEmailChanged(value));
+              },
               decoration: InputDecoration(
                 enabled: state.editable,
                 hintText: "Enter email or phone number*",
@@ -93,7 +100,7 @@ class _SubmitButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Submit'),
+            Text('proceed').tr(),
             SizedBox(
               width: kDeviceSize.width * 0.05,
             ),

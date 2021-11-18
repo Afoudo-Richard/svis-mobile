@@ -109,11 +109,10 @@ class _AppViewState extends State<AppView> {
           elevation: 0,
           backgroundColor: kScaffoldBackground,
           centerTitle: false,
-          textTheme: Theme.of(context).textTheme.apply(
-                bodyColor: kAppPrimaryColor,
-                displayColor: kAppPrimaryColor,
-                fontFamily: 'Poppins',
-              ),
+          toolbarTextStyle: TextStyle(
+            color: kAppPrimaryColor,
+            fontFamily: 'Poppins',
+          ),
           iconTheme: IconThemeData(color: kAppPrimaryColor),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(

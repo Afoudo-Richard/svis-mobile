@@ -12,7 +12,11 @@ part 'add_vehicle_state.dart';
 class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
   ProfileUser? profile;
 
-  AddVehicleBloc({this.profile}) : super(AddVehicleState()) {
+  AddVehicleBloc({this.profile, String? email})
+      : super(AddVehicleState(
+            verificationEmail:
+                Email.dirty(email ?? 'info@sumelongenterprise.com'))) {
+    on<SerialNumberChanged>(_onSerialNumberChanged);
     on<ChangeEmailorPhone>(_onChangeEmailorPhone);
     on<ChangeSubmitedEmailOrPhone>(_onChangeSubmitedEmailOrPhone);
     on<AssociateDeviceLater>(_onAssociateDeviceLater);
@@ -30,6 +34,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     on<BearerNameChanged>(_onBearerNameChanged);
     on<PhoneNumberChanged>(_onPhoneNumberChanged);
     on<EmailChanged>(_onEmailChanged);
+    on<VerificationEmailChanged>(_onVerificationEmailChanged);
     on<AddressLine1Changed>(_onAddressLine1Changed);
     on<AddressLine2Changed>(_onAddressLine2Changed);
     on<ImageUploadChanged>(_onImageUploadChanged);
@@ -134,7 +139,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(registrationDate: Name.dirty(event.value)),
+      state.copyWith(registrationDate: IDateTime.dirty(event.value)),
     );
   }
 
@@ -143,7 +148,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(expiryDate: Name.dirty(event.value)),
+      state.copyWith(expiryDate: IDateTime.dirty(event.value)),
     );
   }
 
@@ -171,6 +176,15 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
   ) async {
     emit(
       state.copyWith(email: Email.dirty(event.value)),
+    );
+  }
+
+  Future<void> _onVerificationEmailChanged(
+    VerificationEmailChanged event,
+    Emitter<AddVehicleState> emit,
+  ) async {
+    emit(
+      state.copyWith(verificationEmail: Email.dirty(event.value)),
     );
   }
 
@@ -288,6 +302,19 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
   ) async {
     emit(
       state.copyWith(mileage: Name.dirty(event.value)),
+    );
+  }
+
+  Future<void> _onSerialNumberChanged(
+    SerialNumberChanged event,
+    Emitter<AddVehicleState> emit,
+  ) async {
+    var serialNumber = Name.dirty(event.value);
+    emit(
+      state.copyWith(
+        deviceSerialNumber: serialNumber,
+        serialInputForm: fz.Formz.validate([serialNumber]),
+      ),
     );
   }
 

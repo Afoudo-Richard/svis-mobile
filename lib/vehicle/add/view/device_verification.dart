@@ -65,7 +65,12 @@ class _VerificationCodeInput extends StatelessWidget {
                   .subtitle2
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            TextField(
+            TextFormField(
+              onChanged: (value) {
+              /*   return context
+                    .read<AddVehicleBloc>()
+                    .add(VerificationEmailChanged(value)); */
+              },
               decoration: InputDecoration(
                 enabled: state.editable,
                 hintText: "Enter email or phone number*",
