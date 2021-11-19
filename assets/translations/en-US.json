@@ -15,6 +15,14 @@
     "tag": "Please fill in exactly the information provided."
   },
   "forms": {
+    "vin": "Vin",
+    "vehicleName": "Vehicle Name",
+    "vehicleGroup": "Vehicle Group",
+    "mileage": "Mileage",
+    "imageUpload": "Upload vehicle image",
+    "country": "Country",
+    "bearerName": "Bearer Name",
+    "licenseNumber": "Licence Number",
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",

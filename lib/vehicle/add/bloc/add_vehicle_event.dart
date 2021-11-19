@@ -4,7 +4,7 @@ abstract class AddVehicleEvent extends Equatable {
   const AddVehicleEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ChangeEmailorPhone extends AddVehicleEvent {}
@@ -143,10 +143,10 @@ class AddressLine2Changed extends AddVehicleEvent {
 class ImageUploadChanged extends AddVehicleEvent {
   const ImageUploadChanged(this.value);
 
-  final String value;
+  final File? value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class VehicleNameChanged extends AddVehicleEvent {
@@ -224,10 +224,10 @@ class FuelTypeChanged extends AddVehicleEvent {
 class VehicleGroupChanged extends AddVehicleEvent {
   const VehicleGroupChanged(this.value);
 
-  final String value;
+  final VehicleGroup? value;
 
   @override
-  List<Object> get props => [value];
+  List<Object?> get props => [value];
 }
 
 class MileageChanged extends AddVehicleEvent {

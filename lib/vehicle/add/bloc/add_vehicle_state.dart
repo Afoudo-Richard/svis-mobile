@@ -15,16 +15,16 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   final Name deviceSerialNumber;
   final fz.FormzStatus serialInputForm;
   final Name name;
-  final Name vin;
+  final ValidVin vin;
   final Name make;
   final Name model;
   final Name bodyType;
   final Name year;
   final Name transmission;
   final Name fuelType;
-  final Name vehicleGroup;
-  final Name mileage;
-  final Name image;
+  final ParseObjectItem vehicleGroup;
+  final INumber mileage;
+  final OptionalFile image;
   final Name country;
   final Name region;
   final Name registrationId;
@@ -32,7 +32,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   final IDateTime registrationDate;
   final IDateTime expiryDate;
   final Name bearerName;
-  final Name phoneNumber;
+  final PhoneNumber phoneNumber;
   final Email email;
   final Email verificationEmail;
   final Name addressLine1;
@@ -43,16 +43,16 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     this.deviceSerialNumber = const Name.pure(),
     this.serialInputForm = fz.FormzStatus.pure,
     this.name = const Name.pure(),
-    this.vin = const Name.pure(),
+    this.vin = const ValidVin.pure(),
     this.make = const Name.pure(),
     this.model = const Name.pure(),
     this.bodyType = const Name.pure(),
     this.year = const Name.pure(),
     this.transmission = const Name.pure(),
     this.fuelType = const Name.pure(),
-    this.vehicleGroup = const Name.pure(),
-    this.mileage = const Name.pure(),
-    this.image = const Name.pure(),
+    this.vehicleGroup = const ParseObjectItem.pure(),
+    this.mileage = const INumber.pure(),
+    this.image = const OptionalFile.pure(),
     this.country = const Name.pure(),
     this.region = const Name.pure(),
     this.registrationId = const Name.pure(),
@@ -60,7 +60,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     this.registrationDate = const IDateTime.pure(),
     this.expiryDate = const IDateTime.pure(),
     this.bearerName = const Name.pure(),
-    this.phoneNumber = const Name.pure(),
+    this.phoneNumber = const PhoneNumber.pure(),
     this.email = const Email.pure(),
     this.verificationEmail = const Email.pure(),
     this.addressLine1 = const Name.pure(),
@@ -74,16 +74,16 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     Name? deviceSerialNumber,
     fz.FormzStatus? serialInputForm,
     Name? name,
-    Name? vin,
+    ValidVin? vin,
     Name? make,
     Name? model,
     Name? bodyType,
     Name? year,
     Name? transmission,
     Name? fuelType,
-    Name? vehicleGroup,
-    Name? mileage,
-    Name? image,
+    ParseObjectItem? vehicleGroup,
+    INumber? mileage,
+    OptionalFile? image,
     Name? country,
     Name? region,
     Name? registrationId,
@@ -91,7 +91,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     IDateTime? registrationDate,
     IDateTime? expiryDate,
     Name? bearerName,
-    Name? phoneNumber,
+    PhoneNumber? phoneNumber,
     Email? email,
     Email? verificationEmail,
     Name? addressLine1,

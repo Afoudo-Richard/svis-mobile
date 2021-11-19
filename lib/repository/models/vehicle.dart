@@ -75,12 +75,24 @@ class Vehicle extends ParseObject
     return this.get('Profile');
   }
 
+  set profile(Profile? value) {
+    set('profile', value);
+  }
+
   String? get model {
     return get('model');
   }
 
   set model(String? value) {
     set('model', value);
+  }
+
+  User? get driver {
+    return get('driver');
+  }
+
+  set driver(User? value) {
+    set('driver', value);
   }
 
   int? get mileage {
@@ -101,6 +113,10 @@ class Vehicle extends ParseObject
 
   User? get user {
     return this.get('user');
+  }
+
+  set user(User? value) {
+    set('user', value);
   }
 
   set make(String? value) {
@@ -183,8 +199,12 @@ class Vehicle extends ParseObject
     set('bearerAddress', value);
   }
 
-  ParseRelation<VehicleGroup>? get vehicleGroup {
-    return this.getRelation('VehicleGroup');
+  VehicleGroup? get vehicleGroup {
+    return this.get('vehicleGroup');
+  }
+
+  set vehicleGroup(VehicleGroup? value) {
+    set('vehicleGroup', value);
   }
 
   DateTime? get licensePlateDateOfRegistration {

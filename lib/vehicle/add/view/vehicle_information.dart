@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
+import 'package:app/commons/vehicle_group/vehicle_group.dart';
 import 'package:app/repository/models/make.dart';
 import 'package:app/repository/models/model_year.dart';
+import 'package:app/repository/models/models.dart';
 import 'package:app/vehicle/add/add.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
+import 'package:image_picker/image_picker.dart';
 
 class VehicleInformation extends StatelessWidget {
   VehicleInformation({Key? key}) : super(key: key);
@@ -110,7 +117,11 @@ class VehicleInformation extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _VehicleGroupInput(),
+              child: BlocProvider(
+                create: (context) =>
+                    VehicleGroupBloc()..add(VehicleGroupFetch()),
+                child: _VehicleGroupInput(),
+              ),
             ),
             SizedBox(width: 10),
             Expanded(
@@ -120,7 +131,7 @@ class VehicleInformation extends StatelessWidget {
         ),
         SizedBox(height: kDeviceSize.height * 0.015),
         _ImageUploadInput(),
-        SizedBox(height: kDeviceSize.height * 0.1),
+        SizedBox(height: kDeviceSize.height * 0.07),
         _SubmitButton(),
         SizedBox(height: kDeviceSize.height * 0.1),
       ],
@@ -622,6 +633,12 @@ class _FuelTypeInput extends StatelessWidget {
                   onFieldSubmitted: (String value) {
                     onFieldSubmitted();
                   },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.fuelType'.tr(),
+                    errorText:
+                        state.fuelType.invalid ? 'invalid fuelType' : null,
+                  ),
                 );
               },
             ),
@@ -639,6 +656,7 @@ class _VehicleGroupInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.vehicleGroup != current.vehicleGroup,
       builder: (context, state) {
+        final vehicleGroup = context.watch<VehicleGroupBloc>().state;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -646,20 +664,54 @@ class _VehicleGroupInput extends StatelessWidget {
               'forms.vehicleGroup',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextFormField(
-              initialValue: state.vehicleGroup.value,
-              onChanged: (value) {
-                return context
-                    .read<AddVehicleBloc>()
-                    .add(VehicleGroupChanged(value));
-              },
-              decoration: InputDecoration(
+            DropdownSearch<VehicleGroup>(
+              mode: Mode.BOTTOM_SHEET,
+              dropdownSearchDecoration: InputDecoration(
                 enabled: state.editable,
                 hintText: 'forms.vehicleGroup'.tr(),
                 errorText:
                     state.vehicleGroup.invalid ? 'invalid vehicle Group' : null,
               ),
-            ),
+              popupTitle: Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  top: 8.0,
+                ),
+                child: Text(
+                  'Select a vehicle group',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              items: vehicleGroup.status == VehicleGroupStatus.success
+                  ? vehicleGroup.items
+                      .where((element) => element.name != null)
+                      .toList()
+                  : [],
+              maxHeight: kDeviceSize.height * 0.8,
+              onChanged: (value) {
+                return context
+                    .read<AddVehicleBloc>()
+                    .add(VehicleGroupChanged(value));
+              },
+              selectedItem: state.vehicleGroup.value != null
+                  ? state.vehicleGroup.value as VehicleGroup
+                  : null,
+            )
+            /* TextFormField(
+                  initialValue: state.vehicleGroup.value,
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(VehicleGroupChanged(value));
+                  },
+                  decoration: InputDecoration(
+                    enabled: state.editable,
+                    hintText: 'forms.vehicleGroup'.tr(),
+                    errorText:
+                        state.vehicleGroup.invalid ? 'invalid vehicle Group' : null,
+                  ),
+                ), */
           ],
         );
       },
@@ -701,6 +753,7 @@ class _MileageInput extends StatelessWidget {
 }
 
 class _ImageUploadInput extends StatelessWidget {
+  final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
@@ -713,19 +766,89 @@ class _ImageUploadInput extends StatelessWidget {
               'forms.imageUpload',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
-            TextFormField(
-              initialValue: state.image.value,
-              onChanged: (value) {
-                return context
-                    .read<AddVehicleBloc>()
-                    .add(ImageUploadChanged(value));
-              },
-              decoration: InputDecoration(
-                enabled: state.editable,
-                hintText: 'forms.imageUpload'.tr(),
-                errorText: state.image.invalid ? 'invalid imageUpload' : null,
-              ),
+            Stack(
+              children: [
+                TextFormField(
+                  /* initialValue: state.image.value,
+                  onChanged: (value) {
+                    return context
+                        .read<AddVehicleBloc>()
+                        .add(ImageUploadChanged(value));
+                  }, */
+                  decoration: InputDecoration(
+                    enabled: false,
+                    hintText: 'forms.imageUpload'.tr(),
+                    errorText:
+                        state.image.invalid ? 'invalid imageUpload' : null,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  top: 0,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final XFile? image = await _picker.pickImage(
+                              source: ImageSource.camera);
+                          if (image != null) {
+                            File file = File(image.path);
+                            context.read<AddVehicleBloc>().add(
+                                  ImageUploadChanged(file),
+                                );
+                          } else {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.red.withOpacity(0.1),
+                                  elevation: 0,
+                                  content: Text(
+                                    'error picking file',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              );
+                          }
+                        },
+                        icon: Icon(Icons.camera, color: kAppAccent),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          final XFile? image = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          if (image != null) {
+                            File file = File(image.path);
+                            context.read<AddVehicleBloc>().add(
+                                  ImageUploadChanged(file),
+                                );
+                          } else {
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.red.withOpacity(0.1),
+                                  content: Text(
+                                    'error picking file',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              );
+                          }
+                        },
+                        icon: Icon(Icons.cloud_upload_outlined,
+                            color: kAppAccent),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 10),
+            state.image.value != null
+                ? Image.file(state.image.value as File)
+                : Container(),
           ],
         );
       },

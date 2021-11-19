@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/commons/forms/forms.dart';
+import 'package:app/repository/base/api_response.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:app/commons/formz.dart' as fz;
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 part 'add_vehicle_event.dart';
 part 'add_vehicle_state.dart';
@@ -166,7 +169,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(phoneNumber: Name.dirty(event.value)),
+      state.copyWith(phoneNumber: PhoneNumber.dirty(event.value)),
     );
   }
 
@@ -211,7 +214,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(image: Name.dirty(event.value)),
+      state.copyWith(image: OptionalFile.dirty(event.value)),
     );
   }
 
@@ -229,7 +232,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(vin: Name.dirty(event.value)),
+      state.copyWith(vin: ValidVin.dirty(event.value)),
     );
   }
 
@@ -292,7 +295,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(vehicleGroup: Name.dirty(event.value)),
+      state.copyWith(vehicleGroup: ParseObjectItem.dirty(event.value)),
     );
   }
 
@@ -301,7 +304,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(mileage: Name.dirty(event.value)),
+      state.copyWith(mileage: INumber.dirty(event.value)),
     );
   }
 
@@ -328,6 +331,39 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
         editable: false,
       ));
       try {
+        ApiResponse response = getApiResponse<Vehicle>(await (Vehicle()
+              ..name = state.name.value
+              ..vin = state.vin.value
+              ..make = state.make.value
+              ..set('manufacturer', state.make.value)
+              ..model = state.model.value
+              ..driver = await ParseUser.currentUser()
+              ..user = await ParseUser.currentUser()
+              ..bodyType = state.bodyType.value
+              ..modelYear = state.year.value
+              ..transmission = state.transmission.value
+              ..fuelType = state.fuelType.value
+              ..vehicleGroup = state.vehicleGroup.value != null
+                  ? state.vehicleGroup.value as VehicleGroup?
+                  : null
+              ..mileage = int.parse(state.mileage.value)
+              ..photo = state.image.value != null
+                  ? ParseFile(state.image.value)
+                  : null
+              ..profile = profile?.profile
+              ..countryCode = state.country.value
+              ..registrationCountry = state.country.value
+              // ..region=state.region.value
+              ..registrationId = state.registrationId.value
+              ..licensePlate = state.licenceNumber.value
+              ..licensePlateDateOfRegistration = state.registrationDate.value
+              ..licensePlateDateValidUntil = state.expiryDate.value
+              ..bearerName = state.bearerName.value
+              ..bearerPhoneNumber = int.parse(state.phoneNumber.value)
+              ..bearerEmailAddress = state.email.value
+              ..bearerAddress = state.addressLine1.value
+              ..bearerAddress2 = state.addressLine2.value)
+            .save());
         await Future.delayed(const Duration(milliseconds: 5000), () {
           emit(
             state.copyWith(
@@ -336,6 +372,23 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
             ),
           );
         });
+        if (response.success) {
+          emit(
+            state.copyWith(
+              submission: fz.FormzSubmission.success(),
+              editable: true,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              submission: fz.FormzSubmission.failure(
+                response.error?.message ?? 'unable to save',
+              ),
+              editable: true,
+            ),
+          );
+        }
       } catch (error) {
         emit(
           state.copyWith(

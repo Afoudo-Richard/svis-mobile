@@ -113,6 +113,7 @@ class _AppViewState extends State<AppView> {
             color: kAppPrimaryColor,
             fontFamily: 'Poppins',
           ),
+          titleTextStyle: Theme.of(context).textTheme.headline6,
           iconTheme: IconThemeData(color: kAppPrimaryColor),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
