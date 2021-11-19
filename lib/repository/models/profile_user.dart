@@ -50,5 +50,15 @@ class ProfileUser extends ParseObject
   @override
   List<Object?> get props => [
         objectId,
+        name,
+        profileUserType,
+        user,
+        profile,
+        group,
+        role,
+        permission,
+        status,
+        expirationDate,
+        accessMode,
       ];
 }

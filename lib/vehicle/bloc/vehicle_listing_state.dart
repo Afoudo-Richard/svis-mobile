@@ -7,6 +7,7 @@ class VehicleListingState extends Equatable {
     required this.isSelectingController,
     this.status = VehicleListStatus.initial,
     this.vehicles = const <Vehicle>[],
+    this.vehiclesCopy = const<Vehicle>[],
     this.hasReachedMax = false,
   }){
         isSelectingController.disableEditingWhenNoneSelected = true;
@@ -15,6 +16,7 @@ class VehicleListingState extends Equatable {
 
   final VehicleListStatus status;
   final List<Vehicle> vehicles;
+  final List<Vehicle> vehiclesCopy;
   final bool hasReachedMax;
   final MultiSelectController isSelectingController ;
 
@@ -22,6 +24,7 @@ class VehicleListingState extends Equatable {
     VehicleListingState copyWith({
     VehicleListStatus? status,
     List<Vehicle>? vehicles,
+    List<Vehicle>? vehiclesCopy,
     bool? hasReachedMax,
     MultiSelectController? isSelectingController,
 
@@ -29,6 +32,7 @@ class VehicleListingState extends Equatable {
     return VehicleListingState(
       status: status ?? this.status,
       vehicles: vehicles ?? this.vehicles,
+      vehiclesCopy: vehiclesCopy ?? this.vehiclesCopy,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       isSelectingController : isSelectingController ?? this.isSelectingController
 

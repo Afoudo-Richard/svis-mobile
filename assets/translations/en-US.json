@@ -31,8 +31,22 @@
     "region": "Region",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
-    "passwordError": "Password does not match"
+    "passwordError": "Password does not match",
+    "make": "Make",
+    "model": "Model",
+    "bodyType": "Body type",
+    "year": "Year",
+    "transmission": "Transmission",
+    "fuelType": "Fuel type",
+    "regionOrCity": "Region/City",
+    "registrationId": "Registration ID",
+    "licensePlateNumber": "License plate number",
+    "issuedDate": "Issued date",
+    "expiryDate": "Expiry date",
+    "registrationDate": "Registration date",
+    "bearName": "Bearer name"
   },
+
   "alreadyHaveAnAccount": "Already have an account? Login",
   "login": "Login",
   "login.email": "Email or User ID",
@@ -75,6 +89,26 @@
   "moreInformation": "More information",
   "lowRisk": "Low risk",
   "highRisk": "High risk",
-  "mediumRisk": "Medium risk"
+  "mediumRisk": "Medium risk",
+  "viewDashboard": "View dashboard",
+  "vehicleProfile": "Vehicle profile",
+  "vehicleInformation": "Vehicle Information",
+  "registrationInformation": "Registration Information",
+  "assigned": "Assigned",
+  "registrationDocuments": "Registration Documents",
+  "svisCapabilityService": "SVIS Capability Service",
+  "driverAssigned": "Driver Assigned",
+  "faultCodes": "Fault codes {}",
+  "configuration": {
+    "one":"Configuration",
+    "many": "Configurations"
+  },
+  "reminder": {
+    "one":"Reminder",
+    "other": "Reminders {}"
+  },
+  "assignDrivers": "Assign Drivers",
+  "controlPanel": "Control Panel",
+  "reset": "Reset"
   
 }
