@@ -1,9 +1,10 @@
 part of '../vehicle_list.dart';
 
 enum VehicleListItemOptions {
-  assignDriver, 
+  assignDriver,
   viewProfile,
   edit,
+  associateDevice,
   deassociateDevice,
   archive,
   delete,
@@ -86,7 +87,8 @@ class _VehicleListItemState extends State<VehicleListItem> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 4.0, right: 2.0),
+                                    margin:
+                                        EdgeInsets.only(top: 4.0, right: 2.0),
                                     height: 7.0,
                                     width: 7.0,
                                     decoration: BoxDecoration(
@@ -95,7 +97,8 @@ class _VehicleListItemState extends State<VehicleListItem> {
                                     ),
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
@@ -155,14 +158,17 @@ class _VehicleListItemState extends State<VehicleListItem> {
                     child: Icon(Icons.more_vert),
                     onSelected: (VehicleListItemOptions item) async {
                       switch (item) {
-                        
                         case VehicleListItemOptions.delete:
                           break;
                         default:
                       }
                     },
                     itemBuilder: (context) {
-                      return VehicleListItemOptions.values.map((item) {
+                      var _options = [...VehicleListItemOptions.values];
+                      _options.remove(widget.vehicle?.device != null
+                          ? VehicleListItemOptions.associateDevice
+                          : VehicleListItemOptions.deassociateDevice);
+                      return _options.map((item) {
                         return PopupMenuItem(
                           child: Text(item.toString().split('.').last).tr(),
                           value: item,

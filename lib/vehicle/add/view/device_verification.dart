@@ -1,6 +1,7 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
+import 'package:app/commons/formz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -59,7 +60,7 @@ class _VerificationCodeInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Email/Phone number*",
+              "verificationPinCode",
               style: Theme.of(context)
                   .textTheme
                   .subtitle2
@@ -67,13 +68,13 @@ class _VerificationCodeInput extends StatelessWidget {
             ),
             TextFormField(
               onChanged: (value) {
-              /*   return context
+                return context
                     .read<AddVehicleBloc>()
-                    .add(VerificationEmailChanged(value)); */
+                    .add(VerificationPinChanged(value));
               },
               decoration: InputDecoration(
-                enabled: state.editable,
-                hintText: "Enter email or phone number*",
+                // enabled: state.editable,
+                hintText: "enterPinCode",
               ),
             ),
           ],
@@ -90,26 +91,39 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all(0),
-        ),
-        onPressed: () {
-          context.read<AddVehicleBloc>().add(SubmitVerificationCode());
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('verify').tr(),
-            SizedBox(
-              width: kDeviceSize.width * 0.05,
-            ),
-            Icon(Icons.arrow_forward)
-          ],
-        ),
-      ),
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress
+            ? Center(
+                child: const CircularProgressIndicator(),
+              )
+            : Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                  ),
+                  onPressed: state.verificationPinInputForm.isValid
+                      ? () {
+                          context
+                              .read<AddVehicleBloc>()
+                              .add(SubmitVerificationCode());
+                        }
+                      : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('verify').tr(),
+                      SizedBox(
+                        width: kDeviceSize.width * 0.05,
+                      ),
+                      Icon(Icons.arrow_forward)
+                    ],
+                  ),
+                ),
+              );
+      },
     );
   }
 }

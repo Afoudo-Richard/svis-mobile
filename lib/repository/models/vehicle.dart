@@ -1,3 +1,4 @@
+import 'package:app/repository/models/device.dart';
 import 'package:app/repository/models/profile.dart';
 import 'package:app/repository/models/vehicle_group.dart';
 import 'package:equatable/equatable.dart';
@@ -301,6 +302,14 @@ class Vehicle extends ParseObject
 
   set bearerEmailAddress(String? value) {
     set('bearerEmailAddress', value);
+  }
+
+  Device? get device {
+    return get('device');
+  }
+
+  set device(Device? value) {
+    set('device', value);
   }
 
   String? get vin {

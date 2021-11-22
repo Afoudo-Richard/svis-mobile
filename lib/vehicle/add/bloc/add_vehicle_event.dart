@@ -23,6 +23,15 @@ class SubmitVehicleInformation extends AddVehicleEvent {}
 
 class SubmitRegistrationInformation extends AddVehicleEvent {}
 
+class VerificationPinChanged extends AddVehicleEvent {
+  const VerificationPinChanged(this.value);
+
+  final String value;
+
+  @override
+  List<Object> get props => [value];
+}
+
 class CountryChanged extends AddVehicleEvent {
   const CountryChanged(this.value);
 

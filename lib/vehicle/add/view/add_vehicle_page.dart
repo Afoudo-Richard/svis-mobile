@@ -32,7 +32,10 @@ class AddVehiclePage extends StatelessWidget {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          const SnackBar(content: Text('Submission Failure')),
+                          SnackBar(
+                            content: Text(
+                                state.submission.error ?? 'Submission Failure'),
+                          ),
                         );
                     } else if (state.status.isSubmissionSuccess) {
                       ScaffoldMessenger.of(context)

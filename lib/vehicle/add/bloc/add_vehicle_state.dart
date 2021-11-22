@@ -14,6 +14,9 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   final bool editable;
   final Name deviceSerialNumber;
   final fz.FormzStatus serialInputForm;
+  final Name verificationPin;
+  final fz.FormzStatus verificationPinInputForm;
+  final Device? device;
   final Name name;
   final ValidVin vin;
   final Name make;
@@ -35,6 +38,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   final PhoneNumber phoneNumber;
   final Email email;
   final Email verificationEmail;
+  final String? verificationCode;
   final Name addressLine1;
   final Name addressLine2;
 
@@ -42,6 +46,9 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     this.pagestatus = SwitchPageStatus.initial,
     this.deviceSerialNumber = const Name.pure(),
     this.serialInputForm = fz.FormzStatus.pure,
+    this.verificationPin = const Name.pure(),
+    this.verificationPinInputForm = fz.FormzStatus.pure,
+    this.device,
     this.name = const Name.pure(),
     this.vin = const ValidVin.pure(),
     this.make = const Name.pure(),
@@ -63,6 +70,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     this.phoneNumber = const PhoneNumber.pure(),
     this.email = const Email.pure(),
     this.verificationEmail = const Email.pure(),
+    this.verificationCode,
     this.addressLine1 = const Name.pure(),
     this.addressLine2 = const Name.pure(),
     this.editable = true,
@@ -73,6 +81,9 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     SwitchPageStatus? pagestatus,
     Name? deviceSerialNumber,
     fz.FormzStatus? serialInputForm,
+    Name? verificationPin,
+    fz.FormzStatus? verificationPinInputForm,
+    Device? device,
     Name? name,
     ValidVin? vin,
     Name? make,
@@ -94,6 +105,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     PhoneNumber? phoneNumber,
     Email? email,
     Email? verificationEmail,
+    String? verificationCode,
     Name? addressLine1,
     Name? addressLine2,
     bool? editable,
@@ -103,6 +115,10 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
       pagestatus: pagestatus ?? this.pagestatus,
       deviceSerialNumber: deviceSerialNumber ?? this.deviceSerialNumber,
       serialInputForm: serialInputForm ?? this.serialInputForm,
+      verificationPin: verificationPin ?? this.verificationPin,
+      verificationPinInputForm:
+          verificationPinInputForm ?? this.verificationPinInputForm,
+      device: device ?? this.device,
       name: name ?? this.name,
       vin: vin ?? this.vin,
       make: make ?? this.make,
@@ -124,6 +140,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       email: email ?? this.email,
       verificationEmail: verificationEmail ?? this.verificationEmail,
+      verificationCode: verificationCode ?? this.verificationCode,
       addressLine1: addressLine1 ?? this.addressLine1,
       addressLine2: addressLine2 ?? this.addressLine2,
       editable: editable ?? this.editable,
@@ -132,12 +149,15 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         pagestatus,
         editable,
         _submission,
         deviceSerialNumber,
         serialInputForm,
+        verificationPin,
+        verificationPinInputForm,
+        device,
         name,
         vin,
         make,
@@ -159,6 +179,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
         phoneNumber,
         email,
         verificationEmail,
+        verificationCode,
         addressLine1,
         addressLine2,
       ];
