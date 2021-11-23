@@ -32,15 +32,19 @@ class AppBottomAppBar extends StatelessWidget {
                 label: 'control pannel',
               ),
               _BottomBarItem(
+<<<<<<< HEAD
+=======
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(VehiclePage.route());
+                },
+>>>>>>> 2adb209dea739f3de00961ccb4eb9454596b7397
                 icon: Image.asset(
                   'assets/icons/vehicles.png',
                   height: 28,
                   width: 28,
                 ),
                 label: 'Vehicle',
-                onTap: () {
-                  Navigator.of(context).push(VehiclePage.route());
-                },
               ),
               _BottomBarItem(
                 onTap: () {

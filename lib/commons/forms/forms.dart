@@ -13,3 +13,6 @@ export 'optional_items.dart';
 export 'phone_number.dart';
 export 'optional_phone_number.dart';
 export 'optional_file.dart';
+export 'valid_vin.dart';
+export 'parse_object_item.dart';
+export 'number.dart';

@@ -19,7 +19,10 @@ class VehicleGroup extends ParseObject
   String? get description => get<String?>('Description');
   set description(String? value) => set<String?>('Description', value);
 
-
+  @override
+  String toString() {
+    return name ?? '';
+  }
 
   @override
   List<Object?> get props => [

@@ -169,31 +169,36 @@ class _SubmitDeviceAssociation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddVehicleBloc, AddVehicleState>(
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-            ),
-            onPressed: state.serialInputForm.isValid
-                ? () {
-                    context
-                        .read<AddVehicleBloc>()
-                        .add(SubmitDeviceAssociation());
-                  }
-                : null,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Submit'),
-                SizedBox(
-                  width: kDeviceSize.width * 0.05,
+        return state.status.isSubmissionInProgress
+            ? Center(
+                child: const CircularProgressIndicator(),
+              )
+            : Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: kDeviceSize.width * 0.1),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                  ),
+                  onPressed: state.serialInputForm.isValid
+                      ? () {
+                          context
+                              .read<AddVehicleBloc>()
+                              .add(SubmitDeviceAssociation());
+                        }
+                      : null,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Submit'),
+                      SizedBox(
+                        width: kDeviceSize.width * 0.05,
+                      ),
+                      Icon(Icons.arrow_forward)
+                    ],
+                  ),
                 ),
-                Icon(Icons.arrow_forward)
-              ],
-            ),
-          ),
-        );
+              );
       },
     );
   }

@@ -121,7 +121,7 @@ class RegistrationInformation extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: kDeviceSize.height * 0.15),
+        SizedBox(height: kDeviceSize.height * 0.08),
         _SubmitButton(),
         SizedBox(height: kDeviceSize.height * 0.1),
       ],
@@ -267,7 +267,7 @@ class _LicenceNumberInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'forms.licenceNumber',
+              'forms.licenseNumber',
               style: TextStyle(fontWeight: FontWeight.bold),
             ).tr(),
             TextFormField(
@@ -279,9 +279,9 @@ class _LicenceNumberInput extends StatelessWidget {
               },
               decoration: InputDecoration(
                 enabled: state.editable,
-                hintText: 'forms.licenceNumber'.tr(),
+                hintText: 'forms.licenseNumber'.tr(),
                 errorText: state.licenceNumber.invalid
-                    ? 'invalid licence Number'
+                    ? 'invalid license Number'
                     : null,
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:app/repository/models/device.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:app/repository/models/trouble_code.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -61,5 +62,5 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kVehicle, () => Vehicle());
   ParseCoreData().registerSubClass(kTroubleCode, () => TroubleCode());
   ParseCoreData().registerSubClass(kVehicleGroup, () => VehicleGroup());
-
+  ParseCoreData().registerSubClass(kDevice, () => Device());
 }
