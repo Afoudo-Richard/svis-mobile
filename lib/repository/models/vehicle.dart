@@ -328,6 +328,14 @@ class Vehicle extends ParseObject
     set('bodyType', value);
   }
 
+  String? get region {
+    return get('region');
+  }
+
+  set region(String? value) {
+    set('region', value);
+  }
+
   String? get registrationCountry {
     return get('registrationCountry');
   }

@@ -29,7 +29,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
   final INumber mileage;
   final OptionalFile image;
   final Name country;
-  final Name region;
+  final OptionalName region;
   final Name registrationId;
   final Name licenceNumber;
   final IDateTime registrationDate;
@@ -61,7 +61,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     this.mileage = const INumber.pure(),
     this.image = const OptionalFile.pure(),
     this.country = const Name.pure(),
-    this.region = const Name.pure(),
+    this.region = const OptionalName.pure(),
     this.registrationId = const Name.pure(),
     this.licenceNumber = const Name.pure(),
     this.registrationDate = const IDateTime.pure(),
@@ -96,7 +96,7 @@ class AddVehicleState extends Equatable with fz.FormzMixin<String, Vehicle> {
     INumber? mileage,
     OptionalFile? image,
     Name? country,
-    Name? region,
+    OptionalName? region,
     Name? registrationId,
     Name? licenceNumber,
     IDateTime? registrationDate,

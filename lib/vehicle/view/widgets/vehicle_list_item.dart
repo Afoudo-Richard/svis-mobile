@@ -160,6 +160,13 @@ class _VehicleListItemState extends State<VehicleListItem> {
                       switch (item) {
                         case VehicleListItemOptions.delete:
                           break;
+                        case VehicleListItemOptions.edit:
+                          var vehicle = await Navigator.of(context).push(
+                            AddVehiclePage.route(item: widget.vehicle),
+                          );
+
+                          /// TODO:  update list
+                          break;
                         default:
                       }
                     },

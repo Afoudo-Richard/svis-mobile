@@ -694,9 +694,8 @@ class _VehicleGroupInput extends StatelessWidget {
                     .read<AddVehicleBloc>()
                     .add(VehicleGroupChanged(value));
               },
-              selectedItem: state.vehicleGroup.value != null
-                  ? state.vehicleGroup.value as VehicleGroup
-                  : null,
+              selectedItem: vehicleGroup.items.firstWhereOrNull((element) =>
+                  element.objectId == state.vehicleGroup.value?.objectId),
             )
             /* TextFormField(
                   initialValue: state.vehicleGroup.value,

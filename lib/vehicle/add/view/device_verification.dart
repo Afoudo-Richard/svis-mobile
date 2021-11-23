@@ -26,16 +26,7 @@ class DeviceVerification extends StatelessWidget {
           SizedBox(height: kDeviceSize.height * 0.02),
           _VerificationCodeInput(),
           SizedBox(height: kDeviceSize.height * 0.2),
-          Align(
-            child: Text(
-              'resendVerificationCode',
-              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 13.0,
-                  color: kAppPrimaryColor),
-              textAlign: TextAlign.center,
-            ).tr(),
-          ),
+          _ResendVerificationCode(),
           SizedBox(height: kDeviceSize.height * 0.01),
           _SubmitButton(),
         ],
@@ -45,6 +36,39 @@ class DeviceVerification extends StatelessWidget {
 
   void deviceVerificationListenner(
       BuildContext context, AddVehicleState state) {}
+}
+
+class _ResendVerificationCode extends StatelessWidget {
+  const _ResendVerificationCode({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+      builder: (context, state) {
+        return Align(
+          child: TextButton(
+            onPressed: state.status.isSubmissionInProgress
+                ? null
+                : () {
+                    context
+                        .read<AddVehicleBloc>()
+                        .add(ResendVerificationCode());
+                  },
+            child: Text(
+              'resendVerificationCode',
+              style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 13.0,
+                  color: kAppPrimaryColor),
+              textAlign: TextAlign.center,
+            ).tr(),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _VerificationCodeInput extends StatelessWidget {

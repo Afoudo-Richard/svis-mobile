@@ -61,7 +61,10 @@ class _VehicleListState extends State<VehicleList> {
                 ],
                 IconButton(
                   onPressed: () async {
-                    Navigator.of(context).push(AddVehiclePage.route());
+                    var vehicle = await Navigator.of(context)
+                        .push(AddVehiclePage.route());
+
+                    /// TODO: update list
                   },
                   icon: Icon(Icons.add),
                   iconSize: 35.0,
@@ -488,8 +491,7 @@ class _VehicleListingViewState extends State<VehicleListingView> {
                           onTap: () {
                             if (!state.isSelectingController.isSelecting) {
                               Navigator.of(context).push(
-                                  UserProfilePage.route(
-                                      state.vehicles[index]));
+                                  UserProfilePage.route(state.vehicles[index]));
                             } else {
                               driversBloc.add(ItemSelected(index: index));
                               //state.isSelectingController.toggle(index);
