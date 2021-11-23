@@ -91,7 +91,7 @@ class DriversBloc extends Bloc<DriversEvent, DriversState> {
 
   void _onItemSelected(ItemSelected event, Emitter<DriversState> emit) {
     state.isSelectingController.toggle(event.index);
-    print("Item selected ${event.index}");
+
     //state.isSelectingController.isSelecting = true;
     emit(state.copyWith(isSelectingController: state.isSelectingController));
 
