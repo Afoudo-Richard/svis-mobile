@@ -26,6 +26,8 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
+    "deviceSerial": "Device Serial",
+    "deviceSerialPrompt": "Enter device serial number",
     "password": "Password",
     "dob": "Date of Birth",
     "gender": "Gender",
@@ -54,9 +56,12 @@
     "registrationDate": "Registration date",
     "bearName": "Bearer name"
   },
-
   "alreadyHaveAnAccount": "Already have an account? Login",
   "login": "Login",
+  "changeEmailOrPhone": {
+    "title": "Change email or phone",
+    "prompt": "Submit your email or phone number to receive a verification code for your device."
+  },
   "login.email": "Email or User ID",
   "forgotPassword": "Forgot Password",
   "resetPassword": "Reset Password",
@@ -79,17 +84,17 @@
   "usersInformation": "User's Information",
   "editProfile": "Edit profile",
   "privacyPolicyAndTerms": "Privacy policy | Term of Services",
-  "search" : "Search",
+  "search": "Search",
   "driver": "Driver",
   "drivers": "Drivers",
   "recentActions": "Recent Actions",
   "addDriver": "Add Driver",
-  "archived" : "Archived",
+  "archived": "Archived",
   "assign": "Assign",
   "select": "Select",
   "delete": "Delete",
   "failedToFetchDrivers": "Failed to fetch drivers",
-  "reload":"Reload",
+  "reload": "Reload",
   "noDrivers": "No drivers",
   "advanceTracking": "Advance tracking",
   "view": "View",
@@ -103,20 +108,24 @@
   "vehicleInformation": "Vehicle Information",
   "registrationInformation": "Registration Information",
   "assigned": "Assigned",
+  "deviceAssociationForVehicle": "Device Association - {}",
+  "deviceAssociation": {
+    "prompt": "In order to proceed, please enter the device serial number and click 'Submit'. A verification code will be sent to your email",
+    "title": "Device Association"
+  },
   "registrationDocuments": "Registration Documents",
   "svisCapabilityService": "SVIS Capability Service",
   "driverAssigned": "Driver Assigned",
   "faultCodes": "Fault codes {}",
   "configuration": {
-    "one":"Configuration",
+    "one": "Configuration",
     "many": "Configurations"
   },
   "reminder": {
-    "one":"Reminder",
+    "one": "Reminder",
     "other": "Reminders {}"
   },
   "assignDrivers": "Assign Drivers",
   "controlPanel": "Control Panel",
   "reset": "Reset"
-  
 }

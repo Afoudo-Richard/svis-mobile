@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/commons/commons.dart';
 import 'package:app/commons/forms/forms.dart';
 import 'package:app/repository/base/api_response.dart';
 import 'package:app/repository/models/device.dart';
@@ -10,16 +11,9 @@ import 'package:equatable/equatable.dart';
 import 'package:app/commons/formz.dart' as fz;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:collection/collection.dart';
-import 'dart:math';
 
 part 'add_vehicle_event.dart';
 part 'add_vehicle_state.dart';
-
-String generateRandomString(int len) {
-  var r = Random();
-  return String.fromCharCodes(
-      List.generate(len, (index) => r.nextInt(33) + 89));
-}
 
 class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
   ProfileUser? profile;
