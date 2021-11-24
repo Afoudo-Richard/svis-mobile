@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/repository/models/vehicle.dart';
 import 'package:bloc/bloc.dart';
@@ -6,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:collection/collection.dart';
 
 part 'vehicle_listing_event.dart';
 part 'vehicle_listing_state.dart';
@@ -24,6 +27,7 @@ class VehicleListingBloc
       : super(VehicleListingState(
             isSelectingController: MultiSelectController())) {
     on<VehicleListFetched>(_onVehiclesListFetched, transformer: droppable());
+    on<UpdateVehicleList>(_onUpdateVehicleList);
     on<TextChanged>(_onVehicleSearchChanged, transformer: debounce(_duration));
   }
 
@@ -81,6 +85,29 @@ class VehicleListingBloc
     emit(state.copyWith(
       status: VehicleListStatus.success,
       vehicles: items,
+    ));
+  }
+
+  Future<void> _onUpdateVehicleList(
+    UpdateVehicleList event,
+    Emitter<VehicleListingState> emit,
+  ) async {
+    var vehicle = state.vehicles.firstWhereOrNull((element) {
+      return element.objectId == event.value?.objectId;
+    });
+    emit(state.copyWith(
+      status: VehicleListStatus.success,
+      vehicles: vehicle != null
+          ? (List.of(state.vehicles)
+              .map((element) {
+                if (element.objectId == event.value?.objectId) {
+                  return event.value as Vehicle;
+                } else {
+                  return element;
+                }
+              })
+              .toList())
+          : (List.of(state.vehicles)..add(event.value as Vehicle)),
     ));
   }
 }

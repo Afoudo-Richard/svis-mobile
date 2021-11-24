@@ -164,8 +164,11 @@ class _VehicleListItemState extends State<VehicleListItem> {
                           var vehicle = await Navigator.of(context).push(
                             AddVehiclePage.route(item: widget.vehicle),
                           );
-
-                          /// TODO:  update list
+                          if (vehicle is Vehicle) {
+                            context
+                                .read<VehicleListingBloc>()
+                                .add(UpdateVehicleList(vehicle));
+                          }
                           break;
                         default:
                       }

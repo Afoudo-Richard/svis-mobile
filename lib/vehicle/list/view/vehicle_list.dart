@@ -3,8 +3,9 @@ import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/vehicle/add/add.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
-import 'package:app/vehicle/bloc/vehicle_listing_bloc.dart';
+import 'package:app/vehicle/list/list.dart';
 import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,8 +64,11 @@ class _VehicleListState extends State<VehicleList> {
                   onPressed: () async {
                     var vehicle = await Navigator.of(context)
                         .push(AddVehiclePage.route());
-
-                    /// TODO: update list
+                    if (vehicle is Vehicle) {
+                      context
+                          .read<VehicleListingBloc>()
+                          .add(UpdateVehicleList(vehicle));
+                    }
                   },
                   icon: Icon(Icons.add),
                   iconSize: 35.0,
