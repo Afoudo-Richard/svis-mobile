@@ -6,3 +6,5 @@ abstract class VehicleDriverAssignedEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class VehicleDriverAssigedListFetched extends VehicleDriverAssignedEvent {}
