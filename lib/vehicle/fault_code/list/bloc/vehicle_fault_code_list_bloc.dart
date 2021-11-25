@@ -1,4 +1,6 @@
 import 'package:app/repository/models/trouble_code.dart';
+import 'package:app/repository/models/vehicle.dart';
+import 'package:app/repository/models/vehicle_trouble_code.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -8,7 +10,8 @@ part 'vehicle_fault_code_list_state.dart';
 
 class VehicleFaultCodeListBloc
     extends Bloc<VehicleFaultCodeEvent, VehicleFaultCodeListState> {
-  VehicleFaultCodeListBloc() : super(VehicleFaultCodeListState()) {
+      final Vehicle? vehicle;
+  VehicleFaultCodeListBloc({required this.vehicle}) : super(VehicleFaultCodeListState(vehicle: vehicle ?? Vehicle())) {
     on<VehicleFaultCodeFetch>(_onFaultCodeFetch);
   }
 
@@ -20,17 +23,17 @@ class VehicleFaultCodeListBloc
         final items = await _fetchItems();
         return emit(state.copyWith(
           status: VehicleFaultCodeListStatus.success,
-          faultCodes: items,
+          vehicleTroubleCodes: items,
           hasReachedMax: true,
         ));
       }
 
-      final items = await _fetchItems(state.faultCodes.length);
+      final items = await _fetchItems(state.vehicleTroubleCodes.length);
       emit(items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: VehicleFaultCodeListStatus.success,
-              faultCodes: List.of(state.faultCodes)..addAll(items),
+              vehicleTroubleCodes: List.of(state.vehicleTroubleCodes)..addAll(items),
               hasReachedMax: false,
             ));
     } catch (_) {
@@ -38,10 +41,11 @@ class VehicleFaultCodeListBloc
     }
   }
 
-    Future<List<TroubleCode>> _fetchItems([int startIndex = 0]) async {
-    QueryBuilder<TroubleCode> query = QueryBuilder<TroubleCode>(TroubleCode());
+    Future<List<VehicleTroubleCode>> _fetchItems([int startIndex = 0]) async {
+    QueryBuilder<VehicleTroubleCode> query = QueryBuilder<VehicleTroubleCode>(VehicleTroubleCode());
     query.setAmountToSkip(startIndex);
-    query.includeObject(['ProfileUserTypes', 'User']);
+    query.whereEqualTo('vehicle', vehicle );
+    query.includeObject(['troubleCode', 'troubleCodeType']);
     query.setLimit(20);
     return query.find();
   }

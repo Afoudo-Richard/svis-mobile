@@ -1,6 +1,7 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/vehicle_trouble_code.dart';
 import 'package:app/vehicle/fault_code/details/views/vehicle_fault_code_detail_page.dart';
 import 'package:app/vehicle/fault_code/list/bloc/vehicle_fault_code_list_bloc.dart';
 import 'package:flutter/material.dart';
@@ -8,17 +9,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class VehicleFaultCodesListPage extends StatelessWidget {
-  const VehicleFaultCodesListPage({Key? key}) : super(key: key);
+  const VehicleFaultCodesListPage({Key? key, required this.vehicle})
+      : super(key: key);
 
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => VehicleFaultCodesListPage());
+  final Vehicle? vehicle;
+  static Route route(Vehicle vehicle) {
+    return MaterialPageRoute<void>(
+        builder: (_) => VehicleFaultCodesListPage(
+              vehicle: vehicle,
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fault Codes (5)", style:TextStyle(color: kAppPrimaryColor)),
+        title:
+            Text("Fault Codes (5)", style: TextStyle(color: kAppPrimaryColor)),
         actions: [
           PopupMenuButton(
             iconSize: 35.0,
@@ -32,7 +39,8 @@ class VehicleFaultCodesListPage extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => VehicleFaultCodeListBloc()..add(VehicleFaultCodeFetch()),
+        create: (context) => VehicleFaultCodeListBloc(vehicle: vehicle)
+          ..add(VehicleFaultCodeFetch()),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -66,7 +74,8 @@ class _FaultListViewState extends State<FaultListView> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<VehicleFaultCodeListBloc>().add(VehicleFaultCodeFetch());
+    if (_isBottom)
+      context.read<VehicleFaultCodeListBloc>().add(VehicleFaultCodeFetch());
   }
 
   bool get _isBottom {
@@ -84,7 +93,7 @@ class _FaultListViewState extends State<FaultListView> {
           case VehicleFaultCodeListStatus.failure:
             return const Center(child: Text('failed to fetch fault codes'));
           case VehicleFaultCodeListStatus.success:
-            var items = state.faultCodes;
+            var items = state.vehicleTroubleCodes;
             if (items.isEmpty) {
               return const Center(child: Text('no fault codes'));
             }
@@ -104,10 +113,12 @@ class _FaultListViewState extends State<FaultListView> {
                     );
                   } else {
                     return _FaultCodeItem(
-                      item: items[index],
+                      item: items[index].troubleCode ?? TroubleCode(),
                       index: index,
-                      onTap: (){
-                        Navigator.of(context).push(VehicleFaultCodesDetailPage.route());
+                      onTap: () {
+                        Navigator.of(context).push(
+                            VehicleFaultCodesDetailPage.route(
+                                state.vehicle, items[index]));
                       },
                     );
                   }
@@ -238,7 +249,6 @@ class _FaultCodeItem extends StatelessWidget {
     required this.index,
     required this.item,
     required this.onTap,
-    
   }) : super(key: key);
 
   @override
@@ -261,7 +271,11 @@ class _FaultCodeItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.potentialSymptoms ?? "N/A"),
+                    Text(
+                      item.potentialSymptoms ?? "N/A",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     SizedBox(
                       height: 5.0,
                     ),
@@ -287,7 +301,9 @@ class _FaultCodeItem extends StatelessWidget {
             ),
             PopupMenuButton(
               padding: EdgeInsets.all(0.0),
-              child: Icon(Icons.more_vert,),
+              child: Icon(
+                Icons.more_vert,
+              ),
               itemBuilder: (context) => [
                 PopupMenuItem(
                   child: Text('Details'),

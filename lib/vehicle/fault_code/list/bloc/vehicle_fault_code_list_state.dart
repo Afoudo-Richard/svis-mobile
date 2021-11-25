@@ -1,35 +1,37 @@
 part of 'vehicle_fault_code_list_bloc.dart';
+
 enum VehicleFaultCodeListStatus { initial, success, failure }
 
 class VehicleFaultCodeListState extends Equatable {
-
-    final VehicleFaultCodeListStatus status;
-  final List<TroubleCode> faultCodes;
+  final Vehicle vehicle;
+  final VehicleFaultCodeListStatus status;
+  final List<VehicleTroubleCode> vehicleTroubleCodes;
   final bool hasReachedMax;
   final String searchText;
 
   const VehicleFaultCodeListState({
-        this.status = VehicleFaultCodeListStatus.initial,
-    this.faultCodes = const <TroubleCode>[],
+    required this.vehicle,
+    this.status = VehicleFaultCodeListStatus.initial,
+    this.vehicleTroubleCodes = const <VehicleTroubleCode>[],
     this.hasReachedMax = false,
     this.searchText = "",
   });
 
-      VehicleFaultCodeListState copyWith({
+  VehicleFaultCodeListState copyWith({
     VehicleFaultCodeListStatus? status,
-    List<TroubleCode>? faultCodes,
+    List<VehicleTroubleCode>? vehicleTroubleCodes,
     bool? hasReachedMax,
     String? searchText,
   }) {
     return VehicleFaultCodeListState(
+      vehicle: this.vehicle,
       status: status ?? this.status,
-      faultCodes: faultCodes ?? this.faultCodes,
+      vehicleTroubleCodes: vehicleTroubleCodes ?? this.vehicleTroubleCodes,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      searchText:  searchText ?? this.searchText,
+      searchText: searchText ?? this.searchText,
     );
   }
-  
-  @override
-  List<Object> get props => [status, faultCodes, hasReachedMax];
-}
 
+  @override
+  List<Object> get props => [vehicle,status, vehicleTroubleCodes, hasReachedMax];
+}

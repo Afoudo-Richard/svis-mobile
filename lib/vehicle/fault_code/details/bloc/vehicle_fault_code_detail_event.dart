@@ -5,4 +5,5 @@ abstract class VehicleFaultCodeDetailEvent extends Equatable {
 
   @override
   List<Object> get props => [];
+  
 }

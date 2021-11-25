@@ -1,1 +1,1 @@
-export 'view/vehicle_page.dart';
+export 'list/view/vehicle_page.dart';

@@ -1,3 +1,4 @@
+import 'package:app/repository/models/profile.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/vehicle.dart';
 import 'package:bloc/bloc.dart';
@@ -10,8 +11,8 @@ part 'vehicle_driver_assigned_state.dart';
 
 class VehicleDriverAssignedBloc
     extends Bloc<VehicleDriverAssignedEvent, VehicleDriverAssignedState> {
-      final User user;
-  VehicleDriverAssignedBloc(this.user) : super(VehicleDriverAssignedState()) {
+      ProfileUser? profile;
+  VehicleDriverAssignedBloc(this.profile): super(VehicleDriverAssignedState()) {
     on<VehicleDriverAssigedListFetched>(_onVehicleDriverAssigedListFetched);
   }
 
@@ -42,9 +43,9 @@ class VehicleDriverAssignedBloc
   }
 
   Future<List<ProfileUser>> _fetchItems([int startIndex = 0]) async {
-    QueryBuilder<Vehicle> query = QueryBuilder<Vehicle>(Vehicle());
+    QueryBuilder<ProfileUser> query = QueryBuilder<ProfileUser>(ProfileUser());
     query.setAmountToSkip(startIndex);
-    query.whereEqualTo('driver', user);
+    query.whereEqualTo('profile', profile!.profile);
     query.includeObject(['profile']);
     query.setLimit(20);
     return query.find();

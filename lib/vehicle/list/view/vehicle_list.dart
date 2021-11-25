@@ -4,7 +4,7 @@ import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
-import 'package:app/vehicle/bloc/vehicle_listing_bloc.dart';
+import 'package:app/vehicle/list/bloc/vehicle_listing_bloc.dart';
 import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -167,12 +167,13 @@ class _DriverItemState extends State<DriverItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: widget.onTap,
       child: InkWell(
         child: MultiSelectItem(
           isSelecting: widget.isSelecting,
           onSelected: widget.onSelected,
           child: GestureDetector(
-            onTap: widget.onTap,
+            
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10.0),
               decoration: BoxDecoration(

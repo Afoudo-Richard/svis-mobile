@@ -1,9 +1,9 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-const String kReminderCode = 'Reminder';
+const String kReminder = 'Reminder';
 
 class Reminder extends ParseObject implements ParseCloneable {
-  Reminder() : super(kReminderCode);
+  Reminder() : super(kReminder);
   Reminder.clone() : this();
 
   @override
