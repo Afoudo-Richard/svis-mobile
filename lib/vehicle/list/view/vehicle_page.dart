@@ -19,7 +19,7 @@ class VehiclePage extends StatelessWidget {
         if (state.status == AuthenticationStatus.authenticated) {
           return BlocProvider(
             create: (context) {
-              return VehicleListingBloc(state.user as User)
+              return VehicleListingBloc(state.profile)
                 ..add(VehicleListFetched());
             },
             child: VehicleList(),

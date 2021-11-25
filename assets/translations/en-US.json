@@ -26,6 +26,7 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
+    "deviceDissociationPrompt": "Last 5 digits",
     "deviceSerial": "Device Serial",
     "deviceSerialPrompt": "Enter device serial number",
     "password": "Password",
@@ -112,6 +113,11 @@
   "deviceAssociation": {
     "prompt": "In order to proceed, please enter the device serial number and click 'Submit'. A verification code will be sent to your email",
     "title": "Device Association"
+  },
+  "deviceDissociationForVehicle": "Device Dissociation - {}",
+  "deviceDissociation": {
+    "prompt": "In order to proceed, please enter the last 4 digits of the device serial number and click 'Submit'. A verification code will be sent to your email",
+    "title": "Device Dissociation"
   },
   "registrationDocuments": "Registration Documents",
   "svisCapabilityService": "SVIS Capability Service",

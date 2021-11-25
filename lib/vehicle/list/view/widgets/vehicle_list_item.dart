@@ -170,9 +170,17 @@ class _VehicleListItemState extends State<VehicleListItem> {
                           } else {
                             // TODO: Show error message.
                           }
-
                           break;
                         case VehicleListItemOptions.deassociateDevice:
+                          if (widget.vehicle?.objectId != null) {
+                            Navigator.of(context).push(
+                              DeviceDissociationPage.route(
+                                vehicle: widget.vehicle as Vehicle,
+                              ),
+                            );
+                          } else {
+                            // TODO: Show error message.
+                          }
                           break;
                         case VehicleListItemOptions.edit:
                           var vehicle = await Navigator.of(context).push(

@@ -6,6 +6,7 @@ import 'package:app/repository/models/models.dart';
 import 'package:app/vehicle/add/add.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
 import 'package:app/vehicle/device_association/device_association.dart';
+import 'package:app/vehicle/device_dissociation/view/view.dart';
 import 'package:app/vehicle/list/list.dart';
 import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
