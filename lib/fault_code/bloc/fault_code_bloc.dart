@@ -1,4 +1,5 @@
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/vehicle_trouble_code.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
@@ -14,7 +15,8 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 }
 
 class FaultCodeBloc extends Bloc<FaultCodeEvent, FaultCodeState> {
-  FaultCodeBloc() : super(FaultCodeState()) {
+  List<Vehicle> vehicles;
+  FaultCodeBloc(this.vehicles) : super(FaultCodeState(vehicles: vehicles)) {
     on<FaultCodeFetch>(_onFaultCodeFetch);
     on<TextChanged>(_onTextChanged, transformer: debounce(_duration));
   }
@@ -28,17 +30,17 @@ class FaultCodeBloc extends Bloc<FaultCodeEvent, FaultCodeState> {
         final items = await _fetchItems();
         return emit(state.copyWith(
           status: FaultCodeListStatus.success,
-          faultCodes: items,
+          vehicleTroubleCodes: items,
           hasReachedMax: true,
         ));
       }
 
-      final items = await _fetchItems(state.faultCodes.length);
+      final items = await _fetchItems(state.vehicleTroubleCodes.length);
       emit(items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
               status: FaultCodeListStatus.success,
-              faultCodes: List.of(state.faultCodes)..addAll(items),
+              vehicleTroubleCodes: List.of(state.vehicleTroubleCodes)..addAll(items),
               hasReachedMax: false,
             ));
     } catch (_) {
@@ -54,17 +56,27 @@ class FaultCodeBloc extends Bloc<FaultCodeEvent, FaultCodeState> {
     final searchTerm = event.text;
   }
 
-  Future<List<TroubleCode>> _fetchItems([int startIndex = 0]) async {
+  // Future<List<TroubleCode>> _fetchItems([int startIndex = 0]) async {
+  //   QueryBuilder<TroubleCode> query = QueryBuilder<TroubleCode>(TroubleCode());
+  //   query.setAmountToSkip(startIndex);
+  //   query.includeObject(['ProfileUserTypes', 'User']);
+  //   query.setLimit(20);
+  //   return query.find();
+  // }
+
+    Future<List<TroubleCode>> _Search(String searchTerm) async {
     QueryBuilder<TroubleCode> query = QueryBuilder<TroubleCode>(TroubleCode());
-    query.setAmountToSkip(startIndex);
     query.includeObject(['ProfileUserTypes', 'User']);
     query.setLimit(20);
     return query.find();
   }
 
-    Future<List<TroubleCode>> _Search(String searchTerm) async {
-    QueryBuilder<TroubleCode> query = QueryBuilder<TroubleCode>(TroubleCode());
-    query.includeObject(['ProfileUserTypes', 'User']);
+      Future<List<VehicleTroubleCode>> _fetchItems([int startIndex = 0]) async {
+    QueryBuilder<VehicleTroubleCode> query = QueryBuilder<VehicleTroubleCode>(VehicleTroubleCode());
+    query.setAmountToSkip(startIndex);
+    // ignore: unnecessary_statements
+    vehicles.length>0 ? query.whereContainedIn('vehicle', vehicles) : "";
+    query.includeObject(['troubleCode', 'troubleCodeType','vehicle']);
     query.setLimit(20);
     return query.find();
   }

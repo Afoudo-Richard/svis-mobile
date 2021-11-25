@@ -4,27 +4,29 @@ enum FaultCodeListStatus { initial, success, failure }
 
 class FaultCodeState extends Equatable {
   const FaultCodeState({
+    required this.vehicles,
     this.status = FaultCodeListStatus.initial,
-    this.faultCodes = const <TroubleCode>[],
+    this.vehicleTroubleCodes = const <VehicleTroubleCode>[],
     this.hasReachedMax = false,
     this.searchText = "",
   }
   );
-
+  final List<Vehicle> vehicles;
   final FaultCodeListStatus status;
-  final List<TroubleCode> faultCodes;
+  final List<VehicleTroubleCode> vehicleTroubleCodes;
   final bool hasReachedMax;
   final String searchText;
 
     FaultCodeState copyWith({
     FaultCodeListStatus? status,
-    List<TroubleCode>? faultCodes,
+    List<VehicleTroubleCode>? vehicleTroubleCodes,
     bool? hasReachedMax,
     String? searchText,
   }) {
     return FaultCodeState(
+      vehicles: this.vehicles,
       status: status ?? this.status,
-      faultCodes: faultCodes ?? this.faultCodes,
+      vehicleTroubleCodes: vehicleTroubleCodes ?? this.vehicleTroubleCodes,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       searchText:  searchText ?? this.searchText,
     );
@@ -33,7 +35,7 @@ class FaultCodeState extends Equatable {
 
   
   @override
-  List<Object> get props => [status, faultCodes, hasReachedMax];
+  List<Object> get props => [status, vehicleTroubleCodes, hasReachedMax];
 }
 
 

@@ -8,9 +8,8 @@ part 'vehicle_fault_code_detail_state.dart';
 
 class VehicleFaultCodeDetailBloc
     extends Bloc<VehicleFaultCodeDetailEvent, VehicleFaultCodeDetailState> {
-  Vehicle vehicle;
   VehicleTroubleCode vehicleTroubleCode;
-  VehicleFaultCodeDetailBloc({required this.vehicle, required this.vehicleTroubleCode})
+  VehicleFaultCodeDetailBloc({required this.vehicleTroubleCode})
       : super(VehicleFaultCodeDetailState(
-            vehicle: vehicle, vehicleTroubleCode: vehicleTroubleCode));
+             vehicleTroubleCode: vehicleTroubleCode));
 }

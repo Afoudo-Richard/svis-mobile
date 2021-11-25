@@ -1,6 +1,7 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/widgets/app_bottom_app_bar.dart';
+import 'package:app/fault_code/views/fault_code_page.dart';
 import 'package:app/reminder/list/views/reminder_page.dart';
 import 'package:app/repository/models/vehicle.dart';
 import 'package:app/vehicle/detail/bloc/vehicle_dashboard_bloc.dart';
@@ -527,7 +528,7 @@ class VehicleDashboardView extends StatelessWidget {
                               size: 16.0,
                             ),
                             onTap: () {
-                              Navigator.of(context).push(VehicleFaultCodesListPage.route(state.vehicle ?? Vehicle()));
+                              Navigator.of(context).push(FaultCodesPage.route(vehicles: [state.vehicle as Vehicle]));
                             },
                           ),
                           Divider(

@@ -8,17 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class VehicleFaultCodesDetailPage extends StatelessWidget {
-  Vehicle vehicle;
+
   VehicleTroubleCode vehicleTroubleCode;
 
   VehicleFaultCodesDetailPage(
-      {Key? key, required this.vehicle, required this.vehicleTroubleCode})
+      {Key? key,required this.vehicleTroubleCode})
       : super(key: key);
 
-  static Route route(Vehicle vehicle, VehicleTroubleCode vehicleTroubleCode) {
+  static Route route(VehicleTroubleCode vehicleTroubleCode) {
     return MaterialPageRoute<void>(
         builder: (_) => VehicleFaultCodesDetailPage(
-              vehicle: vehicle,
               vehicleTroubleCode: vehicleTroubleCode,
             ));
   }
@@ -56,7 +55,6 @@ class VehicleFaultCodesDetailPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => VehicleFaultCodeDetailBloc(
-          vehicle: vehicle,
           vehicleTroubleCode: vehicleTroubleCode,
         ),
         child: SingleChildScrollView(
@@ -89,7 +87,7 @@ class _VehicleFaultCodeDetailView extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: kAppAccent,
                     radius: 18,
-                    backgroundImage: NetworkImage(state.vehicle.photo?.url ??
+                    backgroundImage: NetworkImage(state.vehicleTroubleCode.vehicle?.photo?.url ??
                         'https://sumelongenterprise.com/sites/default/files/logo_0.png'),
                   ),
                 ),
@@ -99,7 +97,7 @@ class _VehicleFaultCodeDetailView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        state.vehicle.manufacturer ?? '',
+                        state.vehicleTroubleCode.vehicle?.manufacturer ?? '',
                         style: Theme.of(context)
                             .textTheme
                             .headline5!

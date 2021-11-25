@@ -2,15 +2,17 @@ import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/fault_code/bloc/fault_code_bloc.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/vehicle/fault_code/details/views/vehicle_fault_code_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class FaultCodesPage extends StatelessWidget {
-  const FaultCodesPage({Key? key}) : super(key: key);
-
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => FaultCodesPage());
+  const FaultCodesPage({Key? key, required this.vehicles}) : super(key: key);
+  final List<Vehicle> vehicles;
+  static Route route({List<Vehicle> vehicles = const <Vehicle>[]}) {
+    return MaterialPageRoute<void>(
+        builder: (_) => FaultCodesPage(vehicles: vehicles));
   }
 
   @override
@@ -31,12 +33,11 @@ class FaultCodesPage extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => FaultCodeBloc()..add(FaultCodeFetch()),
+        create: (context) => FaultCodeBloc(vehicles)..add(FaultCodeFetch()),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              
               _SearchBar(),
               FaultListView(),
             ],
@@ -84,7 +85,7 @@ class _FaultListViewState extends State<FaultListView> {
           case FaultCodeListStatus.failure:
             return const Center(child: Text('failed to fetch fault codes'));
           case FaultCodeListStatus.success:
-            var items = state.faultCodes;
+            var items = state.vehicleTroubleCodes;
             if (items.isEmpty) {
               return const Center(child: Text('no fault codes'));
             }
@@ -104,8 +105,12 @@ class _FaultListViewState extends State<FaultListView> {
                     );
                   } else {
                     return _FaultCodeItem(
-                      item: items[index],
+                      item: items[index].troubleCode ?? TroubleCode(),
                       index: index,
+                      onTap: () {
+                        Navigator.of(context).push(
+                            VehicleFaultCodesDetailPage.route(items[index]));
+                      },
                     );
                   }
                 },
@@ -228,82 +233,93 @@ class __SearchBarState extends State<_SearchBar> {
 class _FaultCodeItem extends StatelessWidget {
   final index;
   final TroubleCode item;
+  final VoidCallback onTap;
 
   const _FaultCodeItem({
     Key? key,
     required this.index,
     required this.item,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            item.code ?? "N/A",
-            style: TextStyle(color: index % 2 == 0 ? Colors.red : kAppAccent),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.potentialSymptoms ?? "N/A"),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "CE 223 DE",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(
-                        item.createdAt.toString().split(" ")[0],
-                        style: TextStyle(
-                            color: index % 2 == 0 ? Colors.red : kAppAccent),
-                      )
-                    ],
-                  )
-                ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.code ?? "N/A",
+              style: TextStyle(color: index % 2 == 0 ? Colors.red : kAppAccent),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.potentialSymptoms ?? "N/A",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "CE 223 DE",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          item.createdAt.toString().split(" ")[0],
+                          style: TextStyle(
+                              color: index % 2 == 0 ? Colors.red : kAppAccent),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          PopupMenuButton(
-            padding: EdgeInsets.all(0.0),
-            child: Icon(Icons.apps),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text('Details'),
-                value: 1,
+            PopupMenuButton(
+              padding: EdgeInsets.all(0.0),
+              child: Icon(
+                Icons.more_vert,
               ),
-              PopupMenuItem(
-                child: Text('Bets'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Auction'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Repairs'),
-                value: 1,
-              ),
-              PopupMenuItem(
-                child: Text('Reset'),
-                value: 1,
-              ),
-            ],
-          ),
-        ],
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: Text('Details'),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Text('Bets'),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Text('Auction'),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Text('Repairs'),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Text('Reset'),
+                  value: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

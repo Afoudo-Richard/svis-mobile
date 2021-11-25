@@ -116,9 +116,9 @@ class _FaultListViewState extends State<FaultListView> {
                       item: items[index].troubleCode ?? TroubleCode(),
                       index: index,
                       onTap: () {
-                        Navigator.of(context).push(
-                            VehicleFaultCodesDetailPage.route(
-                                state.vehicle, items[index]));
+                        // Navigator.of(context).push(
+                        //     VehicleFaultCodesDetailPage.route(
+                        //          items[index]));
                       },
                     );
                   }
