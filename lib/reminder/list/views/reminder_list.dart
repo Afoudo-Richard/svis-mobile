@@ -46,89 +46,8 @@ class _ReminderListState extends State<ReminderList> {
           BlocBuilder<ReminderListBloc, ReminderListState>(
               builder: (context, state) {
             return Container();
-            // return Row(
-            //   children: [
-            //     if (state.isSelectingController.isSelecting) ...[
-            //       IconButton(
-            //         icon: Icon(Icons.delete),
-            //         onPressed: () {
-            //           driversBloc.add(DeleteSelected());
-            //         },
-            //       ),
-            //       IconButton(
-            //         icon: Icon(Icons.event_note),
-            //         onPressed: () {},
-            //       ),
-            //     ],
-            //     IconButton(
-            //       onPressed: () async {
-            //         Navigator.of(context).push(AddVehiclePage.route());
-            //       },
-            //       icon: Icon(Icons.add),
-            //       iconSize: 35.0,
-            //     ),
-            //     PopupMenuButton<ReminderListOptions>(
-            //       iconSize: 35.0,
-            //       onSelected: (ReminderListOptions item) async {
-            //         switch (item) {
-            //           // case ReminderListOptions.assign:
-            //           //   await asignUsers(context, []);
-            //           //   break;
-            //           case ReminderListOptions.delete:
-            //             break;
-            //           default:
-            //         }
-            //       },
-            //       itemBuilder: (context) {
-            //         return ReminderListOptions.values.map((item) {
-            //           return PopupMenuItem(
-            //             child: Text(item.toString().split('.').last).tr(),
-            //             value: item,
-            //           );
-            //         }).toList();
-            //       },
-            //     ),
-            //   ],
-            // );
           })
         ],
-
-        // [
-        //   if (driversBloc.state.isSelectingController.isSelecting) ...[
-        //     IconButton(
-        //       icon: Icon(Icons.delete),
-        //       onPressed: () {
-        //         driversBloc.add(DeleteSelected());
-        //       },
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.event_note),
-        //       onPressed: () {},
-        //     ),
-        //   ] else
-        //     ...[],
-        //   PopupMenuButton<UserListOptions>(
-        //     iconSize: 35.0,
-        //     onSelected: (UserListOptions item) async {
-        //       switch (item) {
-        //         case UserListOptions.assign:
-        //           await asignUsers(context, []);
-        //           break;
-        //         case UserListOptions.delete:
-        //           break;
-        //         default:
-        //       }
-        //     },
-        //     itemBuilder: (context) {
-        //       return UserListOptions.values.map((item) {
-        //         return PopupMenuItem(
-        //           child: Text(item.toString().split('.').last).tr(),
-        //           value: item,
-        //         );
-        //       }).toList();
-        //     },
-        //   )
-        // ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -346,76 +265,77 @@ class __SearchBarState extends State<_SearchBar> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReminderListBloc, ReminderListState>(
       builder: (context, state) {
-        //if (state.status == ReminderListStatus.success) {
-        return Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    autocorrect: false,
-                    onChanged: (text) {
-                      _reminderBloc.add(
-                        TextChanged(text: text),
-                      );
-                    },
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.blue,
-                        size: 25.0,
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: _onClearTapped,
-                        child: const Icon(Icons.clear),
-                      ),
-                      hintText: "search".tr(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade400,
-                          width: 0.0,
+        if (state.status == ReminderListStatus.success) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _textController,
+                      autocorrect: false,
+                      onChanged: (text) {
+                        _reminderBloc.add(
+                          TextChanged(text: text),
+                        );
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.blue,
+                          size: 25.0,
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade400,
-                          width: 0.0,
+                        suffixIcon: GestureDetector(
+                          onTap: _onClearTapped,
+                          child: const Icon(Icons.clear),
+                        ),
+                        hintText: "search".tr(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                            width: 0.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade400,
+                            width: 0.0,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 5.0),
-                Container(
-                  child: IconButton(
-                    onPressed: () => {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => BlocProvider<ReminderListBloc>.value(
-                          value: context.read<ReminderListBloc>(),
-                          child: _FilterReminder(),
+                  SizedBox(width: 5.0),
+                  Container(
+                    child: IconButton(
+                      onPressed: () => {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) =>
+                              BlocProvider<ReminderListBloc>.value(
+                            value: context.read<ReminderListBloc>(),
+                            child: _FilterReminder(),
+                          ),
                         ),
-                      ),
-                    },
-                    icon: Icon(Icons.filter_alt),
-                    color: Colors.white,
-                    iconSize: 30.0,
-                  ),
-                  decoration: BoxDecoration(
-                      color: kAppPrimaryColor,
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                )
-              ],
-            ),
-            SizedBox(height: 20),
-            Divider(color: Colors.grey.shade400),
-          ],
-        );
-        // } else {
-        //   return Container();
-        // }
+                      },
+                      icon: Icon(Icons.filter_alt),
+                      color: Colors.white,
+                      iconSize: 30.0,
+                    ),
+                    decoration: BoxDecoration(
+                        color: kAppPrimaryColor,
+                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  )
+                ],
+              ),
+              SizedBox(height: 20),
+              Divider(color: Colors.grey.shade400),
+            ],
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -442,59 +362,82 @@ class _ReminderListingViewState extends State<ReminderListingView> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReminderListBloc, ReminderListState>(
         builder: (context, state) {
-      return Expanded(
-        child: ListView.separated(
-            itemCount: 3,
+      switch (state.status) {
+        case ReminderListStatus.failure:
+          return const Center(child: Text('failed to fetch reminders'));
+        case ReminderListStatus.success:
+          var items = state.reminders;
+          if (items.isEmpty) {
+            return const Center(child: Text('noReminder'));
+          }
+          return Expanded(
+              child: ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: state.hasReachedMax ? items.length : items.length + 1,
+            controller: _scrollController,
             separatorBuilder: (context, index) {
               return Divider(color: Colors.grey);
             },
-            itemBuilder: (context, int index) {
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Text(
-                  "Jan 03,\n 2021",
-                  style: TextStyle(
-                    color: index % 2 == 0 ? Colors.blue : Colors.red,
-                  ),
-                ),
-                title: Column(
-                  children: [
-                    Text(
-                      "Clutch check and Full service",
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.w500),
+            itemBuilder: (BuildContext context, int index) {
+              if (index >= items.length && !state.hasReachedMax) {
+                return CircularProgressIndicator();
+              } else {
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Text(
+                    //items[index].createdAt.toString().split(" ").first,
+                    "${items[index].createdAt!.month} ${items[index].createdAt!.day}, \n ${items[index].createdAt!.year}",
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      color: index % 2 == 0 ? Colors.blue : Colors.red,
                     ),
-                    Row(children: [
-                      Text(
-                        "CE 223 DE",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: kDeviceSize.width * 0.03,
-                      ),
-                      Text(
-                        "interim Service",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w200),
-                      ),
-                    ]),
-                  ],
-                ),
-                trailing: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                    color: index % 2 == 0 ? Colors.blue : Colors.red,
-                    child: Text(
-                      "overdue",
-                      style: TextStyle(color: Colors.white),
-                    ).tr(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis
                   ),
-                ),
-              );
-            }),
-      );
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        items[index].description ?? "N/A",
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
+                      ),
+                      Row(children: [
+                        Text(
+                          "CE 223 DE",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: kDeviceSize.width * 0.03,
+                        ),
+                        Text(
+                          "interim Service",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w200),
+                        ),
+                      ]),
+                    ],
+                  ),
+                  trailing: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                      color: index % 2 == 0 ? Colors.blue : Colors.red,
+                      child: Text(
+                        "overdue",
+                        style: TextStyle(color: Colors.white),
+                      ).tr(),
+                    ),
+                  ),
+                );
+              }
+            },
+          ));
+        default:
+          return const Center(child: CircularProgressIndicator());
+      }
     });
   }
 
@@ -644,11 +587,14 @@ class _FilterReminderState extends State<_FilterReminder> {
                   SizedBox(
                     width: kDeviceSize.width * 0.02,
                   ),
-
                   GestureDetector(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
-                      child: Text("overDue", style: TextStyle(fontSize: 12.0, color: kAppPrimaryColor)).tr(),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.0, vertical: 4.0),
+                      child: Text("overDue",
+                              style: TextStyle(
+                                  fontSize: 12.0, color: kAppPrimaryColor))
+                          .tr(),
                       decoration: BoxDecoration(
                         //color:kAppPrimaryColor,
                         border: Border.all(color: kAppPrimaryColor),
@@ -662,7 +608,9 @@ class _FilterReminderState extends State<_FilterReminder> {
             ],
           ),
         ),
-        SizedBox(height: kDeviceSize.height*0.03,),
+        SizedBox(
+          height: kDeviceSize.height * 0.03,
+        ),
         ClipRRect(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(6),

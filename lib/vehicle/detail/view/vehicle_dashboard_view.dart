@@ -579,7 +579,7 @@ class VehicleDashboardView extends StatelessWidget {
                               size: 16.0,
                             ),
                             onTap: () {
-                              Navigator.of(context).push(ReminderPage.route());
+                              Navigator.of(context).push(ReminderPage.route(state.vehicle));
                             },
                           ),
                         ],

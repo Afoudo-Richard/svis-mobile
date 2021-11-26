@@ -91,43 +91,6 @@ class _VehicleListState extends State<VehicleList> {
             );
           })
         ],
-
-        // [
-        //   if (driversBloc.state.isSelectingController.isSelecting) ...[
-        //     IconButton(
-        //       icon: Icon(Icons.delete),
-        //       onPressed: () {
-        //         driversBloc.add(DeleteSelected());
-        //       },
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.event_note),
-        //       onPressed: () {},
-        //     ),
-        //   ] else
-        //     ...[],
-        //   PopupMenuButton<UserListOptions>(
-        //     iconSize: 35.0,
-        //     onSelected: (UserListOptions item) async {
-        //       switch (item) {
-        //         case UserListOptions.assign:
-        //           await asignUsers(context, []);
-        //           break;
-        //         case UserListOptions.delete:
-        //           break;
-        //         default:
-        //       }
-        //     },
-        //     itemBuilder: (context) {
-        //       return UserListOptions.values.map((item) {
-        //         return PopupMenuItem(
-        //           child: Text(item.toString().split('.').last).tr(),
-        //           value: item,
-        //         );
-        //       }).toList();
-        //     },
-        //   )
-        // ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
