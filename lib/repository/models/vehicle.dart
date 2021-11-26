@@ -264,13 +264,13 @@ class Vehicle extends ParseObject
     set('bearerPhoneNumber', value);
   }
 
-  String? get timestamp {
+/*   String? get timestamp {
     return get('timestamp');
   }
 
   set timestamp(String? value) {
     set('timestamp', value);
-  }
+  } */
 
   //   Device? get device {
   //   return this.get('device');
@@ -392,6 +392,6 @@ class Vehicle extends ParseObject
         insurancePolicyNumber,
         licensePlate,
         bearerPhoneNumber,
-        timestamp,
+        // timestamp,
       ];
 }

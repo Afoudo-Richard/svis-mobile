@@ -6,3 +6,5 @@ abstract class VehicleDashboardEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchLastKnwonLocation extends VehicleDashboardEvent {}

@@ -45,6 +45,7 @@ registerParseServer() async {
     clientKey: 'somesecret',
     debug: true,
     autoSendSessionId: true,
+    liveQueryUrl: 'ws://parse-server-develop.cloud.sumelongenterprise.com/parse',
     coreStore: await CoreStoreSharedPrefsImp.getInstance(),
   );
   ParseCoreData().registerUserSubClass((username, password, emailAddress,
@@ -63,4 +64,5 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kTroubleCode, () => TroubleCode());
   ParseCoreData().registerSubClass(kVehicleGroup, () => VehicleGroup());
   ParseCoreData().registerSubClass(kDevice, () => Device());
+  ParseCoreData().registerSubClass(kTrack, () => Track());
 }

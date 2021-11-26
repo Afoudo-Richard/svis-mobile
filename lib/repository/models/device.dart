@@ -56,4 +56,12 @@ class Device extends ParseObject implements ParseCloneable {
   set bearerEmailAddress(String? value) {
     this.set('bearerEmailAddress', value);
   }
+
+  DateTime? get lastConnected {
+    return this.get('lastConnected');
+  }
+
+  set lastConnected(DateTime? value) {
+    this.set('lastConnected', value);
+  }
 }
