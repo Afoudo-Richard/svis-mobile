@@ -264,13 +264,13 @@ class Vehicle extends ParseObject
     set('bearerPhoneNumber', value);
   }
 
-  String? get timestamp {
+/*   String? get timestamp {
     return get('timestamp');
   }
 
   set timestamp(String? value) {
     set('timestamp', value);
-  }
+  } */
 
   //   Device? get device {
   //   return this.get('device');
@@ -328,6 +328,14 @@ class Vehicle extends ParseObject
     set('bodyType', value);
   }
 
+  String? get region {
+    return get('region');
+  }
+
+  set region(String? value) {
+    set('region', value);
+  }
+
   String? get registrationCountry {
     return get('registrationCountry');
   }
@@ -356,36 +364,36 @@ class Vehicle extends ParseObject
 
   @override
   List<Object?> get props => [
-        // objectId,
-        // geofence,
-        // countryCode,
-        // registrationCity,
-        // transmission,
-        // modelYear,
-        // updating,
-        // purchasedPrice,
-        // profile,
-        // model,
-        // mileage,
-        // name,
-        // user,
-        // trackDisplayColor,
-        // bearerName,
-        // secretKey,
-        // fuelType,
-        // currentMileage,
-        // manufacturer,
-        // photo,
-        // status,
-        // bearerAddress,
-        // vehicleGroup,
-        // licensePlateDateOfRegistration,
-        // achiveStatus,
-        // isPrivatmodus,
-        // registrationId,
-        // insurancePolicyNumber,
-        // licensePlate,
-        // bearerPhoneNumber,
+        objectId,
+        geofence,
+        countryCode,
+        registrationCity,
+        transmission,
+        modelYear,
+        updating,
+        purchasedPrice,
+        profile,
+        model,
+        mileage,
+        name,
+        user,
+        trackDisplayColor,
+        bearerName,
+        secretKey,
+        fuelType,
+        currentMileage,
+        manufacturer,
+        photo,
+        status,
+        bearerAddress,
+        vehicleGroup,
+        licensePlateDateOfRegistration,
+        achiveStatus,
+        isPrivatmodus,
+        registrationId,
+        insurancePolicyNumber,
+        licensePlate,
+        bearerPhoneNumber,
         // timestamp,
       ];
 }

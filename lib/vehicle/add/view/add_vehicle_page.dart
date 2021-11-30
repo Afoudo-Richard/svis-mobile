@@ -1,4 +1,5 @@
 import 'package:app/authentication/authentication.dart';
+import 'package:app/repository/models/vehicle.dart';
 import 'package:app/vehicle/add/add.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:formz/formz.dart';
 
 class AddVehiclePage extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => AddVehiclePage());
+  final Vehicle? item;
+
+  static Route route({Vehicle? item}) {
+    return MaterialPageRoute<void>(builder: (_) => AddVehiclePage(item: item));
   }
+
+  const AddVehiclePage({Key? key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,7 @@ class AddVehiclePage extends StatelessWidget {
                 create: (context) => AddVehicleBloc(
                   profile: state.profile,
                   email: state.user?.email,
+                  item: item,
                 ),
                 child: BlocListener<AddVehicleBloc, AddVehicleState>(
                   listener: (context, state) {
@@ -44,7 +50,7 @@ class AddVehiclePage extends StatelessWidget {
                           const SnackBar(
                               content: Text('Your Submission has been Saved')),
                         );
-                      Navigator.pop(context, state);
+                      Navigator.of(context).pop(state.submission.success);
                     }
                   },
                   child: BlocBuilder<AddVehicleBloc, AddVehicleState>(

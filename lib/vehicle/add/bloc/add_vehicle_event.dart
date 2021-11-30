@@ -19,6 +19,8 @@ class SkipDeviceAssociation extends AddVehicleEvent {}
 
 class SubmitVerificationCode extends AddVehicleEvent {}
 
+class ResendVerificationCode extends AddVehicleEvent {}
+
 class SubmitVehicleInformation extends AddVehicleEvent {}
 
 class SubmitRegistrationInformation extends AddVehicleEvent {}

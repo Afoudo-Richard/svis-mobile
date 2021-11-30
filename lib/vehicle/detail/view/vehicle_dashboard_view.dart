@@ -9,12 +9,12 @@ import 'package:app/vehicle/driver_assigned/views/vehicle_driver_assigned_page.d
 import 'package:app/vehicle/fault_code/list/view/vehicle_fault_code_list_page.dart';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:formz/formz.dart';
 
 enum VehicleDashboardOptions {
   AdvancedTracking,
@@ -132,7 +132,9 @@ class VehicleDashboardView extends StatelessWidget {
                                           fontSize: 14,
                                         ),
                                       ),
-                                      Text("Last checked-in 1 hour ago"),
+                                      Text(state.lastConnected
+                                              ?.toIso8601String() ??
+                                          'n/a'),
                                     ],
                                   ),
                                 ],
@@ -145,113 +147,7 @@ class VehicleDashboardView extends StatelessWidget {
                     SizedBox(
                       height: kDeviceSize.height * 0.02,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: kDeviceSize.height * 0.3,
-                      decoration: BoxDecoration(
-                        color: kAppPrimaryColor,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 55),
-                            child: FlutterMap(
-                              options: MapOptions(
-                                center: LatLng(51.5, -0.09),
-                                zoom: 13.0,
-                              ),
-                              layers: [
-                                TileLayerOptions(
-                                  urlTemplate:
-                                      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                  subdomains: ['a', 'b', 'c'],
-                                  attributionBuilder: (_) {
-                                    return Text("© OpenStreetMap contributors");
-                                  },
-                                ),
-                                MarkerLayerOptions(
-                                  markers: [
-                                    Marker(
-                                      width: 80.0,
-                                      height: 80.0,
-                                      point: LatLng(51.5, -0.09),
-                                      builder: (ctx) => Image.asset(
-                                          'assets/markers/online.png'),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 60.0,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5.0, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  MapItemProp(
-                                    name: "Status",
-                                    itemcolorStatus: true,
-                                    itemStatusName: "Disconnected",
-                                  ),
-                                  MapItemProp(
-                                    name: "Engine",
-                                    itemcolorStatus: false,
-                                    itemStatusName: "off",
-                                  ),
-                                  MapItemProp(
-                                    name: "State",
-                                    itemcolorStatus: true,
-                                    itemStatusName: "Towed",
-                                  ),
-                                  MapItemProp(
-                                    name: "Arduino",
-                                    itemcolorStatus: true,
-                                    itemStatusName: "off",
-                                  ),
-                                  MapItemProp(
-                                    name: "Immobilizer",
-                                    itemcolorStatus: true,
-                                    itemStatusName: "on",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 10,
-                            top: 10,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: kAppPrimaryColor,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Icon(
-                                  Icons.fullscreen,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    _VehicleMap(),
                     SizedBox(
                       height: kDeviceSize.height * 0.02,
                     ),
@@ -589,6 +485,134 @@ class VehicleDashboardView extends StatelessWidget {
                 )),
           ),
           bottomNavigationBar: AppBottomAppBar(),
+        );
+      },
+    );
+  }
+}
+
+class _VehicleMap extends StatelessWidget {
+  const _VehicleMap({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<VehicleDashboardBloc, VehicleDashboardState>(
+      builder: (context, state) {
+        return Container(
+          width: double.infinity,
+          height: kDeviceSize.height * 0.3,
+          decoration: BoxDecoration(
+            color: kAppPrimaryColor,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Stack(
+            children: [
+              (state.lastKnwon?.geoCoordinate != null &&
+                      (state.lastKnwonStatus?.isSubmissionSuccess ?? false))
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 55),
+                      child: FlutterMap(
+                        options: MapOptions(
+                          center: LatLng(
+                            state.lastKnwon!.geoCoordinate!.latitude,
+                            state.lastKnwon!.geoCoordinate!.longitude,
+                          ),
+                          zoom: 13.0,
+                        ),
+                        layers: [
+                          TileLayerOptions(
+                            urlTemplate:
+                                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            subdomains: ['a', 'b', 'c'],
+                            attributionBuilder: (_) {
+                              return Text("© OpenStreetMap contributors");
+                            },
+                          ),
+                          MarkerLayerOptions(
+                            markers: [
+                              Marker(
+                                width: 80.0,
+                                height: 80.0,
+                                point: LatLng(
+                                  state.lastKnwon!.geoCoordinate!.latitude,
+                                  state.lastKnwon!.geoCoordinate!.longitude,
+                                ),
+                                builder: (ctx) =>
+                                    Image.asset('assets/markers/online.png'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 60.0,
+                  padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      MapItemProp(
+                        name: "Status",
+                        itemcolorStatus: true,
+                        itemStatusName: "Disconnected",
+                      ),
+                      MapItemProp(
+                        name: "Engine",
+                        itemcolorStatus: false,
+                        itemStatusName: "off",
+                      ),
+                      MapItemProp(
+                        name: "State",
+                        itemcolorStatus: true,
+                        itemStatusName: "Towed",
+                      ),
+                      MapItemProp(
+                        name: "Arduino",
+                        itemcolorStatus: true,
+                        itemStatusName: "off",
+                      ),
+                      MapItemProp(
+                        name: "Immobilizer",
+                        itemcolorStatus: true,
+                        itemStatusName: "on",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 10,
+                top: 10,
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: kAppPrimaryColor,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Icon(
+                      Icons.fullscreen,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         );
       },
     );
