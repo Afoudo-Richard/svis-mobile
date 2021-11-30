@@ -1,6 +1,9 @@
 import 'package:app/repository/models/device.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:app/repository/models/trouble_code.dart';
+import 'package:app/repository/models/trouble_code_type.dart';
+import 'package:app/repository/models/vehicle_service_period.dart';
+import 'package:app/repository/models/vehicle_service_setup.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:app/app.dart';
@@ -65,4 +68,7 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kVehicleGroup, () => VehicleGroup());
   ParseCoreData().registerSubClass(kDevice, () => Device());
   ParseCoreData().registerSubClass(kTrack, () => Track());
+  ParseCoreData().registerSubClass(kTroubleCodeType, () => TroubleCodeType());
+  ParseCoreData().registerSubClass(kVehicleServiceSetup, () => VehicleServiceSetup());
+  ParseCoreData().registerSubClass(kVehicleServicePeriod, () => VehicleServicePeriod());
 }

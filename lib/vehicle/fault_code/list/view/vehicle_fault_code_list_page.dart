@@ -1,25 +1,31 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
-import 'package:app/fault_code/bloc/fault_code_bloc.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/vehicle_trouble_code.dart';
 import 'package:app/vehicle/fault_code/details/views/vehicle_fault_code_detail_page.dart';
+import 'package:app/vehicle/fault_code/list/bloc/vehicle_fault_code_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class FaultCodesPage extends StatelessWidget {
-  const FaultCodesPage({Key? key, required this.vehicles}) : super(key: key);
-  final List<Vehicle> vehicles;
-  static Route route({List<Vehicle> vehicles = const <Vehicle>[]}) {
+class VehicleFaultCodesListPage extends StatelessWidget {
+  const VehicleFaultCodesListPage({Key? key, required this.vehicle})
+      : super(key: key);
+
+  final Vehicle? vehicle;
+  static Route route(Vehicle vehicle) {
     return MaterialPageRoute<void>(
-        builder: (_) => FaultCodesPage(vehicles: vehicles));
+        builder: (_) => VehicleFaultCodesListPage(
+              vehicle: vehicle,
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fault Codes"),
+        title:
+            Text("Fault Codes (5)", style: TextStyle(color: kAppPrimaryColor)),
         actions: [
           PopupMenuButton(
             iconSize: 35.0,
@@ -33,7 +39,8 @@ class FaultCodesPage extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => FaultCodeBloc(vehicles)..add(FaultCodeFetch()),
+        create: (context) => VehicleFaultCodeListBloc(vehicle: vehicle)
+          ..add(VehicleFaultCodeFetch()),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -67,7 +74,8 @@ class _FaultListViewState extends State<FaultListView> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<FaultCodeBloc>().add(FaultCodeFetch());
+    if (_isBottom)
+      context.read<VehicleFaultCodeListBloc>().add(VehicleFaultCodeFetch());
   }
 
   bool get _isBottom {
@@ -79,12 +87,12 @@ class _FaultListViewState extends State<FaultListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FaultCodeBloc, FaultCodeState>(
+    return BlocBuilder<VehicleFaultCodeListBloc, VehicleFaultCodeListState>(
       builder: (context, state) {
         switch (state.status) {
-          case FaultCodeListStatus.failure:
+          case VehicleFaultCodeListStatus.failure:
             return const Center(child: Text('failed to fetch fault codes'));
-          case FaultCodeListStatus.success:
+          case VehicleFaultCodeListStatus.success:
             var items = state.vehicleTroubleCodes;
             if (items.isEmpty) {
               return const Center(child: Text('no fault codes'));
@@ -108,8 +116,9 @@ class _FaultListViewState extends State<FaultListView> {
                       item: items[index].troubleCode ?? TroubleCode(),
                       index: index,
                       onTap: () {
-                        Navigator.of(context).push(
-                            VehicleFaultCodesDetailPage.route(items[index]));
+                        // Navigator.of(context).push(
+                        //     VehicleFaultCodesDetailPage.route(
+                        //          items[index]));
                       },
                     );
                   }
@@ -140,12 +149,12 @@ class _SearchBar extends StatefulWidget {
 
 class __SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  late FaultCodeBloc _FaultCodeBloc;
+  late VehicleFaultCodeListBloc _VehicleFaultCodeListBloc;
 
   @override
   void initState() {
     super.initState();
-    _FaultCodeBloc = context.read<FaultCodeBloc>();
+    _VehicleFaultCodeListBloc = context.read<VehicleFaultCodeListBloc>();
   }
 
   @override
@@ -156,14 +165,14 @@ class __SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _FaultCodeBloc.add(const TextChanged(text: ''));
+    _VehicleFaultCodeListBloc.add(const TextChanged(text: ''));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FaultCodeBloc, FaultCodeState>(
+    return BlocBuilder<VehicleFaultCodeListBloc, VehicleFaultCodeListState>(
       builder: (context, state) {
-        if (state.status == FaultCodeListStatus.success) {
+        if (state.status == VehicleFaultCodeListStatus.success) {
           return Column(
             children: [
               Row(
@@ -173,7 +182,7 @@ class __SearchBarState extends State<_SearchBar> {
                       controller: _textController,
                       autocorrect: false,
                       onChanged: (text) {
-                        _FaultCodeBloc.add(
+                        _VehicleFaultCodeListBloc.add(
                           TextChanged(text: text),
                         );
                       },

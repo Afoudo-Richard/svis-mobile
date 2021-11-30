@@ -133,5 +133,17 @@
   },
   "assignDrivers": "Assign Drivers",
   "controlPanel": "Control Panel",
-  "reset": "Reset"
+  "reset": "Reset",
+  "date": "Date",
+  "from": "From",
+  "to": "To",
+  "status": "Status",
+  "dueSoon": "Due soon",
+  "overDue": "Overdue",
+  "apply": "Apply",
+  "dateAndStatus": "Date and status",
+  "dateOccured": "Date Occured",
+  "description": "Description",
+  "causes": "Causes",
+  "diagnosticManager": "Diagnostic Manager"
 }

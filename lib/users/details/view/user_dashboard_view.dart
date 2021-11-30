@@ -324,9 +324,6 @@ class UserDashboardView extends StatelessWidget {
                           onPressed: () => {
                             showDialog(
                               context: context,
-                              // builder: (BuildContext context) {
-                              //   return FilterAction();
-                              // }),
                               builder: (ctx) =>
                                   BlocProvider<DriverDashboardBloc>.value(
                                 value: context.read<DriverDashboardBloc>(),

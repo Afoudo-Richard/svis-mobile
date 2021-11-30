@@ -1,7 +1,13 @@
 import 'package:app/app.dart';
 import 'package:app/commons/colors.dart';
 import 'package:app/commons/widgets/app_bottom_app_bar.dart';
+import 'package:app/fault_code/views/fault_code_page.dart';
+import 'package:app/reminder/list/views/reminder_page.dart';
+import 'package:app/repository/models/vehicle.dart';
 import 'package:app/vehicle/detail/bloc/vehicle_dashboard_bloc.dart';
+import 'package:app/vehicle/driver_assigned/views/vehicle_driver_assigned_page.dart';
+import 'package:app/vehicle/fault_code/list/view/vehicle_fault_code_list_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -374,23 +380,6 @@ class VehicleDashboardView extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          // GestureDetector(
-                          //   child: Container(
-                          //     child: Row(
-                          //       children: [
-                          //         Row(
-                          //           children: [
-                          //             Icon(Icons.person),
-                          //             SizedBox(width: kDeviceSize.width*0.01),
-                          //             Text("Driver assigned"),
-
-                          //           ],
-                          //         )
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Row(
@@ -407,6 +396,9 @@ class VehicleDashboardView extends StatelessWidget {
                               Icons.arrow_forward_ios,
                               size: 16.0,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(VehicleDriverAssignedPage.route());
+                            },
                           ),
                           Divider(
                             color: kAppPrimaryColor,
@@ -431,6 +423,9 @@ class VehicleDashboardView extends StatelessWidget {
                               Icons.arrow_forward_ios,
                               size: 16.0,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(FaultCodesPage.route(vehicles: [state.vehicle as Vehicle]));
+                            },
                           ),
                           Divider(
                             color: kAppPrimaryColor,
@@ -479,6 +474,9 @@ class VehicleDashboardView extends StatelessWidget {
                               Icons.arrow_forward_ios,
                               size: 16.0,
                             ),
+                            onTap: () {
+                              Navigator.of(context).push(ReminderPage.route(state.vehicle));
+                            },
                           ),
                         ],
                       ),
