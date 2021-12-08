@@ -160,6 +160,38 @@ class _VehicleListItemState extends State<VehicleListItem> {
                       switch (item) {
                         case VehicleListItemOptions.delete:
                           break;
+                        case VehicleListItemOptions.associateDevice:
+                          if (widget.vehicle?.objectId != null) {
+                            Navigator.of(context).push(
+                              DeviceAssociationPage.route(
+                                vehicle: widget.vehicle as Vehicle,
+                              ),
+                            );
+                          } else {
+                            // TODO: Show error message.
+                          }
+                          break;
+                        case VehicleListItemOptions.deassociateDevice:
+                          if (widget.vehicle?.objectId != null) {
+                            Navigator.of(context).push(
+                              DeviceDissociationPage.route(
+                                vehicle: widget.vehicle as Vehicle,
+                              ),
+                            );
+                          } else {
+                            // TODO: Show error message.
+                          }
+                          break;
+                        case VehicleListItemOptions.edit:
+                          var vehicle = await Navigator.of(context).push(
+                            AddVehiclePage.route(item: widget.vehicle),
+                          );
+                          if (vehicle is Vehicle) {
+                            context
+                                .read<VehicleListingBloc>()
+                                .add(UpdateVehicleList(vehicle));
+                          }
+                          break;
                         default:
                       }
                     },

@@ -1,7 +1,7 @@
 import 'package:app/commons/colors.dart';
 // import 'package:app/drivers/view/drivers_page.dart';
 import 'package:app/home/home.dart';
-import 'package:app/vehicle/list/view/vehicle_page.dart';
+import 'package:app/vehicle/vehicle.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 

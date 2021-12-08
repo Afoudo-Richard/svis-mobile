@@ -9,4 +9,5 @@ export 'event_log.dart';
 export 'profile_user_group.dart';
 export 'trouble_code.dart';
 export 'vehicle_group.dart';
+export 'track.dart';
 export 'reminder.dart';

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/commons/commons.dart';
 import 'package:app/commons/forms/forms.dart';
 import 'package:app/repository/base/api_response.dart';
 import 'package:app/repository/models/device.dart';
@@ -10,24 +11,51 @@ import 'package:equatable/equatable.dart';
 import 'package:app/commons/formz.dart' as fz;
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:collection/collection.dart';
-import 'dart:math';
 
 part 'add_vehicle_event.dart';
 part 'add_vehicle_state.dart';
 
-String generateRandomString(int len) {
-  var r = Random();
-  return String.fromCharCodes(
-      List.generate(len, (index) => r.nextInt(33) + 89));
-}
-
 class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
   ProfileUser? profile;
+  Vehicle? vehicle;
 
-  AddVehicleBloc({this.profile, String? email})
-      : super(AddVehicleState(
-            verificationEmail:
-                Email.dirty(email ?? 'info@sumelongenterprise.com'))) {
+  AddVehicleBloc({this.profile, String? email, Vehicle? item})
+      : this.vehicle = item,
+        super(
+          item != null
+              ? AddVehicleState(
+                  pagestatus: SwitchPageStatus.vehicleInformation,
+                  verificationEmail:
+                      Email.dirty(email ?? 'info@sumelongenterprise.com'),
+                  name: Name.dirty(item.name ?? ''),
+                  vin: ValidVin.dirty(item.vin ?? ''),
+                  make: Name.dirty(item.make ?? ''),
+                  model: Name.dirty(item.model ?? ''),
+                  bodyType: Name.dirty(item.bodyType ?? ''),
+                  year: Name.dirty(item.modelYear ?? ''),
+                  transmission: Name.dirty(item.transmission ?? ''),
+                  fuelType: Name.dirty(item.fuelType ?? ''),
+                  vehicleGroup: ParseObjectItem.dirty(item.vehicleGroup),
+                  mileage: INumber.dirty(item.mileage.toString()),
+                  country: Name.dirty(item.registrationCountry ?? ''),
+                  region: OptionalName.dirty(item.region ?? ''),
+                  registrationId: Name.dirty(item.registrationId ?? ''),
+                  licenceNumber: Name.dirty(item.licensePlate ?? ''),
+                  registrationDate:
+                      IDateTime.dirty(item.licensePlateDateOfRegistration),
+                  expiryDate: IDateTime.dirty(item.licensePlateDateValidUntil),
+                  bearerName: Name.dirty(item.bearerName ?? ''),
+                  phoneNumber:
+                      PhoneNumber.dirty(item.bearerPhoneNumber.toString()),
+                  email: Email.dirty(item.bearerEmailAddress ?? ''),
+                  addressLine1: Name.dirty(item.bearerAddress ?? ''),
+                  addressLine2: Name.dirty(item.bearerAddress2 ?? ''),
+                )
+              : AddVehicleState(
+                  verificationEmail:
+                      Email.dirty(email ?? 'info@sumelongenterprise.com'),
+                ),
+        ) {
     on<VerificationPinChanged>(_onVerificationPinChanged);
     on<SerialNumberChanged>(_onSerialNumberChanged);
     on<ChangeEmailorPhone>(_onChangeEmailorPhone);
@@ -36,6 +64,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     on<SubmitDeviceAssociation>(_onSubmitDeviceAssociation);
     on<SkipDeviceAssociation>(_onSkipDeviceAssociation);
     on<SubmitVerificationCode>(_onSubmitVerificationCode);
+    on<ResendVerificationCode>(_onResendVerificationCode);
     on<SubmitVehicleInformation>(_onSubmitVehicleInformation);
     on<SubmitRegistrationInformation>(_onSubmitRegistrationInformation);
     on<CountryChanged>(_onCountryChanged);
@@ -182,6 +211,63 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     // emit(state.copyWith(pagestatus: SwitchPageStatus.vehicleInformation));
   }
 
+  Future<void> _onResendVerificationCode(
+    ResendVerificationCode event,
+    Emitter<AddVehicleState> emit,
+  ) async {
+    if (state.deviceSerialNumber.valid) {
+      emit(state.copyWith(
+        submission: fz.FormzSubmission.inProgress(),
+        editable: false,
+      ));
+      try {
+        var _iDevice = await _fetchDevice(state.deviceSerialNumber.value);
+        var _device = _iDevice?.firstOrNull;
+        if (_device != null) {
+          var _vehicle =
+              await _fetchVehicleIfExists(state.deviceSerialNumber.value);
+          if (_vehicle?.isEmpty ?? false) {
+            /// process device here
+            _device.bearerEmailAddress = state.verificationEmail.value;
+            _device.updating = true;
+            var _verificationCode = state.verificationCode;
+            _device.devicePin = _verificationCode;
+            await _device.update();
+            emit(
+              state.copyWith(
+                submission: fz.FormzSubmission.pure(),
+                verificationCode: _verificationCode,
+                editable: true,
+              ),
+            );
+          } else {
+            throw 'device is mapped';
+          }
+        } else {
+          throw 'device not found';
+        }
+      } catch (e) {
+        emit(
+          state.copyWith(
+            submission: fz.FormzSubmission.failure(
+              e.toString(),
+            ),
+            editable: true,
+          ),
+        );
+      }
+    } else {
+      emit(
+        state.copyWith(
+          submission: fz.FormzSubmission.failure(
+            'unable to process device',
+          ),
+          editable: true,
+        ),
+      );
+    }
+  }
+
   Future<void> _onSubmitVehicleInformation(
     SubmitVehicleInformation event,
     Emitter<AddVehicleState> emit,
@@ -205,7 +291,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
     Emitter<AddVehicleState> emit,
   ) async {
     emit(
-      state.copyWith(region: Name.dirty(event.value)),
+      state.copyWith(region: OptionalName.dirty(event.value)),
     );
   }
 
@@ -422,52 +508,81 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
         editable: false,
       ));
       try {
-        ApiResponse response = getApiResponse<Vehicle>(await (Vehicle()
-              ..name = state.name.value
-              ..vin = state.vin.value
-              ..make = state.make.value
-              ..set('manufacturer', state.make.value)
-              ..model = state.model.value
-              ..driver = await ParseUser.currentUser()
-              ..user = await ParseUser.currentUser()
-              ..bodyType = state.bodyType.value
-              ..modelYear = state.year.value
-              ..transmission = state.transmission.value
-              ..fuelType = state.fuelType.value
-              ..vehicleGroup = state.vehicleGroup.value != null
-                  ? state.vehicleGroup.value as VehicleGroup?
-                  : null
-              ..mileage = int.parse(state.mileage.value)
-              ..photo = state.image.value != null
-                  ? ParseFile(state.image.value)
-                  : null
-              ..profile = profile?.profile
-              ..countryCode = state.country.value
-              ..registrationCountry = state.country.value
-              // ..region=state.region.value
-              ..registrationId = state.registrationId.value
-              ..licensePlate = state.licenceNumber.value
-              ..licensePlateDateOfRegistration = state.registrationDate.value
-              ..licensePlateDateValidUntil = state.expiryDate.value
-              ..bearerName = state.bearerName.value
-              ..bearerPhoneNumber = int.parse(state.phoneNumber.value)
-              ..bearerEmailAddress = state.email.value
-              ..device = state.device
-              ..bearerAddress = state.addressLine1.value
-              ..bearerAddress2 = state.addressLine2.value)
-            .save());
-        await Future.delayed(const Duration(milliseconds: 5000), () {
-          emit(
-            state.copyWith(
-              submission: fz.FormzSubmission.success(),
-              editable: true,
-            ),
-          );
-        });
+        ApiResponse response = vehicle != null
+            ? getApiResponse<Vehicle>(await ((vehicle as Vehicle)
+                  ..name = state.name.value
+                  ..vin = state.vin.value
+                  ..make = state.make.value
+                  ..set('manufacturer', state.make.value)
+                  ..model = state.model.value
+                  ..driver = await ParseUser.currentUser()
+                  ..user = await ParseUser.currentUser()
+                  ..bodyType = state.bodyType.value
+                  ..modelYear = state.year.value
+                  ..transmission = state.transmission.value
+                  ..fuelType = state.fuelType.value
+                  ..vehicleGroup = state.vehicleGroup.value != null
+                      ? state.vehicleGroup.value as VehicleGroup?
+                      : null
+                  ..mileage = int.parse(state.mileage.value)
+                  ..photo = state.image.value != null
+                      ? ParseFile(state.image.value)
+                      : null
+                  ..profile = profile?.profile
+                  ..countryCode = state.country.value
+                  ..registrationCountry = state.country.value
+                  ..region = state.region.value
+                  ..registrationId = state.registrationId.value
+                  ..licensePlate = state.licenceNumber.value
+                  ..licensePlateDateOfRegistration =
+                      state.registrationDate.value
+                  ..licensePlateDateValidUntil = state.expiryDate.value
+                  ..bearerName = state.bearerName.value
+                  ..bearerPhoneNumber = int.parse(state.phoneNumber.value)
+                  ..bearerEmailAddress = state.email.value
+                  ..device = state.device
+                  ..bearerAddress = state.addressLine1.value
+                  ..bearerAddress2 = state.addressLine2.value)
+                .update())
+            : getApiResponse<Vehicle>(await (Vehicle()
+                  ..name = state.name.value
+                  ..vin = state.vin.value
+                  ..make = state.make.value
+                  ..set('manufacturer', state.make.value)
+                  ..model = state.model.value
+                  ..driver = await ParseUser.currentUser()
+                  ..user = await ParseUser.currentUser()
+                  ..bodyType = state.bodyType.value
+                  ..modelYear = state.year.value
+                  ..transmission = state.transmission.value
+                  ..fuelType = state.fuelType.value
+                  ..vehicleGroup = state.vehicleGroup.value != null
+                      ? state.vehicleGroup.value as VehicleGroup?
+                      : null
+                  ..mileage = int.parse(state.mileage.value)
+                  ..photo = state.image.value != null
+                      ? ParseFile(state.image.value)
+                      : null
+                  ..profile = profile?.profile
+                  ..countryCode = state.country.value
+                  ..registrationCountry = state.country.value
+                  ..region = state.region.value
+                  ..registrationId = state.registrationId.value
+                  ..licensePlate = state.licenceNumber.value
+                  ..licensePlateDateOfRegistration =
+                      state.registrationDate.value
+                  ..licensePlateDateValidUntil = state.expiryDate.value
+                  ..bearerName = state.bearerName.value
+                  ..bearerPhoneNumber = int.parse(state.phoneNumber.value)
+                  ..bearerEmailAddress = state.email.value
+                  ..device = state.device
+                  ..bearerAddress = state.addressLine1.value
+                  ..bearerAddress2 = state.addressLine2.value)
+                .save());
         if (response.success) {
           emit(
             state.copyWith(
-              submission: fz.FormzSubmission.success(),
+              submission: fz.FormzSubmission.success(success: response.result),
               editable: true,
             ),
           );

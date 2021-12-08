@@ -1,6 +1,5 @@
 import 'package:app/authentication/authentication.dart';
-import 'package:app/vehicle/list/bloc/vehicle_listing_bloc.dart';
-import 'package:app/vehicle/list/view/vehicle_list.dart';
+import 'package:app/vehicle/list/list.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +19,7 @@ class VehiclePage extends StatelessWidget {
         if (state.status == AuthenticationStatus.authenticated) {
           return BlocProvider(
             create: (context) {
-              return VehicleListingBloc(state.user as User)
+              return VehicleListingBloc(state.profile)
                 ..add(VehicleListFetched());
             },
             child: VehicleList(),

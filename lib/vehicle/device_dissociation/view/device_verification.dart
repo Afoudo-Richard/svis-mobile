@@ -1,17 +1,11 @@
-import 'package:app/app.dart';
-import 'package:app/commons/colors.dart';
-import 'package:app/vehicle/add/bloc/add_vehicle_bloc.dart';
-import 'package:app/commons/formz.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_localization/easy_localization.dart';
+part of 'device_dissociation_page.dart';
 
 class DeviceVerification extends StatelessWidget {
   const DeviceVerification({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddVehicleBloc, AddVehicleState>(
+    return BlocListener<DeviceDissociationBloc, DeviceDissociationState>(
       listener: deviceVerificationListenner,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,14 +22,14 @@ class DeviceVerification extends StatelessWidget {
           SizedBox(height: kDeviceSize.height * 0.2),
           _ResendVerificationCode(),
           SizedBox(height: kDeviceSize.height * 0.01),
-          _SubmitButton(),
+          _SubmitButtonDeviceVerification(),
         ],
       ),
     );
   }
 
   void deviceVerificationListenner(
-      BuildContext context, AddVehicleState state) {}
+      BuildContext context, DeviceDissociationState state) {}
 }
 
 class _ResendVerificationCode extends StatelessWidget {
@@ -45,7 +39,7 @@ class _ResendVerificationCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+    return BlocBuilder<DeviceDissociationBloc, DeviceDissociationState>(
       builder: (context, state) {
         return Align(
           child: TextButton(
@@ -53,7 +47,7 @@ class _ResendVerificationCode extends StatelessWidget {
                 ? null
                 : () {
                     context
-                        .read<AddVehicleBloc>()
+                        .read<DeviceDissociationBloc>()
                         .add(ResendVerificationCode());
                   },
             child: Text(
@@ -78,7 +72,7 @@ class _VerificationCodeInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+    return BlocBuilder<DeviceDissociationBloc, DeviceDissociationState>(
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +87,7 @@ class _VerificationCodeInput extends StatelessWidget {
             TextFormField(
               onChanged: (value) {
                 return context
-                    .read<AddVehicleBloc>()
+                    .read<DeviceDissociationBloc>()
                     .add(VerificationPinChanged(value));
               },
               decoration: InputDecoration(
@@ -108,14 +102,14 @@ class _VerificationCodeInput extends StatelessWidget {
   }
 }
 
-class _SubmitButton extends StatelessWidget {
-  const _SubmitButton({
+class _SubmitButtonDeviceVerification extends StatelessWidget {
+  const _SubmitButtonDeviceVerification({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddVehicleBloc, AddVehicleState>(
+    return BlocBuilder<DeviceDissociationBloc, DeviceDissociationState>(
       builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? Center(
@@ -131,7 +125,7 @@ class _SubmitButton extends StatelessWidget {
                   onPressed: state.verificationPinInputForm.isValid
                       ? () {
                           context
-                              .read<AddVehicleBloc>()
+                              .read<DeviceDissociationBloc>()
                               .add(SubmitVerificationCode());
                         }
                       : null,

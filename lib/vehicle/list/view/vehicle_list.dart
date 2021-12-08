@@ -3,8 +3,11 @@ import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/vehicle/add/add.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
-import 'package:app/vehicle/list/bloc/vehicle_listing_bloc.dart';
+import 'package:app/vehicle/device_association/device_association.dart';
+import 'package:app/vehicle/device_dissociation/view/view.dart';
+import 'package:app/vehicle/list/list.dart';
 import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +64,13 @@ class _VehicleListState extends State<VehicleList> {
                 ],
                 IconButton(
                   onPressed: () async {
-                    Navigator.of(context).push(AddVehiclePage.route());
+                    var vehicle = await Navigator.of(context)
+                        .push(AddVehiclePage.route());
+                    if (vehicle is Vehicle) {
+                      context
+                          .read<VehicleListingBloc>()
+                          .add(UpdateVehicleList(vehicle));
+                    }
                   },
                   icon: Icon(Icons.add),
                   iconSize: 35.0,
@@ -136,7 +145,7 @@ class _DriverItemState extends State<DriverItem> {
           isSelecting: widget.isSelecting,
           onSelected: widget.onSelected,
           child: GestureDetector(
-            
+
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 10.0),
               decoration: BoxDecoration(
@@ -452,8 +461,7 @@ class _VehicleListingViewState extends State<VehicleListingView> {
                           onTap: () {
                             if (!state.isSelectingController.isSelecting) {
                               Navigator.of(context).push(
-                                  UserProfilePage.route(
-                                      state.vehicles[index]));
+                                  UserProfilePage.route(state.vehicles[index]));
                             } else {
                               driversBloc.add(ItemSelected(index: index));
                               //state.isSelectingController.toggle(index);

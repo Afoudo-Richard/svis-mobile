@@ -4,10 +4,10 @@ abstract class VehicleListingEvent extends Equatable {
   const VehicleListingEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class VehicleListFetched extends VehicleListingEvent{}
+class VehicleListFetched extends VehicleListingEvent {}
 
 class TextChanged extends VehicleListingEvent {
   const TextChanged({required this.text});
@@ -17,7 +17,15 @@ class TextChanged extends VehicleListingEvent {
   List<Object> get props => [text];
 }
 
-class DeleteSelected extends VehicleListingEvent{}
+class UpdateVehicleList extends VehicleListingEvent {
+  const UpdateVehicleList(this.value);
+  final Vehicle? value;
+
+  @override
+  List<Object?> get props => [value];
+}
+
+class DeleteSelected extends VehicleListingEvent {}
 
 class ItemSelected extends VehicleListingEvent {
   const ItemSelected({required this.index});

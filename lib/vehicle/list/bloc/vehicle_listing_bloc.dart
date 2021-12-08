@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:app/commons/multi_select_item.dart';
+import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/vehicle.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:user_repository/user_repository.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:collection/collection.dart';
 
 part 'vehicle_listing_event.dart';
 part 'vehicle_listing_state.dart';
@@ -18,12 +21,13 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 
 class VehicleListingBloc
     extends Bloc<VehicleListingEvent, VehicleListingState> {
-  final User user;
+  final ProfileUser? profile;
 
-  VehicleListingBloc(this.user)
+  VehicleListingBloc(this.profile)
       : super(VehicleListingState(
             isSelectingController: MultiSelectController())) {
     on<VehicleListFetched>(_onVehiclesListFetched, transformer: droppable());
+    on<UpdateVehicleList>(_onUpdateVehicleList);
     on<TextChanged>(_onVehicleSearchChanged, transformer: debounce(_duration));
   }
 
@@ -61,7 +65,7 @@ class VehicleListingBloc
   Future<List<Vehicle>> _fetchItems([int startIndex = 0]) async {
     QueryBuilder<Vehicle> query = QueryBuilder<Vehicle>(Vehicle());
     query.setAmountToSkip(startIndex);
-    query.whereEqualTo('user', user);
+    query.whereEqualTo('profile', profile?.profile);
     query.includeObject(['profile', 'user']);
     query.setLimit(20);
     return query.find();
@@ -81,6 +85,27 @@ class VehicleListingBloc
     emit(state.copyWith(
       status: VehicleListStatus.success,
       vehicles: items,
+    ));
+  }
+
+  Future<void> _onUpdateVehicleList(
+    UpdateVehicleList event,
+    Emitter<VehicleListingState> emit,
+  ) async {
+    var vehicle = state.vehicles.firstWhereOrNull((element) {
+      return element.objectId == event.value?.objectId;
+    });
+    emit(state.copyWith(
+      status: VehicleListStatus.success,
+      vehicles: vehicle != null
+          ? (List.of(state.vehicles).map((element) {
+              if (element.objectId == event.value?.objectId) {
+                return event.value as Vehicle;
+              } else {
+                return element;
+              }
+            }).toList())
+          : (List.of(state.vehicles)..add(event.value as Vehicle)),
     ));
   }
 }

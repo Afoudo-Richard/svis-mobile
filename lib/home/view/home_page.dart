@@ -8,7 +8,7 @@ import 'package:app/profile/profile.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/user_profile/user_profile.dart';
 import 'package:app/users/users.dart';
-import 'package:app/vehicle/list/view/vehicle_page.dart';
+import 'package:app/vehicle/vehicle.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -694,7 +694,6 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     Divider(),
-
                     Row(
                       children: [
                         Expanded(
@@ -1043,7 +1042,6 @@ class SafetyScoreItem extends StatelessWidget {
     );
   }
 }
-
 
 class FilterAction extends StatefulWidget {
   const FilterAction({
