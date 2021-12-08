@@ -398,9 +398,6 @@ class HomePage extends StatelessWidget {
                       onPressed: () => {
                         showDialog(
                           context: context,
-                          // builder: (BuildContext context) {
-                          //   return FilterAction();
-                          // }),
                           builder: (ctx) =>
                               BlocProvider<DriverDashboardBloc>.value(
                             value: context.read<DriverDashboardBloc>(),
@@ -410,7 +407,7 @@ class HomePage extends StatelessWidget {
                       },
                       icon: Icon(Icons.filter_alt),
                       color: Colors.white,
-                      iconSize: 30.0,
+                      iconSize: 20.0,
                     ),
                     decoration: BoxDecoration(
                       color: kAppPrimaryColor,

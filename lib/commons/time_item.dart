@@ -13,7 +13,7 @@ class TimeItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 2.0),
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+        padding: EdgeInsets.symmetric(vertical: 9.0, horizontal: 10.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.0),
@@ -28,7 +28,7 @@ class TimeItem extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(color: Colors.blue[800], fontSize: 13.0),
+          style: TextStyle(color: Colors.blue[800], fontSize: 12.0),
         ),
       ),
     );
