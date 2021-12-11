@@ -14,6 +14,7 @@ part 'vehicle_listing_event.dart';
 part 'vehicle_listing_state.dart';
 
 const _duration = const Duration(milliseconds: 300);
+const _querylimit = 8;
 
 EventTransformer<Event> debounce<Event>(Duration duration) {
   return (events, mapper) => events.debounce(duration).switchMap(mapper);
@@ -35,16 +36,33 @@ class VehicleListingBloc
       VehicleListFetched event, Emitter<VehicleListingState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == VehicleListStatus.initial) {
+      if (state.status == VehicleListStatus.initial || state.status == VehicleListStatus.failure) {
+
+        if(state.status == VehicleListStatus.failure){
+          emit(state.copyWith(
+            status: VehicleListStatus.initial,
+          ));
+        }
+
         final items = await _fetchItems();
-        print(items);
+
+        if (items.length < _querylimit) {
+          return emit(state.copyWith(
+            status: VehicleListStatus.success,
+            vehicles: items,
+            vehiclesCopy: items,
+            hasReachedMax: true,
+          ));
+        }
+
         return emit(state.copyWith(
           status: VehicleListStatus.success,
           vehicles: items,
           vehiclesCopy: items,
-          hasReachedMax: true,
+          hasReachedMax: false,
         ));
       }
+
 
       final items = await _fetchItems(state.vehicles.length);
       print(items);
@@ -67,7 +85,7 @@ class VehicleListingBloc
     query.setAmountToSkip(startIndex);
     query.whereEqualTo('profile', profile?.profile);
     query.includeObject(['profile', 'user']);
-    query.setLimit(20);
+    query.setLimit(_querylimit);
     return query.find();
   }
 

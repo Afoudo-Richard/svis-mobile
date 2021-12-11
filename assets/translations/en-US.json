@@ -95,6 +95,7 @@
   "select": "Select",
   "delete": "Delete",
   "failedToFetchDrivers": "Failed to fetch drivers",
+  "failedToFetchVehicles": "Failed to fetch vehicles",
   "reload": "Reload",
   "noDrivers": "No drivers",
   "advanceTracking": "Advance tracking",

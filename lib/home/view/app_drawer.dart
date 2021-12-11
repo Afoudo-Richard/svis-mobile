@@ -115,6 +115,7 @@ class AppDrawer extends StatelessWidget {
                 ),
               ),
               Container(
+                padding: EdgeInsets.only(bottom: kDeviceSize.height*0.06),
                 child: Column(
                   children: [
                     ListTile(
@@ -229,23 +230,30 @@ class AppDrawer extends StatelessWidget {
                             .add(AuthenticationLogoutRequested());
                       },
                     ),
+                    
                   ],
                 ),
               ),
             ],
           ),
           Positioned(
-            bottom: 15,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () => {},
-                child: Text(
-                  'privacyPolicyAndTerms',
-                  style: TextStyle(fontSize: 12.0),
-                ).tr(),
+            child: GestureDetector(
+              onTap: (){
+                
+              },
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                height: kDeviceSize.height*0.05,
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    'privacyPolicyAndTerms',
+                    style: TextStyle(fontSize: 12.0),
+                  ).tr(),
+                ),
               ),
             ),
           )

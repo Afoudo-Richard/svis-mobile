@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserProfilePage extends StatelessWidget {
-  Vehicle? vehicle;
+class VehicleProfilePage extends StatelessWidget {
+  Vehicle vehicle;
   static Route route(Vehicle vehicle) {
-    return MaterialPageRoute<void>(builder: (_) => UserProfilePage(vehicle: vehicle,));
+    return MaterialPageRoute<void>(builder: (_) => VehicleProfilePage(vehicle: vehicle,));
   }
 
-  UserProfilePage({Key? key, required this.vehicle}) : super(key: key);
+  VehicleProfilePage({Key? key, required this.vehicle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

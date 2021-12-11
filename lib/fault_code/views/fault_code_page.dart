@@ -34,14 +34,14 @@ class FaultCodesPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) => FaultCodeBloc(vehicles)..add(FaultCodeFetch()),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              _SearchBar(),
-              FaultListView(),
-            ],
-          ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _SearchBar(),
+            ),
+            Expanded(child: FaultListView()),
+          ],
         ),
       ),
     );
@@ -89,39 +89,35 @@ class _FaultListViewState extends State<FaultListView> {
             if (items.isEmpty) {
               return const Center(child: Text('no fault codes'));
             }
-            return Expanded(
-              child: ListView.separated(
-                itemCount:
-                    state.hasReachedMax ? items.length : items.length + 1,
-                controller: _scrollController,
-                separatorBuilder: (context, index) {
-                  return Divider(color: Colors.grey);
-                },
-                itemBuilder: (context, index) {
-                  if (index >= items.length && !state.hasReachedMax) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: kDeviceSize.height * 0.4),
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return _FaultCodeItem(
-                      item: items[index].troubleCode ?? TroubleCode(),
-                      index: index,
-                      onTap: () {
-                        Navigator.of(context).push(
-                            VehicleFaultCodesDetailPage.route(items[index]));
-                      },
-                    );
-                  }
-                },
-              ),
+            return ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              itemCount:
+                  state.hasReachedMax ? items.length : items.length + 1,
+              controller: _scrollController,
+              separatorBuilder: (context, index) {
+                return Divider(color: Colors.grey);
+              },
+              itemBuilder: (context, index) {
+                if (index >= items.length && !state.hasReachedMax) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: kDeviceSize.height * 0.4),
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return _FaultCodeItem(
+                    item: items[index].troubleCode ?? TroubleCode(),
+                    index: index,
+                    onTap: () {
+                      Navigator.of(context).push(
+                          VehicleFaultCodesDetailPage.route(items[index]));
+                    },
+                  );
+                }
+              },
             );
           default:
-            return Padding(
-              padding: EdgeInsets.only(top: kDeviceSize.height * 0.4),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
         }
       },
@@ -218,7 +214,7 @@ class __SearchBarState extends State<_SearchBar> {
                   )
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Divider(color: Colors.grey.shade400),
             ],
           );

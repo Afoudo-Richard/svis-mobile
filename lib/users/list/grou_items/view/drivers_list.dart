@@ -95,53 +95,16 @@ class _DriversListState extends State<DriversList> {
             );
           })
         ],
-
-        // [
-        //   if (driversBloc.state.isSelectingController.isSelecting) ...[
-        //     IconButton(
-        //       icon: Icon(Icons.delete),
-        //       onPressed: () {
-        //         driversBloc.add(DeleteSelected());
-        //       },
-        //     ),
-        //     IconButton(
-        //       icon: Icon(Icons.event_note),
-        //       onPressed: () {},
-        //     ),
-        //   ] else
-        //     ...[],
-        //   PopupMenuButton<UserListOptions>(
-        //     iconSize: 35.0,
-        //     onSelected: (UserListOptions item) async {
-        //       switch (item) {
-        //         case UserListOptions.assign:
-        //           await asignUsers(context, []);
-        //           break;
-        //         case UserListOptions.delete:
-        //           break;
-        //         default:
-        //       }
-        //     },
-        //     itemBuilder: (context) {
-        //       return UserListOptions.values.map((item) {
-        //         return PopupMenuItem(
-        //           child: Text(item.toString().split('.').last).tr(),
-        //           value: item,
-        //         );
-        //       }).toList();
-        //     },
-        //   )
-        // ]
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
+      body: Column(
+        children: [
 
-            _SearchBar(),
-            DriverListingView(),
-          ],
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _SearchBar(),
+          ),
+          Expanded(child: DriverListingView()),
+        ],
       ),
     );
   }
@@ -466,51 +429,47 @@ class _DriverListingViewState extends State<DriverListingView> {
             );
           }
 
-          return Expanded(
-            child: ListView.separated(
-                itemCount: state.hasReachedMax
-                    ? state.drivers.length
-                    : state.drivers.length + 1,
-                controller: _scrollController,
-                separatorBuilder: (context, index) {
-                  return Divider(color: Colors.grey);
-                },
-                itemBuilder: (context, int index) {
-                  print(state.isSelectingController);
-                  return index >= state.drivers.length && !state.hasReachedMax
-                      ? BottomLoader()
-                      : UserListItem(
-                          isSelecting: state.isSelectingController.isSelecting,
-                          user: state.drivers[index],
-                          onSelected: () {
-                            driversBloc.add(ItemSelected(index: index));
-                            print("Selected $index");
-                            print(state.status);
-                            print(state.isSelectingController.selectedIndexes);
+          return ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+              itemCount: state.hasReachedMax
+                  ? state.drivers.length
+                  : state.drivers.length + 1,
+              controller: _scrollController,
+              separatorBuilder: (context, index) {
+                return Divider(color: Colors.grey);
+              },
+              itemBuilder: (context, int index) {
+                print(state.isSelectingController);
+                return index >= state.drivers.length && !state.hasReachedMax
+                    ? BottomLoader()
+                    : UserListItem(
+                        isSelecting: state.isSelectingController.isSelecting,
+                        user: state.drivers[index],
+                        onSelected: () {
+                          driversBloc.add(ItemSelected(index: index));
+                          print("Selected $index");
+                          print(state.status);
+                          print(state.isSelectingController.selectedIndexes);
 
-                            
-                          },
-                          onTap: () {
-                            if (!state.isSelectingController.isSelecting) {
-                              Navigator.of(context).push(
-                                  DriverDashboardPage.route(
-                                      state.drivers[index]));
-                            } else {
-                            driversBloc.add(ItemSelected(index: index));
-                              //state.isSelectingController.toggle(index);
-                            }
-                          },
-                          isSelected:
-                              state.isSelectingController.isSelected(index)
-                        );
-                }),
-          );
+                          
+                        },
+                        onTap: () {
+                          if (!state.isSelectingController.isSelecting) {
+                            Navigator.of(context).push(
+                                DriverDashboardPage.route(
+                                    state.drivers[index]));
+                          } else {
+                          driversBloc.add(ItemSelected(index: index));
+                            //state.isSelectingController.toggle(index);
+                          }
+                        },
+                        isSelected:
+                            state.isSelectingController.isSelected(index)
+                      );
+              });
         default:
-          return Padding(
-            padding: EdgeInsets.only(top: kDeviceSize.height * 0.4),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+          return const Center(
+            child: CircularProgressIndicator(),
           );
       }
     });

@@ -80,13 +80,13 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
     List list = event.index;
     print(list);
 
-    List drivers = list.map((e) => ParseObject("User")..set("objectId", e)).toList();
+    //List drivers = list.map((e) => ParseObject("User")..set("objectId", e)).toList();
 
 
     try {
       ApiResponse response = getApiResponse<Vehicle>(await((event.vehicle)!
-        //..set('drivers', list))
-        ..addRelation('drivers', drivers))
+        ..addRelation('drivers', list.map((o) => ParseObject('_User')..objectId = o)
+              .toList()))
         .update());
 
       if (response.success) {

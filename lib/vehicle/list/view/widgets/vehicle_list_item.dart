@@ -163,9 +163,14 @@ class _VehicleListItemState extends State<VehicleListItem> {
                             context: context,
                             builder: (ctx) => BlocProvider<UserListBloc>.value(
                               value: context.read<UserListBloc>(),
-                              child: AssignDriverDialog(vehicle: widget.vehicle),
+                              child:
+                                  AssignDriverDialog(vehicle: widget.vehicle),
                             ),
                           );
+                          break;
+                        case VehicleListItemOptions.viewProfile:
+                          Navigator.of(context).push(VehicleProfilePage.route(
+                              widget.vehicle as Vehicle));
                           break;
                         case VehicleListItemOptions.delete:
                           break;
@@ -273,7 +278,7 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
                     alignment: Alignment.centerLeft,
                     child: Icon(
                       Icons.more_vert,
-                      size: 15.0,
+                      size: 25.0,
                     ),
                   ),
                   itemBuilder: (context) => [
@@ -296,61 +301,28 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
             BlocBuilder<UserListBloc, UserListState>(
               builder: (context, state) {
                 List<ProfileUser> profileUsers = state.profileUsers;
-                return profileUsers.length > 0
-                    ? Column(
-                        children: [
-                          Container(
-                            height: kDeviceSize.height * 0.5,
-                            child: ListView.separated(
-                                itemCount: profileUsers.length,
-                                separatorBuilder: (context, index) {
-                                  return Divider(color: Colors.grey);
-                                },
-                                itemBuilder: (context, int index) {
-                                  return MultiSelectItem(
-                                    isSelecting: controller.isSelecting,
-                                    onSelected: () {
-                                      setState(() {
-                                        controller.toggle(profileUsers[index].objectId);
-                                      });
-                                    },
-                                    child: userItemMin(
-                                      profileUsers[index],
-                                      controller.isSelected(
-                                          profileUsers[index].objectId),
-                                    ),
-                                  );
-                                }),
-                          ),
-                          controller.isSelecting
-                              ? Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: kDeviceSize.width * 0.1),
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                      ),
-                                      onPressed: () {
-                                        //Navigator.of(context).push(PasswordUpdatePage.route());
 
-                                        userListBloc.add(AssignDrivers(
-                                            index: controller.selectedIndexes, vehicle: widget.vehicle));
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text('AssignDriver').tr(),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container(),
+                switch (state.status) {
+                  case UserListStatus.failure:
+                    return Column(
+                        children: [
+                          Center(
+                            child: Text("Failed to fetche users"),
+                          ),
+                          SizedBox(
+                            height: kDeviceSize.height * 0.02,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("close").tr())
                         ],
-                      )
-                    : Column(
+                      );
+                  case UserListStatus.success:
+                    var items = state.profileUsers;
+                    if (items.isEmpty) {
+                      return Column(
                         children: [
                           Center(
                             child: Text("No Driver"),
@@ -365,6 +337,65 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
                               child: Text("close").tr())
                         ],
                       );
+                    }
+                    return Column(
+                      children: [
+                        Container(
+                          height: kDeviceSize.height * 0.4,
+                          child: ListView.separated(
+                              itemCount: profileUsers.length,
+                              separatorBuilder: (context, index) {
+                                return Divider(color: Colors.grey);
+                              },
+                              itemBuilder: (context, int index) {
+                                return MultiSelectItem(
+                                  isSelecting: controller.isSelecting,
+                                  onSelected: () {
+                                    setState(() {
+                                      controller
+                                          .toggle(profileUsers[index].objectId);
+                                    });
+                                  },
+                                  child: userItemMin(
+                                    profileUsers[index],
+                                    controller.isSelected(
+                                        profileUsers[index].objectId),
+                                  ),
+                                );
+                              }),
+                        ),
+                        controller.isSelecting
+                            ? Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: kDeviceSize.width * 0.1),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      elevation: MaterialStateProperty.all(0),
+                                    ),
+                                    onPressed: () {
+                                      //Navigator.of(context).push(PasswordUpdatePage.route());
+                                      print(controller.selectedIndexes);
+                                      userListBloc.add(AssignDrivers(
+                                          index: controller.selectedIndexes,
+                                          vehicle: widget.vehicle));
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('AssignDriver').tr(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    );
+                  default:
+                    return const Center(child: CircularProgressIndicator());
+                }
               },
             ),
           ],
@@ -514,194 +545,5 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
         ),
       ),
     );
-    // return ListTile(
-    //   horizontalTitleGap: 2.0,
-    //   contentPadding: EdgeInsets.zero,
-    //   leading: SizedBox(
-    //     width: kDeviceSize.width*0.2,
-    //     child: Stack(
-    //       children: [
-    //         CircleAvatar(
-    //           backgroundImage: AssetImage("assets/images/user.png"),
-    //           backgroundColor: kAppPrimaryColor,
-    //           radius: 15.0,
-    //         ),
-    //         isSelected
-    //             ? CircleAvatar(
-    //                 backgroundColor: kAppPrimaryColor.withOpacity(0.5),
-    //                 radius: 15.0,
-    //                 child: Icon(Icons.check_sharp),
-    //               )
-    //             : Container(),
-    //       ],
-    //     ),
-    //   ),
-    //   title: Column(
-    //     mainAxisSize: MainAxisSize.min,
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Text(
-    //         "Richard Afoudo",
-    //         style: TextStyle(
-    //           fontWeight: FontWeight.w500,
-    //           fontSize: 11,
-    //         ),
-    //       ),
-    //       Row(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Container(
-    //             margin: EdgeInsets.only(top: 4.0, right: 2.0),
-    //             height: kDeviceSize.height * 0.006,
-    //             width: kDeviceSize.height * 0.006,
-    //             decoration: BoxDecoration(
-    //               shape: BoxShape.circle,
-    //               color: true ? Colors.blue : Colors.red,
-    //             ),
-    //           ),
-    //           Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             mainAxisAlignment: MainAxisAlignment.start,
-    //             children: [
-    //               Text(
-    //                 true ? "Active" : "Inactive",
-    //                 style: TextStyle(
-    //                   fontSize: 6,
-    //                 ),
-    //               ),
-    //               Text(
-    //                 "Role:Admin | Group:Operations",
-    //                 style: TextStyle(
-    //                   fontSize: 6,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
-    // return ListTile(
-    //   horizontalTitleGap: 2.0,
-    //   contentPadding: EdgeInsets.zero,
-    //   leading: Stack(
-    //     children: [
-    //       CircleAvatar(
-    //         backgroundImage: AssetImage("assets/images/user.png"),
-    //         backgroundColor: kAppPrimaryColor,
-    //         radius: 15.0,
-    //       ),
-    //       isSelected
-    //           ? CircleAvatar(
-    //               backgroundColor: kAppPrimaryColor.withOpacity(0.5),
-    //               radius: 15.0,
-    //               child: Icon(Icons.check_sharp),
-    //             )
-    //           : Container(),
-    //     ],
-    //   ),
-    //   title: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Text(
-    //         "Richard Afoudo",
-    //         style: TextStyle(
-    //           fontWeight: FontWeight.w500,
-    //           fontSize: 11,
-    //         ),
-    //       ),
-    //       Row(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Container(
-    //             margin: EdgeInsets.only(top: 4.0, right: 2.0),
-    //             height: kDeviceSize.height * 0.006,
-    //             width: kDeviceSize.height * 0.006,
-    //             decoration: BoxDecoration(
-    //               shape: BoxShape.circle,
-    //               color: true ? Colors.blue : Colors.red,
-    //             ),
-    //           ),
-    //           Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             mainAxisAlignment: MainAxisAlignment.start,
-    //             children: [
-    //               Text(
-    //                 true ? "Active" : "Inactive",
-    //                 style: TextStyle(
-    //                   fontSize: 6,
-    //                 ),
-    //               ),
-    //               Text(
-    //                 "Role:Admin | Group:Operations",
-    //                 style: TextStyle(
-    //                   fontSize: 6,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    //   trailing: Row(
-    //     mainAxisSize: MainAxisSize.min,
-    //     children: [
-    //       Column(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Row(
-    //             crossAxisAlignment: CrossAxisAlignment.end,
-    //             children: [
-    //               Text(
-    //                 "84%",
-    //                 style: TextStyle(
-    //                   fontWeight: FontWeight.w500,
-    //                   fontSize: 10,
-    //                 ),
-    //               ),
-    //               Icon(
-    //                 true ? Icons.expand_less : Icons.expand_more,
-    //                 color: true ? Colors.green : Colors.red,
-    //               ),
-    //             ],
-    //           ),
-    //           Text(
-    //             "Last 24hrs",
-    //             style: TextStyle(
-    //               fontSize: 6,
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //       SizedBox(
-    //         width: kDeviceSize.width * 0.04,
-    //       ),
-    //       PopupMenuButton<UserListItemOptions>(
-    //         padding: EdgeInsets.all(0.0),
-    //         child: Icon(
-    //           Icons.more_vert,
-    //           size: 15,
-    //         ),
-    //         onSelected: (UserListItemOptions item) async {
-    //           switch (item) {
-    //             case UserListItemOptions.delete:
-    //               break;
-    //             default:
-    //           }
-    //         },
-    //         itemBuilder: (context) {
-    //           return UserListItemOptions.values.map((item) {
-    //             return PopupMenuItem(
-    //               child: Text(item.toString().split('.').last).tr(),
-    //               value: item,
-    //             );
-    //           }).toList();
-    //         },
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

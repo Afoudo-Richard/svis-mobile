@@ -395,6 +395,5 @@ class Vehicle extends ParseObject
         licensePlate,
         bearerPhoneNumber,
         drivers
-        // timestamp,
       ];
 }
