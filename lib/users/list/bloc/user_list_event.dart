@@ -8,3 +8,12 @@ abstract class UserListEvent extends Equatable {
 }
 
 class UserListFetched extends UserListEvent {}
+
+class AssignDrivers extends UserListEvent {
+  const AssignDrivers({required this.index, required this.vehicle});
+  final List index;
+  final Vehicle? vehicle;
+
+  @override
+  List<Object> get props => [index];
+}

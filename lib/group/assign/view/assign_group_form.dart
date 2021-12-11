@@ -2,19 +2,15 @@ import 'package:app/app.dart';
 import 'package:app/commons/formz.dart';
 import 'package:app/group/assign/bloc/assign_group_bloc.dart';
 import 'package:app/group/bloc/groups_bloc.dart';
-import 'package:app/repository/models/group.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/profile_user_group.dart';
-import 'package:app/repository/models/svis_role.dart';
-import 'package:app/role/assign/bloc/assign_role_bloc.dart';
-import 'package:app/role/bloc/role_bloc.dart';
-import 'package:app/users/list/grou_items/view/drivers_list.dart';
 import 'package:app/users/list/user_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:app/commons/user_list_item.dart';
 
 class AssignGroupsForm extends StatelessWidget {
   const AssignGroupsForm({

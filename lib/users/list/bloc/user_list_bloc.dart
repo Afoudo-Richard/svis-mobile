@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:app/repository/base/api_response.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/profile_user_types.dart';
+import 'package:app/repository/models/vehicle.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
@@ -24,6 +26,7 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
 
   UserListBloc(this.profile) : super(UserListState()) {
     on<UserListFetched>(_onUserListFetched, transformer: droppable());
+    on<AssignDrivers>(_onAssignDrivers);
   }
   void _onUserListFetched(
       UserListFetched event, Emitter<UserListState> emit) async {
@@ -71,5 +74,28 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
     query.includeObject(['ProfileUserTypes', 'User']);
     query.setLimit(20);
     return query.find();
+  }
+
+  void _onAssignDrivers(AssignDrivers event, Emitter<UserListState> emit) async {
+    List list = event.index;
+    print(list);
+
+    List drivers = list.map((e) => ParseObject("User")..set("objectId", e)).toList();
+
+
+    try {
+      ApiResponse response = getApiResponse<Vehicle>(await((event.vehicle)!
+        //..set('drivers', list))
+        ..addRelation('drivers', drivers))
+        .update());
+
+      if (response.success) {
+        print("successfully assigned drivers");
+      } else {
+        print("could not assign drivers");
+      }
+    } catch (error) {
+      print("An error occurred");
+    }
   }
 }

@@ -4,14 +4,14 @@ import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
 import 'package:app/repository/models/profile_user.dart';
-import 'package:app/repository/models/profile_user_types.dart';
 import 'package:app/users/list/grou_items/user_group_items.dart';
 import 'package:app/users/list/grou_items/view/widgets/assign_users.dart';
-import 'package:app/users/users.dart';
 import 'package:app/vehicle/driver_assigned/bloc/vehicle_driver_assigned_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:app/commons/user_list_item.dart';
+
 
 enum VehicleDriverAssignedListOptions { remove, delete, achieve }
 

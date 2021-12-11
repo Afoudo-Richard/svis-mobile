@@ -1,4 +1,13 @@
-part of '../drivers_list.dart';
+import 'package:app/app.dart';
+import 'package:app/commons/colors.dart';
+import 'package:app/repository/models/profile_user.dart';
+import 'package:app/users/details/view/driver_dashboard_page.dart';
+import 'package:app/users/list/grou_items/view/widgets/assign_users.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+
+import 'multi_select_item.dart';
+
 
 enum UserListItemOptions {
   view,
@@ -43,75 +52,81 @@ class _UserListItemState extends State<UserListItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/images/user.png"),
-                            backgroundColor: kAppPrimaryColor,
-                            radius: 25.0,
-                          ),
-                          widget.isSelected
-                              ? CircleAvatar(
-                                  backgroundColor:
-                                      kAppPrimaryColor.withOpacity(0.5),
-                                  radius: 25.0,
-                                  child: Icon(Icons.check_sharp),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.user?.user?.fullName ?? "",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("assets/images/user.png"),
+                              backgroundColor: kAppPrimaryColor,
+                              radius: 25.0,
                             ),
-                          ),
-                          Row(
+                            widget.isSelected
+                                ? CircleAvatar(
+                                    backgroundColor:
+                                        kAppPrimaryColor.withOpacity(0.5),
+                                    radius: 25.0,
+                                    child: Icon(Icons.check_sharp),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 4.0, right: 2.0),
-                                height: 7.0,
-                                width: 7.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: true ? Colors.blue : Colors.red,
+                              Text(
+                                widget.user?.user?.fullName ?? "",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
                                 ),
                               ),
-                              Column(
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    true ? "Active" : "Inactive",
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                  Container(
+                                    margin: EdgeInsets.only(top: 4.0, right: 2.0),
+                                    height: 7.0,
+                                    width: 7.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: true ? Colors.blue : Colors.red,
                                     ),
                                   ),
-                                  Text(
-                                    "Role:Admin | Group:Operations",
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                    ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        true ? "Active" : "Inactive",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Role:Admin | Group:Operations",
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
+                  SizedBox(width: kDeviceSize.width*0.03,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -122,12 +137,13 @@ class _UserListItemState extends State<UserListItem> {
                             "84%",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 16,
                             ),
                           ),
                           Icon(
                             true ? Icons.expand_less : Icons.expand_more,
                             color: true ? Colors.green : Colors.red,
+                            size: 20,
                           ),
                         ],
                       ),
@@ -139,6 +155,7 @@ class _UserListItemState extends State<UserListItem> {
                       ),
                     ],
                   ),
+                  SizedBox(width: kDeviceSize.width*0.05,),
                   PopupMenuButton<UserListItemOptions>(
                     padding: EdgeInsets.all(0.0),
                     child: Icon(Icons.more_vert),

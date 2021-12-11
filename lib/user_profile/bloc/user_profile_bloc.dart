@@ -240,7 +240,6 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     UserProfileEvent event,
     Emitter<UserProfileState> emit,
   ) async {
-    print(state.status.isValidated);
     if (state.status.isValidated) {
       emit(
         state.copyWith(
@@ -249,10 +248,8 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
       );
 
       try {
-        print("Is trying to update");
         ParseFile profileImage = ParseFile(state.profile.value);
-        //profileImage.save();
-        print(state.profile.value.toString());
+        
         ApiResponse response =
             getApiResponse<User>(await ((await ParseUser.currentUser() as User)
                   ..firstName = state.firstName.value

@@ -34,3 +34,5 @@ class ItemSelected extends VehicleListingEvent {
   @override
   List<Object> get props => [index];
 }
+
+

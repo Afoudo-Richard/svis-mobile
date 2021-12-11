@@ -94,7 +94,7 @@ class Vehicle extends ParseObject
 
   set driver(User? value) {
     set('driver', value);
-  }
+  } 
 
   int? get mileage {
     return get('Mileage');
@@ -394,6 +394,7 @@ class Vehicle extends ParseObject
         insurancePolicyNumber,
         licensePlate,
         bearerPhoneNumber,
+        drivers
         // timestamp,
       ];
 }

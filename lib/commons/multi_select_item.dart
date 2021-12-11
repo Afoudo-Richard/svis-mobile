@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class MultiSelectController extends Equatable {
-  List<int> selectedIndexes = [];
+  List selectedIndexes = [];
   bool isSelecting = false;
   bool disableEditingWhenNoneSelected = true;
   int listLength = 0;
@@ -15,7 +15,7 @@ class MultiSelectController extends Equatable {
   }
 
   /// Returns true if the id is selected
-  bool isSelected(int i) {
+  bool isSelected(i) {
     return selectedIndexes.contains(i);
   }
 
@@ -45,7 +45,7 @@ class MultiSelectController extends Equatable {
   }
 
   /// Toggle at index
-  void toggle(int index) {
+  void toggle(index) {
     if (selectedIndexes.contains(index)) {
       selectedIndexes.remove(index);
     } else {

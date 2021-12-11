@@ -3,6 +3,7 @@ import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/users/list/bloc/user_list_bloc.dart';
 import 'package:app/vehicle/add/add.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
 import 'package:app/vehicle/device_association/device_association.dart';
@@ -12,6 +13,8 @@ import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:app/commons/user_list_item.dart';
+
 
 part 'widgets/vehicle_list_item.dart';
 
@@ -454,9 +457,7 @@ class _VehicleListingViewState extends State<VehicleListingView> {
                           vehicle: state.vehicles[index],
                           onSelected: () {
                             driversBloc.add(ItemSelected(index: index));
-                            print("Selected $index");
-                            print(state.status);
-                            print(state.isSelectingController.selectedIndexes);
+                            
                           },
                           onTap: () {
                             if (!state.isSelectingController.isSelecting) {
