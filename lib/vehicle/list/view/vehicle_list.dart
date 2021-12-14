@@ -33,10 +33,13 @@ class VehicleList extends StatefulWidget {
 
 class _VehicleListState extends State<VehicleList> {
   late VehicleListingBloc vehiclesBloc;
+  final _scrollController = ScrollController();
   MultiSelectController controller = new MultiSelectController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     vehiclesBloc = context.read<VehicleListingBloc>();
     controller.disableEditingWhenNoneSelected = true;
     controller.set(vehiclesBloc.state.vehicles.length);
@@ -48,60 +51,58 @@ class _VehicleListState extends State<VehicleList> {
       appBar: AppBar(
         title: Text('vehicle').tr(),
         actions: [
-          BlocBuilder<VehicleListingBloc, VehicleListingState>(
-              builder: (context, state) {
-            print(state.isSelectingController.isSelecting);
-            return Row(
-              children: [
-                if (state.isSelectingController.isSelecting) ...[
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      vehiclesBloc.add(DeleteSelected());
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.event_note),
-                    onPressed: () {},
-                  ),
-                ],
+          Row(
+            children: [
+              if (controller.isSelecting) ...[
                 IconButton(
-                  onPressed: () async {
-                    var vehicle = await Navigator.of(context)
-                        .push(AddVehiclePage.route());
-                    if (vehicle is Vehicle) {
-                      context
-                          .read<VehicleListingBloc>()
-                          .add(UpdateVehicleList(vehicle));
-                    }
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    vehiclesBloc.add(DeleteSelected());
                   },
-                  icon: Icon(Icons.add),
-                  iconSize: 35.0,
                 ),
-                PopupMenuButton<VehicleListOptions>(
-                  iconSize: 35.0,
-                  onSelected: (VehicleListOptions item) async {
-                    switch (item) {
-                      // case VehicleListOptions.assign:
-                      //   await asignUsers(context, []);
-                      //   break;
-                      case VehicleListOptions.delete:
-                        break;
-                      default:
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return VehicleListOptions.values.map((item) {
-                      return PopupMenuItem(
-                        child: Text(item.toString().split('.').last).tr(),
-                        value: item,
-                      );
-                    }).toList();
+                IconButton(
+                  icon: Icon(Icons.event_note),
+                  onPressed: () {
+                    print(controller.selectedIndexes);
                   },
                 ),
               ],
-            );
-          })
+              IconButton(
+                onPressed: () async {
+                  var vehicle =
+                      await Navigator.of(context).push(AddVehiclePage.route());
+                  if (vehicle is Vehicle) {
+                    context
+                        .read<VehicleListingBloc>()
+                        .add(UpdateVehicleList(vehicle));
+                  }
+                },
+                icon: Icon(Icons.add),
+                iconSize: 35.0,
+              ),
+              PopupMenuButton<VehicleListOptions>(
+                iconSize: 35.0,
+                onSelected: (VehicleListOptions item) async {
+                  switch (item) {
+                    // case VehicleListOptions.assign:
+                    //   await asignUsers(context, []);
+                    //   break;
+                    case VehicleListOptions.delete:
+                      break;
+                    default:
+                  }
+                },
+                itemBuilder: (context) {
+                  return VehicleListOptions.values.map((item) {
+                    return PopupMenuItem(
+                      child: Text(item.toString().split('.').last).tr(),
+                      value: item,
+                    );
+                  }).toList();
+                },
+              ),
+            ],
+          ),
         ],
       ),
       body: Column(
@@ -110,10 +111,112 @@ class _VehicleListState extends State<VehicleList> {
             padding: const EdgeInsets.all(16.0),
             child: _SearchBar(),
           ),
-          Expanded(child: VehicleListingView()),
+          //Expanded(child: VehicleListingView()),
+          vehicleListingView(),
         ],
       ),
     );
+  }
+
+  Widget vehicleListingView() {
+    return Expanded(
+      child: BlocBuilder<VehicleListingBloc, VehicleListingState>(
+          builder: (context, state) {
+        switch (state.status) {
+          case VehicleListStatus.failure:
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "failedToFetchVehicles",
+                    style: TextStyle(fontSize: 18.0),
+                  ).tr(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context
+                          .read<VehicleListingBloc>()
+                          .add(VehicleListFetched());
+                    },
+                    child: Text("reload").tr(),
+                  ),
+                ],
+              ),
+            );
+          case VehicleListStatus.success:
+            if (state.vehicles.isEmpty) {
+              return Center(
+                child: Text("noVehicles").tr(),
+              );
+            }
+
+            return ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                itemCount: state.hasReachedMax
+                    ? state.vehicles.length
+                    : state.vehicles.length + 1,
+                controller: _scrollController,
+                separatorBuilder: (context, index) {
+                  return Divider(color: Colors.grey);
+                },
+                itemBuilder: (context, int index) {
+                  return index >= state.vehicles.length && !state.hasReachedMax
+                      ? BottomLoader()
+                      : MultiSelectItem(
+                          isSelecting: controller.isSelecting,
+                          onSelected: () {
+                            print("I was selected $index");
+                            setState(() {
+                              controller.toggle(state.vehicles[index].objectId);
+                            });
+                          },
+                          child: VehicleListItem(
+                              vehicle: state.vehicles[index],
+                              onTap: () {
+                                if (!controller.isSelecting) {
+                                  Navigator.of(context).push(
+                                      VehicleProfilePage.route(
+                                          state.vehicles[index]));
+                                } else {
+                                  setState(() {
+                                    controller
+                                        .toggle(state.vehicles[index].objectId);
+                                  });
+                                }
+                              },
+                              isSelected: controller
+                                  .isSelected(state.vehicles[index].objectId)),
+                        );
+                });
+          default:
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+        }
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) context.read<VehicleListingBloc>().add(VehicleListFetched());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
   }
 }
 
@@ -172,7 +275,8 @@ class __SearchBarState extends State<_SearchBar> {
                           color: Colors.blue,
                           size: 25.0,
                         ),
-                        suffixIcon: GestureDetector(
+                        // ignore: unrelated_type_equality_checks
+                        suffixIcon: _textController.text == '' ? Text(""): GestureDetector(
                           onTap: _onClearTapped,
                           child: const Icon(Icons.clear),
                         ),
@@ -206,8 +310,7 @@ class __SearchBarState extends State<_SearchBar> {
                   )
                 ],
               ),
-              SizedBox(height: 20),
-              Divider(color: Colors.grey.shade400),
+              SizedBox(height: kDeviceSize.height*0.01),
             ],
           );
         } else {
@@ -218,112 +321,118 @@ class __SearchBarState extends State<_SearchBar> {
   }
 }
 
-class VehicleListingView extends StatefulWidget {
-  const VehicleListingView({Key? key}) : super(key: key);
+// class VehicleListingView extends StatefulWidget {
+//   const VehicleListingView({Key? key}) : super(key: key);
 
-  @override
-  _VehicleListingViewState createState() => _VehicleListingViewState();
-}
+//   @override
+//   _VehicleListingViewState createState() => _VehicleListingViewState();
+// }
 
-class _VehicleListingViewState extends State<VehicleListingView> {
-  final _scrollController = ScrollController();
-  late VehicleListingBloc vehiclesBloc;
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-    vehiclesBloc = context.read<VehicleListingBloc>();
-    vehiclesBloc.add(VehicleListFetched());
-  }
+// class _VehicleListingViewState extends State<VehicleListingView> {
+//   final _scrollController = ScrollController();
+//   late VehicleListingBloc vehiclesBloc;
+//   @override
+//   void initState() {
+//     super.initState();
+//     _scrollController.addListener(_onScroll);
+//     vehiclesBloc = context.read<VehicleListingBloc>();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<VehicleListingBloc, VehicleListingState>(
-        builder: (context, state) {
-      switch (state.status) {
-        case VehicleListStatus.failure:
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "failedToFetchVehicles",
-                  style: TextStyle(fontSize: 18.0),
-                ).tr(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                TextButton(
-                  onPressed: () {
-                    context
-                        .read<VehicleListingBloc>()
-                        .add(VehicleListFetched());
-                  },
-                  child: Text("reload").tr(),
-                ),
-              ],
-            ),
-          );
-        case VehicleListStatus.success:
-          if (state.vehicles.isEmpty) {
-            return Center(
-              child: Text("noVehicles").tr(),
-            );
-          }
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<VehicleListingBloc, VehicleListingState>(
+//         builder: (context, state) {
+//       switch (state.status) {
+//         case VehicleListStatus.failure:
+//           return Center(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Text(
+//                   "failedToFetchVehicles",
+//                   style: TextStyle(fontSize: 18.0),
+//                 ).tr(),
+//                 SizedBox(
+//                   height: 10.0,
+//                 ),
+//                 TextButton(
+//                   onPressed: () {
+//                     context
+//                         .read<VehicleListingBloc>()
+//                         .add(VehicleListFetched());
+//                   },
+//                   child: Text("reload").tr(),
+//                 ),
+//               ],
+//             ),
+//           );
+//         case VehicleListStatus.success:
+//           if (state.vehicles.isEmpty) {
+//             return Center(
+//               child: Text("noVehicles").tr(),
+//             );
+//           }
 
-          return ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              itemCount: state.hasReachedMax
-                  ? state.vehicles.length
-                  : state.vehicles.length + 1,
-              controller: _scrollController,
-              separatorBuilder: (context, index) {
-                return Divider(color: Colors.grey);
-              },
-              itemBuilder: (context, int index) {
-                return index >= state.vehicles.length && !state.hasReachedMax
-                    ? BottomLoader()
-                    : VehicleListItem(
-                        isSelecting: state.isSelectingController.isSelecting,
-                        vehicle: state.vehicles[index],
-                        onSelected: () {
-                          vehiclesBloc.add(ItemSelected(index: index));
-                        },
-                        onTap: () {
-                          if (!state.isSelectingController.isSelecting) {
-                            Navigator.of(context).push(VehicleProfilePage.route(
-                                state.vehicles[index]));
-                          } else {
-                            vehiclesBloc.add(ItemSelected(index: index));
-                          }
-                        },
-                        isSelected:
-                            state.isSelectingController.isSelected(index));
-              });
-        default:
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-      }
-    });
-  }
+//           return ListView.separated(
+//               padding: EdgeInsets.symmetric(horizontal: 16.0),
+//               itemCount: state.hasReachedMax
+//                   ? state.vehicles.length
+//                   : state.vehicles.length + 1,
+//               controller: _scrollController,
+//               separatorBuilder: (context, index) {
+//                 return Divider(color: Colors.grey);
+//               },
+//               itemBuilder: (context, int index) {
+//                 return index >= state.vehicles.length && !state.hasReachedMax
+//                     ? BottomLoader()
+//                     : MultiSelectItem(
+//                         isSelecting: state.multiselectcontroller.isSelecting,
+//                         onSelected: () {
+//                           print("I was selected $index");
+//                           context.read<VehicleListingBloc>().add(
+//                               ItemSelected(id: state.vehicles[index].objectId));
+//                         },
+//                         child: VehicleListItem(
+//                             vehicle: state.vehicles[index],
+//                             onTap: () {
+//                               if (!state.multiselectcontroller.isSelecting) {
+//                                 Navigator.of(context).push(
+//                                     VehicleProfilePage.route(
+//                                         state.vehicles[index]));
+//                               } else {
+//                                 context.read<VehicleListingBloc>().add(
+//                                     ItemSelected(
+//                                         id: state.vehicles[index].objectId));
+//                               }
+//                             },
+//                             isSelected: state.multiselectcontroller
+//                                 .isSelected(state.vehicles[index].objectId)),
+//                       );
+//               });
+//         default:
+//           return const Center(
+//             child: CircularProgressIndicator(),
+//           );
+//       }
+//     });
+//   }
 
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _scrollController
+//       ..removeListener(_onScroll)
+//       ..dispose();
+//     super.dispose();
+//   }
 
-  void _onScroll() {
-    if (_isBottom) context.read<VehicleListingBloc>().add(VehicleListFetched());
-  }
+//   void _onScroll() {
+//     if (_isBottom) context.read<VehicleListingBloc>().add(VehicleListFetched());
+//   }
 
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
-  }
-}
+//   bool get _isBottom {
+//     if (!_scrollController.hasClients) return false;
+//     final maxScroll = _scrollController.position.maxScrollExtent;
+//     final currentScroll = _scrollController.offset;
+//     return currentScroll >= (maxScroll * 0.9);
+//   }
+// }

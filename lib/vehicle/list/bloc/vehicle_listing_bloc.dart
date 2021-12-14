@@ -24,9 +24,7 @@ class VehicleListingBloc
     extends Bloc<VehicleListingEvent, VehicleListingState> {
   final ProfileUser? profile;
 
-  VehicleListingBloc(this.profile)
-      : super(VehicleListingState(
-            isSelectingController: MultiSelectController())) {
+  VehicleListingBloc(this.profile) : super(VehicleListingState()) {
     on<VehicleListFetched>(_onVehiclesListFetched, transformer: droppable());
     on<UpdateVehicleList>(_onUpdateVehicleList);
     on<TextChanged>(_onVehicleSearchChanged, transformer: debounce(_duration));
@@ -36,9 +34,9 @@ class VehicleListingBloc
       VehicleListFetched event, Emitter<VehicleListingState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == VehicleListStatus.initial || state.status == VehicleListStatus.failure) {
-
-        if(state.status == VehicleListStatus.failure){
+      if (state.status == VehicleListStatus.initial ||
+          state.status == VehicleListStatus.failure) {
+        if (state.status == VehicleListStatus.failure) {
           emit(state.copyWith(
             status: VehicleListStatus.initial,
           ));
@@ -62,7 +60,6 @@ class VehicleListingBloc
           hasReachedMax: false,
         ));
       }
-
 
       final items = await _fetchItems(state.vehicles.length);
       print(items);

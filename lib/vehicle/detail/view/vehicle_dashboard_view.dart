@@ -397,7 +397,8 @@ class VehicleDashboardView extends StatelessWidget {
                               size: 16.0,
                             ),
                             onTap: () {
-                              Navigator.of(context).push(VehicleDriverAssignedPage.route());
+                              Navigator.of(context)
+                                  .push(VehicleDriverAssignedPage.route());
                             },
                           ),
                           Divider(
@@ -424,10 +425,39 @@ class VehicleDashboardView extends StatelessWidget {
                               size: 16.0,
                             ),
                             onTap: () {
-                              Navigator.of(context).push(FaultCodesPage.route(vehicles: [state.vehicle as Vehicle]));
+                              Navigator.of(context).push(FaultCodesPage.route(
+                                  vehicles: [state.vehicle as Vehicle]));
                             },
                           ),
                           Divider(
+                            color: kAppPrimaryColor,
+                            thickness: 2,
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Row(
+                              children: [
+                                Icon(
+                                  Icons.notifications,
+                                  color: kAppPrimaryColor,
+                                ),
+                                SizedBox(width: kDeviceSize.width * 0.01),
+                                Text(
+                                  "reminder",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ).plural(2, args: ["(10)"]),
+                              ],
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16.0,
+                            ),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(ReminderPage.route(state.vehicle));
+                            },
+                          ),
+                           Divider(
                             color: kAppPrimaryColor,
                             thickness: 2,
                           ),
@@ -454,29 +484,6 @@ class VehicleDashboardView extends StatelessWidget {
                           Divider(
                             color: kAppPrimaryColor,
                             thickness: 2,
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.notifications,
-                                  color: kAppPrimaryColor,
-                                ),
-                                SizedBox(width: kDeviceSize.width * 0.01),
-                                Text(
-                                  "reminder",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ).plural(2, args: ["(10)"]),
-                              ],
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16.0,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(ReminderPage.route(state.vehicle));
-                            },
                           ),
                         ],
                       ),

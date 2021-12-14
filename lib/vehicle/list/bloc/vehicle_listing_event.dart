@@ -28,11 +28,11 @@ class UpdateVehicleList extends VehicleListingEvent {
 class DeleteSelected extends VehicleListingEvent {}
 
 class ItemSelected extends VehicleListingEvent {
-  const ItemSelected({required this.index});
-  final int index;
+  const ItemSelected({required this.id});
+  final id;
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 
