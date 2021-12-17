@@ -69,7 +69,7 @@ class _DriversListState extends State<DriversList> {
                     onPressed: () {},
                   ),
                 ],
-                Text(state.isSelectingController.isSelecting.toString()),
+              
                 PopupMenuButton<UserListOptions>(
                   iconSize: 35.0,
                   onSelected: (UserListOptions item) async {

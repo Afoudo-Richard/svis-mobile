@@ -1,9 +1,16 @@
 import 'package:app/repository/models/device.dart';
 import 'package:app/repository/models/models.dart';
+import 'package:app/repository/models/product.dart';
+import 'package:app/repository/models/trackSetup.dart';
+import 'package:app/repository/models/trackWatcher.dart';
+import 'package:app/repository/models/track_watcher_action.dart';
 import 'package:app/repository/models/trouble_code.dart';
 import 'package:app/repository/models/trouble_code_type.dart';
 import 'package:app/repository/models/vehicle_service_period.dart';
 import 'package:app/repository/models/vehicle_service_setup.dart';
+import 'package:app/repository/models/vehicle_track_action.dart';
+import 'package:app/repository/models/vehicle_track_setup.dart';
+import 'package:app/repository/models/vehicle_track_watcher.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:app/app.dart';
@@ -25,6 +32,8 @@ void main() async {
   );
   await registerParseServer();
   tz.initializeTimeZones();
+
+
   runApp(EasyLocalization(
     supportedLocales: [
       Locale('en', 'US'),
@@ -71,4 +80,18 @@ registerParseServer() async {
   ParseCoreData().registerSubClass(kTroubleCodeType, () => TroubleCodeType());
   ParseCoreData().registerSubClass(kVehicleServiceSetup, () => VehicleServiceSetup());
   ParseCoreData().registerSubClass(kVehicleServicePeriod, () => VehicleServicePeriod());
+  ParseCoreData().registerSubClass(kTrackSetup, () => TrackSetup());
+  ParseCoreData().registerSubClass(kVehicleTrackSetup, () => VehicleTrackSetup());
+  ParseCoreData().registerSubClass(kProduct, () => Product());
+  ParseCoreData().registerSubClass(kTrackWatcher, () => TrackWatcher());
+  ParseCoreData().registerSubClass(kVehicleTrackWatcher, () => VehicleTrackWatcher());
+  ParseCoreData().registerSubClass(kTrackWatcherAction, () => TrackWatcherAction());
+  ParseCoreData().registerSubClass(kVehicleTrackAction, () => VehicleTrackAction());
+
+
+
+
+
+
+
 }

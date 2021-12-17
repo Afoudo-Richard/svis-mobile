@@ -25,14 +25,19 @@ class UpdateVehicleList extends VehicleListingEvent {
   List<Object?> get props => [value];
 }
 
-class DeleteSelected extends VehicleListingEvent {}
-
-class ItemSelected extends VehicleListingEvent {
-  const ItemSelected({required this.id});
-  final id;
+class DeleteSelected extends VehicleListingEvent {
+  const DeleteSelected({required this.items});
+  final items;
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [items];
 }
 
+class ArchiveSelected extends VehicleListingEvent {
+  const ArchiveSelected({required this.items});
+  final items;
+
+  @override
+  List<Object> get props => [items];
+}
 

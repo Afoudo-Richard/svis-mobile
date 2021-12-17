@@ -360,7 +360,7 @@ class Vehicle extends ParseObject
     set('totalDistanceTravelled', value);
   }
 
-  ParseRelation<User>? get drivers => this.getRelation('drivers');
+  // ParseRelation<User>? get drivers => this.getRelation('drivers');
 
   @override
   List<Object?> get props => [
@@ -394,6 +394,6 @@ class Vehicle extends ParseObject
         insurancePolicyNumber,
         licensePlate,
         bearerPhoneNumber,
-        drivers
+        // drivers
       ];
 }

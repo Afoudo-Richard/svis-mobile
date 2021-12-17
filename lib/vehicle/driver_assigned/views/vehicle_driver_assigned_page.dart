@@ -1,12 +1,9 @@
 import 'package:app/authentication/authentication.dart';
-import 'package:app/vehicle/list/bloc/vehicle_listing_bloc.dart';
 import 'package:app/vehicle/driver_assigned/bloc/vehicle_driver_assigned_bloc.dart';
 import 'package:app/vehicle/driver_assigned/views/vehicle_driver_assigned_view.dart';
-import 'package:app/vehicle/list/view/vehicle_list.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:user_repository/user_repository.dart';
 
 class VehicleDriverAssignedPage extends StatelessWidget {
   const VehicleDriverAssignedPage({Key? key}) : super(key: key);

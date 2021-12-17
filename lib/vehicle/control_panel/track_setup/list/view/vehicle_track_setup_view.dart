@@ -1,38 +1,30 @@
 import 'package:app/app.dart';
-import 'package:app/commons/colors.dart';
 import 'package:app/commons/multi_select_item.dart';
 import 'package:app/commons/widgets/bottom_loader.dart';
-import 'package:app/repository/models/models.dart';
-import 'package:app/users/list/bloc/user_list_bloc.dart';
+import 'package:app/repository/models/product.dart';
 import 'package:app/vehicle/add/add.dart';
 import 'package:app/vehicle/add/view/add_vehicle_page.dart';
-import 'package:app/vehicle/device_association/device_association.dart';
-import 'package:app/vehicle/device_dissociation/view/view.dart';
-import 'package:app/vehicle/list/list.dart';
+import 'package:app/vehicle/control_panel/track_setup/list/bloc/vehicle_track_setup_bloc.dart';
 import 'package:app/vehicle_profile/view/vehicle_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:app/commons/user_list_item.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
-part 'widgets/vehicle_list_item.dart';
-
-enum VehicleListOptions {
-  add,
-  select,
-  archived,
+enum VehicleTrackSetUpOptions {
+  sortby,
   delete,
 }
 
-class VehicleList extends StatefulWidget {
-  const VehicleList({Key? key}) : super(key: key);
+class VehicleTrackSetUpView extends StatefulWidget {
+  const VehicleTrackSetUpView({Key? key}) : super(key: key);
 
   @override
-  _VehicleListState createState() => _VehicleListState();
+  _VehicleTrackSetUpViewState createState() => _VehicleTrackSetUpViewState();
 }
 
-class _VehicleListState extends State<VehicleList> {
-  late VehicleListingBloc vehiclesBloc;
+class _VehicleTrackSetUpViewState extends State<VehicleTrackSetUpView> {
+  late VehicleTrackSetupBloc vehicleTrackSetupsBloc;
   final _scrollController = ScrollController();
   MultiSelectController controller = new MultiSelectController();
 
@@ -40,70 +32,38 @@ class _VehicleListState extends State<VehicleList> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    vehiclesBloc = context.read<VehicleListingBloc>();
+    vehicleTrackSetupsBloc = context.read<VehicleTrackSetupBloc>();
     controller.disableEditingWhenNoneSelected = true;
-    controller.set(vehiclesBloc.state.vehicles.length);
+    controller.set(vehicleTrackSetupsBloc.state.vehicleTrackSetups.length);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('vehicle').tr(),
+        title: Text('trackSetUp').tr(),
         actions: [
           Row(
             children: [
-              if (controller.isSelecting) ...[
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    vehiclesBloc
-                        .add(DeleteSelected(items: controller.selectedIndexes));
-
-                    setState(() {
-                      controller.deselectAll();
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.event_note),
-                  onPressed: () {
-                    vehiclesBloc.add(
-                        ArchiveSelected(items: controller.selectedIndexes));
-
-                    setState(() {
-                      controller.deselectAll();
-                    });
-                  },
-                ),
-              ],
               IconButton(
                 onPressed: () async {
                   var vehicle =
                       await Navigator.of(context).push(AddVehiclePage.route());
-                  if (vehicle is Vehicle) {
-                    context
-                        .read<VehicleListingBloc>()
-                        .add(UpdateVehicleList(vehicle));
-                  }
                 },
                 icon: Icon(Icons.add),
                 iconSize: 35.0,
               ),
-              PopupMenuButton<VehicleListOptions>(
+              PopupMenuButton<VehicleTrackSetUpOptions>(
                 iconSize: 35.0,
-                onSelected: (VehicleListOptions item) async {
+                onSelected: (VehicleTrackSetUpOptions item) async {
                   switch (item) {
-                    // case VehicleListOptions.assign:
-                    //   await asignUsers(context, []);
-                    //   break;
-                    case VehicleListOptions.delete:
+                    case VehicleTrackSetUpOptions.delete:
                       break;
                     default:
                   }
                 },
                 itemBuilder: (context) {
-                  return VehicleListOptions.values.map((item) {
+                  return VehicleTrackSetUpOptions.values.map((item) {
                     return PopupMenuItem(
                       child: Text(item.toString().split('.').last).tr(),
                       value: item,
@@ -115,52 +75,30 @@ class _VehicleListState extends State<VehicleList> {
           ),
         ],
       ),
-      body: BlocListener<VehicleListingBloc, VehicleListingState>(
-        listener: (context, state) {
-
-          if(state.successResponses.isNotEmpty){
-            ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                   SnackBar(
-                      content: Text('${state.successResponses.length} Vehicle  has been deleted successfully')),
-                );
-          }else if(state.failedResponses.isNotEmpty){
-            ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                   SnackBar(
-                      content: Text('${state.successResponses.length} vehicle was not deleted')),
-                );
-          }
-
-        },
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _SearchBar(),
-            ),
-            
-            vehicleListingView(),
-          ],
-        ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _SearchBar(),
+          ),
+          vehicleTrackSetUpview(),
+        ],
       ),
     );
   }
 
-  Widget vehicleListingView() {
+  Widget vehicleTrackSetUpview() {
     return Expanded(
-      child: BlocBuilder<VehicleListingBloc, VehicleListingState>(
+      child: BlocBuilder<VehicleTrackSetupBloc, VehicleTrackSetupState>(
           builder: (context, state) {
         switch (state.status) {
-          case VehicleListStatus.failure:
+          case VehicleTrackSetupListStatus.failure:
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "failedToFetchVehicles",
+                    "failedToFetchVehicleTrackSetUp",
                     style: TextStyle(fontSize: 18.0),
                   ).tr(),
                   SizedBox(
@@ -169,19 +107,19 @@ class _VehicleListState extends State<VehicleList> {
                   TextButton(
                     onPressed: () {
                       context
-                          .read<VehicleListingBloc>()
-                          .add(VehicleListFetched());
+                          .read<VehicleTrackSetupBloc>()
+                          .add(VehicleTrackSetupFetch());
                     },
                     child: Text("reload").tr(),
                   ),
                 ],
               ),
             );
-          case VehicleListStatus.success:
-            if (state.vehicles.isEmpty) {
+          case VehicleTrackSetupListStatus.success:
+            if (state.vehicleTrackSetups.isEmpty) {
               return Center(
                 child: Text(
-                  "noVehiclesAvailable",
+                  "noVehicleTrackSetupAvailable",
                   style: TextStyle(fontSize: 17.0),
                 ).tr(),
               );
@@ -190,37 +128,100 @@ class _VehicleListState extends State<VehicleList> {
             return ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 itemCount: state.hasReachedMax
-                    ? state.vehicles.length
-                    : state.vehicles.length + 1,
+                    ? state.vehicleTrackSetups.length
+                    : state.vehicleTrackSetups.length + 1,
                 controller: _scrollController,
                 separatorBuilder: (context, index) {
                   return Divider(color: Colors.grey);
                 },
                 itemBuilder: (context, int index) {
-                  return index >= state.vehicles.length && !state.hasReachedMax
+                  var item = state.vehicleTrackSetups[index];
+                  
+                  var _featuresCountQuery =
+                      item.trackSetup?.features.getQuery().count();
+
+                  return index >= state.vehicleTrackSetups.length &&
+                          !state.hasReachedMax
                       ? BottomLoader()
                       : MultiSelectItem(
                           isSelecting: controller.isSelecting,
                           onSelected: () {
                             setState(() {
-                              controller.toggle(state.vehicles[index]);
+                              controller
+                                  .toggle(state.vehicleTrackSetups[index]);
                             });
                           },
-                          child: VehicleListItem(
-                              vehicle: state.vehicles[index],
-                              onTap: () {
-                                if (!controller.isSelecting) {
-                                  Navigator.of(context).push(
-                                      VehicleProfilePage.route(
-                                          state.vehicles[index]));
-                                } else {
-                                  setState(() {
-                                    controller.toggle(state.vehicles[index]);
-                                  });
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  state.vehicleTrackSetups[index].trackSetup
+                                          ?.name
+                                          ?.toUpperCase() ??
+                                      "N/A",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: !item.status
+                                        ? Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.3)
+                                        : Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: kDeviceSize.height * 0.01,
+                                ),
+                                Builder(builder: (context) {
+                                  if (!state.vehicleTrackSetups[index].status) {
+                                    return Text(
+                                      "Deactivated",
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.3)),
+                                    );
+                                  } else {
+                                    return FutureBuilder<ParseResponse>(
+                                        future: _featuresCountQuery,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                              "trackParameter",
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                              ),
+                                            ).plural(snapshot.data?.count ?? 0);
+                                          } else {
+                                            return Text("---");
+                                          }
+                                        });
+                                  }
+                                })
+                              ],
+                            ),
+                            trailing: PopupMenuButton(
+                              child: Icon(
+                                Icons.more_vert,
+                                size: 25.0,
+                              ),
+                              onSelected: (item) async {
+                                switch (item) {
                                 }
                               },
-                              isSelected:
-                                  controller.isSelected(state.vehicles[index])),
+                              itemBuilder: (context) {
+                                return [
+                                  PopupMenuItem(
+                                    child: Text("addFromExisting").tr(),
+                                    value: 1,
+                                  )
+                                ];
+                              },
+                            ),
+                          ),
                         );
                 });
           default:
@@ -244,7 +245,8 @@ class _VehicleListState extends State<VehicleList> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<VehicleListingBloc>().add(VehicleListFetched());
+    if (_isBottom)
+      context.read<VehicleTrackSetupBloc>().add(VehicleTrackSetupFetch());
   }
 
   bool get _isBottom {
@@ -266,12 +268,12 @@ class _SearchBar extends StatefulWidget {
 
 class __SearchBarState extends State<_SearchBar> {
   final _textController = TextEditingController();
-  late VehicleListingBloc _vehiclesBloc;
+  late VehicleTrackSetupBloc _vehicleTrackSetupsBloc;
 
   @override
   void initState() {
     super.initState();
-    _vehiclesBloc = context.read<VehicleListingBloc>();
+    _vehicleTrackSetupsBloc = context.read<VehicleTrackSetupBloc>();
   }
 
   @override
@@ -282,12 +284,12 @@ class __SearchBarState extends State<_SearchBar> {
 
   void _onClearTapped() {
     _textController.text = '';
-    _vehiclesBloc.add(const TextChanged(text: ''));
+    _vehicleTrackSetupsBloc.add(const TextChanged(text: ''));
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<VehicleListingBloc, VehicleListingState>(
+    return BlocBuilder<VehicleTrackSetupBloc, VehicleTrackSetupState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -298,7 +300,7 @@ class __SearchBarState extends State<_SearchBar> {
                     controller: _textController,
                     autocorrect: false,
                     onChanged: (text) {
-                      _vehiclesBloc.add(
+                      _vehicleTrackSetupsBloc.add(
                         TextChanged(text: text),
                       );
                     },

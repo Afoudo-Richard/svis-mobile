@@ -525,7 +525,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
                       ? state.vehicleGroup.value as VehicleGroup?
                       : null
                   ..mileage = int.parse(state.mileage.value)
-                  ..photo = state.image.value != null
+                  ..photo = state.image.value?.path != null
                       ? ParseFile(state.image.value)
                       : null
                   ..profile = profile?.profile
@@ -560,7 +560,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
                       ? state.vehicleGroup.value as VehicleGroup?
                       : null
                   ..mileage = int.parse(state.mileage.value)
-                  ..photo = state.image.value != null
+                  ..photo = state.image.value?.path != null
                       ? ParseFile(state.image.value)
                       : null
                   ..profile = profile?.profile
@@ -578,6 +578,7 @@ class AddVehicleBloc extends Bloc<AddVehicleEvent, AddVehicleState> {
                   ..device = state.device
                   ..bearerAddress = state.addressLine1.value
                   ..bearerAddress2 = state.addressLine2.value)
+                  
                 .save());
         if (response.success) {
           emit(

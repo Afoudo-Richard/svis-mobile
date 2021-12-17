@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:user_repository/user_repository.dart';
 part 'user_list_event.dart';
 
 part 'user_list_state.dart';
@@ -27,6 +28,7 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
   UserListBloc(this.profile) : super(UserListState()) {
     on<UserListFetched>(_onUserListFetched, transformer: droppable());
     on<AssignDrivers>(_onAssignDrivers);
+    on<ResetState>(_onResetState);
   }
   void _onUserListFetched(
       UserListFetched event, Emitter<UserListState> emit) async {
@@ -76,26 +78,36 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
     return query.find();
   }
 
-  void _onAssignDrivers(AssignDrivers event, Emitter<UserListState> emit) async {
-    List list = event.index;
-    print(list);
-
-    //List drivers = list.map((e) => ParseObject("User")..set("objectId", e)).toList();
-
+  void _onAssignDrivers(
+      AssignDrivers event, Emitter<UserListState> emit) async {
+    List items = event.items;
 
     try {
-      ApiResponse response = getApiResponse<Vehicle>(await((event.vehicle)!
-        ..addRelation('drivers', list.map((o) => ParseObject('_User')..objectId = o)
-              .toList()))
-        .update());
+      var vehicle = event.vehicle?..addRelation('drivers', items);
+      emit(state.copyWith(
+        status: UserListStatus.initial,
+      ));
+
+      ApiResponse response = getApiResponse(await (vehicle as Vehicle).save());
 
       if (response.success) {
-        print("successfully assigned drivers");
+        emit(state.copyWith(
+        status: UserListStatus.assignSuccess,
+      ));
       } else {
-        print("could not assign drivers");
+        emit(state.copyWith(
+        status: UserListStatus.assignFailure,
+      ));
       }
     } catch (error) {
       print("An error occurred");
     }
+  }
+
+  void _onResetState(ResetState event, Emitter<UserListState> emit){
+    emit(state.copyWith(
+        status: UserListStatus.success,
+      ));
+    //add(UserListFetched());
   }
 }

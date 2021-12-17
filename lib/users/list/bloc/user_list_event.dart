@@ -10,10 +10,12 @@ abstract class UserListEvent extends Equatable {
 class UserListFetched extends UserListEvent {}
 
 class AssignDrivers extends UserListEvent {
-  const AssignDrivers({required this.index, required this.vehicle});
-  final List index;
+  const AssignDrivers({required this.items, required this.vehicle});
+  final List items;
   final Vehicle? vehicle;
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [items];
 }
+
+class ResetState extends UserListEvent {}

@@ -43,10 +43,9 @@ class _VehicleListItemState extends State<VehicleListItem> {
                   Stack(
                     children: [
                       CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(
-                                    widget.vehicle?.photo?.url ??
-                                'https://sumelongenterprise.com/sites/default/files/logo_0.png'),
+                        backgroundImage: NetworkImage(widget
+                                .vehicle?.photo?.url ??
+                            'https://sumelongenterprise.com/sites/default/files/logo_0.png'),
                         backgroundColor: kAppPrimaryColor,
                         radius: 25.0,
                       ),
@@ -158,11 +157,112 @@ class _VehicleListItemState extends State<VehicleListItem> {
                     );
                     break;
                   case VehicleListItemOptions.viewProfile:
-                    Navigator.of(context).push(VehicleProfilePage.route(
-                        widget.vehicle as Vehicle));
+                    Navigator.of(context).push(
+                        VehicleProfilePage.route(widget.vehicle as Vehicle));
                     break;
+                  case VehicleListItemOptions.archive:
+                    return showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return BlocProvider.value(
+                            value: context.read<VehicleListingBloc>(),
+                            child: Dialog(
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("archive").tr(),
+                                    SizedBox(
+                                      height: kDeviceSize.height * 0.04,
+                                    ),
+                                    Text("areYouSure").tr(),
+                                    SizedBox(
+                                      height: kDeviceSize.height * 0.04,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<VehicleListingBloc>()
+                                                  .add(ArchiveSelected(items: [
+                                                    widget.vehicle as Vehicle
+                                                  ]));
+                                              Navigator.pop(context);
+                                                
+                                            },
+                                            child: Text("yes").tr()),
+                                        SizedBox(
+                                          width: kDeviceSize.width * 0.04,
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("no").tr()),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
                   case VehicleListItemOptions.delete:
-                    break;
+                    return showDialog(
+                        context: context,
+                        builder: (ctx) {
+                          return BlocProvider.value(
+                            value: context.read<VehicleListingBloc>(),
+                            child: Dialog(
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("delete").tr(),
+                                    SizedBox(
+                                      height: kDeviceSize.height * 0.04,
+                                    ),
+                                    Text("confirmDelete").tr(),
+                                    SizedBox(
+                                      height: kDeviceSize.height * 0.04,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<VehicleListingBloc>()
+                                                  .add(DeleteSelected(items: [
+                                                    widget.vehicle as Vehicle
+                                                  ]));
+                                              Navigator.pop(context);
+                                                
+                                            },
+                                            child: Text("yes").tr()),
+                                        SizedBox(
+                                          width: kDeviceSize.width * 0.04,
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("no").tr()),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                    
                   case VehicleListItemOptions.associateDevice:
                     if (widget.vehicle?.objectId != null) {
                       Navigator.of(context).push(
@@ -339,13 +439,13 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
                                   onSelected: () {
                                     setState(() {
                                       controller
-                                          .toggle(profileUsers[index].objectId);
+                                          .toggle(profileUsers[index].user);
                                     });
                                   },
                                   child: userItemMin(
                                     profileUsers[index],
-                                    controller.isSelected(
-                                        profileUsers[index].objectId),
+                                    controller
+                                        .isSelected(profileUsers[index].user),
                                   ),
                                 );
                               }),
@@ -361,9 +461,9 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
                                     ),
                                     onPressed: () {
                                       //Navigator.of(context).push(PasswordUpdatePage.route());
-                                      print(controller.selectedIndexes);
+
                                       userListBloc.add(AssignDrivers(
-                                          index: controller.selectedIndexes,
+                                          items: controller.selectedIndexes,
                                           vehicle: widget.vehicle));
                                     },
                                     child: Row(
@@ -377,6 +477,56 @@ class _AssignDriverDialogState extends State<AssignDriverDialog> {
                                 ),
                               )
                             : Container(),
+                      ],
+                    );
+                  case UserListStatus.assignSuccess:
+                    return Column(
+                      children: [
+                        Center(
+                          child: Text("Successfully assigned drivers"),
+                        ),
+                        SizedBox(
+                          height: kDeviceSize.height * 0.02,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              userListBloc.add(ResetState());
+                              Navigator.pop(context);
+                            },
+                            child: Text("close").tr())
+                      ],
+                    );
+
+                  case UserListStatus.assignFailure:
+                    return Column(
+                      children: [
+                        Center(
+                          child: Text("Failed to assigned drivers"),
+                        ),
+                        SizedBox(
+                          height: kDeviceSize.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  userListBloc.add(AssignDrivers(
+                                      items: controller.selectedIndexes,
+                                      vehicle: widget.vehicle));
+                                },
+                                child: Text("retry").tr()),
+                            SizedBox(
+                              width: kDeviceSize.width * 0.02,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  userListBloc.add(ResetState());
+                                  Navigator.pop(context);
+                                },
+                                child: Text("close").tr()),
+                          ],
+                        ),
                       ],
                     );
                   default:

@@ -123,14 +123,30 @@
   "registrationDocuments": "Registration Documents",
   "svisCapabilityService": "SVIS Capability Service",
   "driverAssigned": "Driver Assigned",
-  "faultCodes": "Fault codes {}",
+  "faultCode": {
+    "zero": "Fault code ({})",
+    "two": "Fault codes ({})",
+    "few": "Fault codes ({})",
+    "many": "Fault codes ({})",
+    "other": "Fault codes ({})"
+
+
+  },
   "configuration": {
-    "one": "Configuration",
-    "many": "Configurations"
+    "zero": "Configuration",
+    "one": "Configuration ({})",
+    "two": "Configurations ({})",
+    "few": "Configurations ({})",  
+    "many": "Configurations ({})",
+    "other": "Configurations ({})"
+
   },
   "reminder": {
-    "one": "Reminder",
-    "other": "Reminders {}"
+    "one": "Reminder ({})",
+    "two": "Reminders ({})",
+    "few": "Reminders ({})",
+    "many": "Reminders ({})",
+    "other": "Reminders ({})"
   },
   "assignDrivers": "Assign Drivers",
   "controlPanel": "Control Panel",
@@ -146,5 +162,21 @@
   "dateOccured": "Date Occured",
   "description": "Description",
   "causes": "Causes",
-  "diagnosticManager": "Diagnostic Manager"
+  "diagnosticManager": "Diagnostic Manager",
+  "noVehiclesAvailable": "No vehicles available",
+  "tracking" : "Tracking",
+  "trackSetups": "Track setups",
+  "trackWatchers": "Track watchers",
+  "trackActions": "Track actions",
+  "trackManagment": "Track Management",
+  "monitoringAndLoging": "Monitoring and Logging",
+  "trackSetUp": "Track Setup",
+  "noVehicleTrackSetupAvailable": "No vehicle track setup available",
+  "failedToFetchVehicleTrackSetUp": "Failed to fetch vehicle track setup",
+  "trackParameter" : {
+    "zero": "{} track parameter",
+    "one": "{} track parameter",
+    "other": "{} track parameters"
+
+  }
 }

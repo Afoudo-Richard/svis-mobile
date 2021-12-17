@@ -4,6 +4,8 @@ import 'package:app/commons/widgets/app_bottom_app_bar.dart';
 import 'package:app/fault_code/views/fault_code_page.dart';
 import 'package:app/reminder/list/views/reminder_page.dart';
 import 'package:app/repository/models/vehicle.dart';
+import 'package:app/vehicle/configuration/view/vehicle_configuration_page.dart';
+import 'package:app/vehicle/control_panel/main/view/vehicle_control_panel_page.dart';
 import 'package:app/vehicle/detail/bloc/vehicle_dashboard_bloc.dart';
 import 'package:app/vehicle/driver_assigned/views/vehicle_driver_assigned_page.dart';
 import 'package:app/vehicle/fault_code/list/view/vehicle_fault_code_list_page.dart';
@@ -46,6 +48,12 @@ class VehicleDashboardView extends StatelessWidget {
                 onSelected: (VehicleDashboardOptions item) async {
                   switch (item) {
                     case VehicleDashboardOptions.AdvancedTracking:
+                      break;
+                    case VehicleDashboardOptions.ControlPanel:
+                      Navigator.push(
+                          context,
+                          VehicleControlPanelPage.route(
+                              BlocProvider.of<VehicleDashboardBloc>(context)));
                       break;
                     default:
                   }
@@ -380,22 +388,9 @@ class VehicleDashboardView extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              children: [
-                                Icon(Icons.person),
-                                SizedBox(width: kDeviceSize.width * 0.01),
-                                Text(
-                                  "driverAssigned",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ).tr(),
-                              ],
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16.0,
-                            ),
+                          detailItem(
+                            icon: Icons.person,
+                            text: "driverAssigned",
                             onTap: () {
                               Navigator.of(context)
                                   .push(VehicleDriverAssignedPage.route());
@@ -405,85 +400,44 @@ class VehicleDashboardView extends StatelessWidget {
                             color: kAppPrimaryColor,
                             thickness: 2,
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.warning,
-                                  color: kAppPrimaryColor,
-                                ),
-                                SizedBox(width: kDeviceSize.width * 0.01),
-                                Text(
-                                  "faultCodes",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ).tr(args: ["(5)"]),
-                              ],
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16.0,
-                            ),
+                          detailItem(
+                            icon: Icons.warning,
+                            text: "faultCode",
+                            textCount: 8,
                             onTap: () {
-                              Navigator.of(context).push(FaultCodesPage.route(
-                                  vehicles: [state.vehicle as Vehicle]));
+                              Navigator.of(context)
+                                  .push(FaultCodesPage.route());
                             },
                           ),
                           Divider(
                             color: kAppPrimaryColor,
-                            thickness: 2,
+                            thickness: 1,
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.notifications,
-                                  color: kAppPrimaryColor,
-                                ),
-                                SizedBox(width: kDeviceSize.width * 0.01),
-                                Text(
-                                  "reminder",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ).plural(2, args: ["(10)"]),
-                              ],
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16.0,
-                            ),
+                          detailItem(
+                            icon: Icons.notifications,
+                            text: 'reminder',
+                            textCount: 5,
                             onTap: () {
                               Navigator.of(context)
                                   .push(ReminderPage.route(state.vehicle));
                             },
                           ),
-                           Divider(
+                          Divider(
                             color: kAppPrimaryColor,
-                            thickness: 2,
+                            thickness: 1,
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              children: [
-                                Icon(
-                                  Icons.settings,
-                                  color: kAppPrimaryColor,
-                                ),
-                                SizedBox(width: kDeviceSize.width * 0.01),
-                                Text(
-                                  "configuration",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ).plural(2),
-                              ],
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16.0,
-                            ),
+                          detailItem(
+                            icon: Icons.settings,
+                            text: "configuration",
+                            textCount: 3,
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(VehicleConfigurationPage.route(context.read<VehicleDashboardBloc>()));
+                            },
                           ),
                           Divider(
                             color: kAppPrimaryColor,
-                            thickness: 2,
+                            thickness: 1,
                           ),
                         ],
                       ),
@@ -494,6 +448,46 @@ class VehicleDashboardView extends StatelessWidget {
           bottomNavigationBar: AppBottomAppBar(),
         );
       },
+    );
+  }
+}
+
+class detailItem extends StatelessWidget {
+  final String text;
+  final int? textCount;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const detailItem({
+    Key? key,
+    required this.text,
+    required this.icon,
+    required this.onTap,
+    this.textCount,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Row(
+        children: [
+          Icon(
+            icon,
+            color: kAppPrimaryColor,
+          ),
+          SizedBox(width: kDeviceSize.width * 0.01),
+          Text(
+            text,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ).plural(textCount ?? 0),
+        ],
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16.0,
+      ),
+      onTap: onTap,
     );
   }
 }

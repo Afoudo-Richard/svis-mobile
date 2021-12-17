@@ -227,8 +227,11 @@ class AddUserBloc extends Bloc<AddUserEvent, AddUserState> {
 
       try {
         final ParseCloudFunction function = ParseCloudFunction('register');
-        var profileImage = getApiResponse<ParseFile>(
-            await ParseFile(state.profile.value).save());
+        ApiResponse? profileImage;
+        if (state.profile.value?.path != null) {
+          profileImage = getApiResponse<ParseFile>(
+              await ParseFile(state.profile.value).save());
+        }
         final Map<String, dynamic> params = <String, dynamic>{
           'email': state.email.value,
           'username': state.email.value,
@@ -244,7 +247,7 @@ class AddUserBloc extends Bloc<AddUserEvent, AddUserState> {
           'country': state.countryOfRegistration.value,
           'gender': state.gender.value,
           'dateOfBirth': state.dateOfBirth.value.toString(),
-          'parseFile': profileImage.result,
+          'parseFile': profileImage?.result,
         };
         ApiResponse response =
             getApiResponse<User>(await function.execute(parameters: params));

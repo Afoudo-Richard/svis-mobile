@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:app/commons/multi_select_item.dart';
 import 'package:app/repository/models/profile_user.dart';
 import 'package:app/repository/models/vehicle.dart';
 import 'package:bloc/bloc.dart';
@@ -27,7 +25,9 @@ class VehicleListingBloc
   VehicleListingBloc(this.profile) : super(VehicleListingState()) {
     on<VehicleListFetched>(_onVehiclesListFetched, transformer: droppable());
     on<UpdateVehicleList>(_onUpdateVehicleList);
-    on<TextChanged>(_onVehicleSearchChanged, transformer: debounce(_duration));
+    on<TextChanged>(_onVehicleSearch, transformer: debounce(_duration));
+    on<DeleteSelected>(_onDeleteItems);
+    on<ArchiveSelected>(_onArchieveItems);
   }
 
   void _onVehiclesListFetched(
@@ -62,7 +62,6 @@ class VehicleListingBloc
       }
 
       final items = await _fetchItems(state.vehicles.length);
-      print(items);
       emit(items.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -72,7 +71,6 @@ class VehicleListingBloc
               hasReachedMax: false,
             ));
     } catch (e) {
-      print(e.toString());
       emit(state.copyWith(status: VehicleListStatus.failure));
     }
   }
@@ -86,7 +84,46 @@ class VehicleListingBloc
     return query.find();
   }
 
-  void _onVehicleSearchChanged(
+  void _onVehicleSearch(
+      TextChanged event, Emitter<VehicleListingState> emit) async {
+    try {
+      emit(state.copyWith(
+        isSearching: true,
+      ));
+
+      final items = await _searchItems(event.text);
+
+      if (event.text == "") {
+        return emit(state.copyWith(
+            status: VehicleListStatus.success,
+            vehicles: items,
+            vehiclesCopy: items,
+            hasReachedMax: false,
+            isSearching: false));
+      }
+      return emit(state.copyWith(
+        status: VehicleListStatus.success,
+        vehicles: items,
+        vehiclesCopy: items,
+        hasReachedMax: true,
+        isSearching: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(status: VehicleListStatus.failure));
+    }
+  }
+
+  Future<List<Vehicle>> _searchItems(String searchText) async {
+    QueryBuilder<Vehicle> query = QueryBuilder<Vehicle>(Vehicle());
+    query.whereEqualTo('profile', profile?.profile);
+    query.whereContains('name', searchText);
+    query.includeObject(['profile', 'user']);
+    query.setLimit(_querylimit);
+    return query.find();
+  }
+
+/*  
+    void _onVehicleSearchChanged(
       TextChanged event, Emitter<VehicleListingState> emit) {
     emit(state.copyWith(
       status: VehicleListStatus.initial,
@@ -102,6 +139,7 @@ class VehicleListingBloc
       vehicles: items,
     ));
   }
+*/
 
   Future<void> _onUpdateVehicleList(
     UpdateVehicleList event,
@@ -122,5 +160,78 @@ class VehicleListingBloc
             }).toList())
           : (List.of(state.vehicles)..add(event.value as Vehicle)),
     ));
+  }
+
+  void _onDeleteItems(
+    DeleteSelected event,
+    Emitter<VehicleListingState> emit,
+  ) async {
+    emit(state.copyWith(
+        status: VehicleListStatus.initial, hasReachedMax: false));
+    var responses = await _deleteItems(event.items);
+
+    List<ParseResponse> _success = [];
+    List<ParseResponse> _failed = [];
+
+    responses?.forEach((response) {
+      if (response.success) {
+        _success.add(response);
+      } else {
+        _failed.add(response);
+      }
+    });
+
+    if (_success.isNotEmpty) {
+      emit(state.copyWith(successResponses: _success));
+    } else if (_failed.isNotEmpty) {
+      emit(state.copyWith(failedResponses: _failed));
+    }
+
+    add(VehicleListFetched());
+  }
+
+  Future<List<ParseResponse>?> _deleteItems(List items) async {
+    var _requests = items.map((item) {
+      return (item as Vehicle).delete();
+    }).toList();
+
+    return await Future.wait(_requests);
+  }
+
+  void _onArchieveItems(
+    ArchiveSelected event,
+    Emitter<VehicleListingState> emit,
+  ) async {
+    emit(state.copyWith(
+        status: VehicleListStatus.initial, hasReachedMax: false));
+
+    var responses = await _archiveItems(event.items);
+    List<ParseResponse> _success = [];
+    List<ParseResponse> _failed = [];
+
+    responses?.forEach((response) {
+      if (response.success) {
+        _success.add(response);
+      } else {
+        _failed.add(response);
+      }
+    });
+
+    if (_success.isNotEmpty) {
+      emit(state.copyWith(successResponses: _success));
+    } else if (_failed.isNotEmpty) {
+      emit(state.copyWith(failedResponses: _failed));
+    }
+
+    add(VehicleListFetched());
+  }
+
+  Future<List<ParseResponse>?> _archiveItems(List items) async {
+    var _requests = items.map((item) {
+      item..set('archiveStatus', 'ARCHIVED');
+      return (item as Vehicle).save();
+    });
+
+    return await Future.wait(_requests);
   }
 }
